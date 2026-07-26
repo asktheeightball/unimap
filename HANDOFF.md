@@ -116,10 +116,21 @@ Consequences to carry into the next session:
 2. **The HTTP path of the importer is the one untested part.** Everything after
    the response — parsing, normalizing, staging, validating, promoting — is
    tested against fixtures in all three response shapes these services use.
-3. **The normalizers were written without being able to read the services' API
-   documentation.** Column names and response shapes are the expected ones but
-   are unconfirmed. Run `--probe` first; it caches the raw response and prints
-   the true columns, which is exactly what is needed to correct a normalizer.
+3. ~~The normalizers are unconfirmed.~~ **Resolved 2026-07-26** by probe output
+   returned from a networked machine. Findings:
+   - **NASA Exoplanet Archive** — confirmed working. Array of objects, all nine
+     columns as expected, 6,248 rows available. No change needed.
+   - **NASA/JPL SBDB** — confirmed shape, but revealed a **data-correctness
+     bug**: `sb-class=TNO` returns every trans-Neptunian object, most of them
+     small bodies, and the normalizer would have labelled all of them
+     `Dwarf Planet`. Fixed with the `select_names` curation filter. Also
+     confirmed that `H`/`a` arrive as strings, `diameter` is frequently null,
+     and `full_name` carries a leading space and a parenthetical designation —
+     all now handled and tested.
+   - **SIMBAD** — not yet reached. The request failed with
+     `CERTIFICATE_VERIFY_FAILED`, a local trust-store problem on the operator's
+     machine rather than a fault in the query. `--ca-bundle` was added so
+     verification stays on. **SIMBAD's response shape remains unconfirmed.**
 4. **The `attribution` and `terms` strings in `tools/sources.json` are
    unverified** and must be checked against each service's current terms page
    before a catalogue built from them is published.

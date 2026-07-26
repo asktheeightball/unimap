@@ -143,6 +143,22 @@ real response shape without importing; run it first against any new or changed
 source. Responses are cached, so reruns do not refetch unless you pass
 `--refresh`.
 
+A source may also carry `select_names`, an editorial allow-list applied after
+normalization. This exists because a broad query filter is not a claim about an
+object's type: `sb-class=TNO` returns every trans-Neptunian object, and only a
+few of those are dwarf planets. Widening that list is a curation decision, made
+in `sources.json` and reviewable in the diff. A source with `select_names`
+always fetches its full result set, so `--limit` does not apply to it.
+
+If TLS verification fails locally (`CERTIFICATE_VERIFY_FAILED`), point the
+importer at a CA bundle rather than disabling verification:
+
+```bash
+python -m pip install certifi
+python -c "import certifi; print(certifi.where())"
+python tools/import_catalogue.py --ca-bundle <that path> --source simbad-stars --probe
+```
+
 ### Promote
 
 ```bash

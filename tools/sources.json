@@ -58,11 +58,12 @@
       "requires_key": false,
       "attribution": "Data courtesy of NASA/JPL Solar System Dynamics, Small-Body Database.",
       "terms": "Public domain, attribution appreciated. CONFIRM before publishing.",
-      "note": "Solar-system 'distance' is reported as a mean orbital distance in AU, which is a different quantity from the light-year distances used for deep-sky objects. The record labels it explicitly.",
+      "note": "sb-class=TNO returns every trans-Neptunian object, most of which are small bodies and NOT dwarf planets. select_names therefore restricts the import to the IAU-recognised trans-Neptunian dwarf planets. Widening this list is an editorial decision, not a query change. Ceres is a main-belt object and is not covered by this source entry.",
+      "note_distance": "Solar-system 'distance' is a mean orbital distance in AU, a different quantity from the light-year distances used for deep-sky objects. The record labels it explicitly.",
+      "select_names": ["Pluto", "Eris", "Haumea", "Makemake"],
       "params": {
         "fields": "full_name,diameter,class,H,a",
-        "sb-class": "TNO",
-        "limit": "40"
+        "sb-class": "TNO"
       },
       "query": null
     }

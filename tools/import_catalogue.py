@@ -29,6 +29,7 @@ import hashlib
 import json
 import math
 import re
+import ssl
 import subprocess
 import sys
 import urllib.error
@@ -194,9 +195,15 @@ def simbad_star(row: dict, source: dict, reviewed: str) -> dict:
 
 
 def jpl_sbdb(row: dict, source: dict, reviewed: str) -> dict:
-    name = str(row.get("full_name") or row.get("name") or "").strip()
-    if not name:
+    # SBDB returns e.g. " 136199 Eris (2003 UB313)" -- a leading space, a
+    # catalogue number, and a provisional designation. Display "Eris" and keep
+    # the full designation as an alias.
+    designation = str(row.get("full_name") or row.get("name") or "").strip()
+    if not designation:
         raise ValueError("row has no full_name")
+
+    match = re.match(r"^\d+\s+([^(]+?)\s*(?:\(.*\))?$", designation)
+    name = match.group(1).strip() if match else designation
 
     # Solar-system distance is an orbital semi-major axis in AU -- a different
     # quantity from the light-year distances used for deep-sky objects, so the
@@ -211,6 +218,9 @@ def jpl_sbdb(row: dict, source: dict, reviewed: str) -> dict:
         "measurementLabel": "Semi-major axis (AU)",
         "measurementValue": f"{semi_major_au:.3f}",
     }
+
+    if designation != name:
+        record["aliases"] = [designation]
 
     try:
         diameter_km = number(row.get("diameter"), "diameter")
@@ -238,6 +248,11 @@ def build_url(source: dict, limit: int | None) -> str:
     params = dict(source.get("params") or {})
     query = source.get("query")
 
+    # A source that curates by name must see the whole result set, or the
+    # objects it selects may fall outside an arbitrary row limit.
+    if source.get("select_names"):
+        limit = None
+
     if query:
         # TAP/ADQL uses TOP rather than LIMIT.
         query = query.replace("{limit}", f"top {int(limit)}" if limit else "")
@@ -248,12 +263,43 @@ def build_url(source: dict, limit: int | None) -> str:
     return f"{source['endpoint']}?{urllib.parse.urlencode(params)}"
 
 
+def selected(record: dict, source: dict) -> bool:
+    """Apply a source's editorial name filter.
+
+    Some queries return far more than UniMap should carry, and a broad class
+    filter is not a claim about an object's type: sb-class=TNO returns every
+    trans-Neptunian object, only a few of which are dwarf planets. Choosing
+    which objects to keep is an editorial decision recorded in sources.json;
+    the values themselves still come from the source.
+    """
+    wanted = source.get("select_names")
+    if not wanted:
+        return True
+    haystack = " ".join([record.get("name", ""), *record.get("aliases", [])]).lower()
+    return any(term.lower() in haystack for term in wanted)
+
+
 def cache_path(source: dict, url: str) -> Path:
     digest = hashlib.sha256(url.encode("utf-8")).hexdigest()[:12]
     return CACHE_DIR / f"{source['id']}-{digest}.json"
 
 
-def fetch(source: dict, url: str, timeout: int, refresh: bool) -> tuple[str, Path]:
+def ssl_context(ca_bundle: str | None):
+    """Build a TLS context, optionally from an explicit CA bundle.
+
+    Some Python installations (commonly on Windows) cannot find a system trust
+    store and fail with CERTIFICATE_VERIFY_FAILED. Pointing at a real CA bundle
+    fixes that while keeping verification ON. Verification is never disabled.
+    """
+    if not ca_bundle:
+        return None
+    path = Path(ca_bundle)
+    if not path.is_file():
+        raise SystemExit(f"error: CA bundle not found: {path}")
+    return ssl.create_default_context(cafile=str(path))
+
+
+def fetch(source: dict, url: str, timeout: int, refresh: bool, context=None) -> tuple[str, Path]:
     """Fetch a source response, caching the raw body for audit and reruns."""
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     path = cache_path(source, url)
@@ -269,15 +315,24 @@ def fetch(source: dict, url: str, timeout: int, refresh: bool) -> tuple[str, Pat
     })
 
     try:
-        with urllib.request.urlopen(request, timeout=timeout) as response:
+        with urllib.request.urlopen(request, timeout=timeout, context=context) as response:
             body = response.read().decode("utf-8", "replace")
     except urllib.error.HTTPError as exc:
         detail = exc.read().decode("utf-8", "replace")[:800]
         raise SystemExit(f"error: {source['id']} request failed "
                          f"({exc.code} {exc.reason})\n{detail}")
     except urllib.error.URLError as exc:
+        hint = ""
+        if isinstance(exc.reason, ssl.SSLError) or "CERTIFICATE_VERIFY_FAILED" in str(exc.reason):
+            hint = ("\n       This is a local trust-store problem, not a problem with the "
+                    "source.\n"
+                    "       Point at a CA bundle and keep verification on:\n"
+                    "           python -m pip install certifi\n"
+                    "           python -c \"import certifi; print(certifi.where())\"\n"
+                    "           python tools/import_catalogue.py --ca-bundle <that path> ...\n"
+                    "       Do not disable certificate verification.")
         raise SystemExit(f"error: cannot reach {source['id']} ({source['endpoint']}): "
-                         f"{exc.reason}")
+                         f"{exc.reason}{hint}")
 
     path.write_text(body, encoding="utf-8")
     print(f"  cached -> {path.relative_to(ROOT)} ({len(body):,} bytes)")
@@ -338,7 +393,8 @@ def import_source(source: dict, args, existing_ids: set[str]) -> int:
                          f"for source {source['id']!r}")
 
     url = build_url(source, args.limit)
-    body, path = fetch(source, url, args.timeout, args.refresh)
+    body, path = fetch(source, url, args.timeout, args.refresh,
+                       ssl_context(args.ca_bundle))
 
     if args.probe:
         return probe(source, body, path)
@@ -352,7 +408,7 @@ def import_source(source: dict, args, existing_ids: set[str]) -> int:
     print(f"  rows: {len(rows)}")
 
     reviewed = datetime.now(timezone.utc).date().isoformat()
-    records, skipped, seen = [], 0, set()
+    records, skipped, filtered, seen = [], 0, 0, set()
 
     for row in rows:
         try:
@@ -361,6 +417,10 @@ def import_source(source: dict, args, existing_ids: set[str]) -> int:
             if args.verbose:
                 print(f"  skip: {exc}", file=sys.stderr)
             skipped += 1
+            continue
+
+        if not selected(record, source):
+            filtered += 1
             continue
 
         if record["id"] in seen:
@@ -379,6 +439,10 @@ def import_source(source: dict, args, existing_ids: set[str]) -> int:
 
     records.sort(key=lambda r: (r["type"], r["name"]))
     print(f"  normalized: {len(records)} record(s), {skipped} skipped")
+    if filtered:
+        wanted = ", ".join(source["select_names"])
+        print(f"  curation filter kept {len(records)} of {len(records) + filtered} rows "
+              f"(select_names: {wanted})")
 
     if not records:
         print("  nothing to stage", file=sys.stderr)
@@ -416,6 +480,9 @@ def main() -> int:
     parser.add_argument("--dry-run", action="store_true", help="normalize but write no staging file")
     parser.add_argument("--refresh", action="store_true", help="refetch even if cached")
     parser.add_argument("--timeout", type=int, default=120, help="HTTP timeout in seconds")
+    parser.add_argument("--ca-bundle", default=None,
+                        help="PEM CA bundle to verify TLS with (fixes local "
+                             "CERTIFICATE_VERIFY_FAILED without disabling verification)")
     parser.add_argument("--verbose", action="store_true", help="report every skipped row")
     args = parser.parse_args()
 
