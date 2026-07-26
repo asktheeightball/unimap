@@ -41,6 +41,7 @@ const el = {
   modeNav: document.getElementById("mode-nav"),
   backButton: document.getElementById("back-button"),
   detailName: document.getElementById("detail-name"),
+  detailSummary: document.getElementById("detail-summary"),
   detailTypeValue: document.getElementById("detail-type-value"),
   detailDistance: document.getElementById("detail-distance"),
   detailSize: document.getElementById("detail-size"),
@@ -169,9 +170,25 @@ function setDetailRow(row, valueElement, value) {
   row.hidden = text === "";
 }
 
+/* A hand-written `summary` always wins over the importer-generated
+   `sourceSummary`, and the two are never merged: one is editorial prose a person
+   wrote, the other is assembled from the values a source returned. A record with
+   neither shows no paragraph at all rather than an empty block. */
+function describeBody(body) {
+  const written = typeof body.summary === "string" ? body.summary.trim() : "";
+  if (written) {
+    return written;
+  }
+  return typeof body.sourceSummary === "string" ? body.sourceSummary.trim() : "";
+}
+
 function renderDetails(body) {
   el.detailName.textContent = body.name;
   el.detailTypeValue.textContent = body.type;
+
+  const description = describeBody(body);
+  el.detailSummary.textContent = description;
+  el.detailSummary.hidden = description === "";
 
   setDetailRow(el.rowDistance, el.detailDistance, body.distance);
   setDetailRow(el.rowSize, el.detailSize, body.size);

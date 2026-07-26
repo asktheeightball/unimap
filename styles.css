@@ -276,6 +276,14 @@ input[type="search"]::placeholder {
   font-size: clamp(1.5rem, 4vw, 2rem);
 }
 
+.detail-summary {
+  margin: 0 0 1.5rem;
+  max-width: 46rem;
+  color: var(--text-muted);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
 .detail-list {
   margin: 0;
   display: grid;
