@@ -24,6 +24,23 @@
     "circumference": "~74 million km"
   },
   {
+    "id": "ceres",
+    "name": "Ceres",
+    "type": "Dwarf Planet",
+    "distance": "~2.8 AU (mean orbital distance)",
+    "measurementLabel": "Semi-major axis (AU)",
+    "measurementValue": "2.770",
+    "aliases": [
+      "1 Ceres (A801 AA)",
+      "Main-belt Asteroid (JPL orbit class)"
+    ],
+    "size": "~939 km (diameter)",
+    "circumference": "~2,951 km",
+    "sourceName": "NASA/JPL Small-Body Database",
+    "sourceUrl": "https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html",
+    "lastReviewed": "2026-07-26"
+  },
+  {
     "id": "eris",
     "name": "Eris",
     "type": "Dwarf Planet",
@@ -1165,7 +1182,185 @@
     "type": "Galaxy",
     "distance": "~2.537 million ly",
     "size": "~220,000 ly across",
-    "circumference": "~691,000 ly"
+    "circumference": "~691,000 ly",
+    "rightAscension": "10.68471",
+    "declination": "41.26875",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "active galaxy nucleus",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "ic-1101",
+    "name": "IC 1101",
+    "type": "Galaxy",
+    "rightAscension": "227.73375",
+    "declination": "5.74477",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "radio galaxy",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "lmc",
+    "name": "LMC",
+    "type": "Galaxy",
+    "aliases": [
+      "NAME LMC"
+    ],
+    "rightAscension": "80.89417",
+    "declination": "-69.75611",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "galaxy",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "m-101",
+    "name": "M 101",
+    "type": "Galaxy",
+    "rightAscension": "210.80243",
+    "declination": "54.34875",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "galaxy in a pair",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "m-49",
+    "name": "M 49",
+    "type": "Galaxy",
+    "rightAscension": "187.44490",
+    "declination": "8.00040",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "Seyfert 2 galaxy",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "m-51",
+    "name": "M 51",
+    "type": "Galaxy",
+    "rightAscension": "202.46957",
+    "declination": "47.19526",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "Seyfert 2 galaxy",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "m-60",
+    "name": "M 60",
+    "type": "Galaxy",
+    "rightAscension": "190.91655",
+    "declination": "11.55269",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "galaxy in a cluster",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "m-63",
+    "name": "M 63",
+    "type": "Galaxy",
+    "rightAscension": "198.95531",
+    "declination": "42.02937",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "LINER-type active galaxy nucleus",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "m-64",
+    "name": "M 64",
+    "type": "Galaxy",
+    "rightAscension": "194.18207",
+    "declination": "21.68266",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "Seyfert galaxy",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "m-74",
+    "name": "M 74",
+    "type": "Galaxy",
+    "rightAscension": "24.17394",
+    "declination": "15.78364",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "galaxy",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "m-77",
+    "name": "M 77",
+    "type": "Galaxy",
+    "rightAscension": "40.66962",
+    "declination": "-0.01329",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "Seyfert 2 galaxy",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "m-81",
+    "name": "M 81",
+    "type": "Galaxy",
+    "rightAscension": "148.88822",
+    "declination": "69.06530",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "Seyfert 2 galaxy",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "m-82",
+    "name": "M 82",
+    "type": "Galaxy",
+    "rightAscension": "148.96846",
+    "declination": "69.67970",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "active galaxy nucleus",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "m-87",
+    "name": "M 87",
+    "type": "Galaxy",
+    "rightAscension": "187.70593",
+    "declination": "12.39112",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "active galaxy nucleus",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "m-94",
+    "name": "M 94",
+    "type": "Galaxy",
+    "rightAscension": "192.72114",
+    "declination": "41.12025",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "Seyfert galaxy",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
   },
   {
     "id": "milky-way",
@@ -1176,12 +1371,130 @@
     "circumference": "~332,000 ly"
   },
   {
+    "id": "ngc-1300",
+    "name": "NGC 1300",
+    "type": "Galaxy",
+    "rightAscension": "49.92103",
+    "declination": "-19.41116",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "Seyfert 2 galaxy",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "ngc-1316",
+    "name": "NGC 1316",
+    "type": "Galaxy",
+    "rightAscension": "50.67412",
+    "declination": "-37.20820",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "radio galaxy",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "ngc-1365",
+    "name": "NGC 1365",
+    "type": "Galaxy",
+    "rightAscension": "53.40191",
+    "declination": "-36.14066",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "Seyfert 1 galaxy",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "ngc-2403",
+    "name": "NGC 2403",
+    "type": "Galaxy",
+    "rightAscension": "114.21391",
+    "declination": "65.60268",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "active galaxy nucleus",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "ngc-253",
+    "name": "NGC 253",
+    "type": "Galaxy",
+    "rightAscension": "11.88806",
+    "declination": "-25.28880",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "Seyfert galaxy",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "ngc-300",
+    "name": "NGC 300",
+    "type": "Galaxy",
+    "rightAscension": "13.72269",
+    "declination": "-37.68421",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "galaxy in a group",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "ngc-4565",
+    "name": "NGC 4565",
+    "type": "Galaxy",
+    "rightAscension": "189.08668",
+    "declination": "25.98739",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "Seyfert 2 galaxy",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "ngc-6822",
+    "name": "NGC 6822",
+    "type": "Galaxy",
+    "rightAscension": "296.23416",
+    "declination": "-14.79758",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "galaxy",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "smc",
+    "name": "SMC",
+    "type": "Galaxy",
+    "aliases": [
+      "NAME SMC"
+    ],
+    "rightAscension": "13.15833",
+    "declination": "-72.80028",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "galaxy",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
     "id": "sombrero-galaxy",
     "name": "Sombrero Galaxy",
     "type": "Galaxy",
     "distance": "~29.3 million ly",
     "size": "~50,000 ly across",
-    "circumference": "~157,000 ly"
+    "circumference": "~157,000 ly",
+    "rightAscension": "189.99763",
+    "declination": "-11.62305",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "LINER-type active galaxy nucleus",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
   },
   {
     "id": "triangulum",
@@ -1189,7 +1502,26 @@
     "type": "Galaxy",
     "distance": "~2.73 million ly",
     "size": "~60,000 ly across",
-    "circumference": "~188,000 ly"
+    "circumference": "~188,000 ly",
+    "rightAscension": "23.46207",
+    "declination": "30.66018",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "galaxy in a group",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "ugca-34",
+    "name": "UGCA 34",
+    "type": "Galaxy",
+    "rightAscension": "39.14778",
+    "declination": "59.65486",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "galaxy in a group",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
   },
   {
     "id": "crab-nebula",
@@ -1197,7 +1529,14 @@
     "type": "Nebula",
     "distance": "~6,500 ly",
     "size": "~11 ly across",
-    "circumference": "~35 ly"
+    "circumference": "~35 ly",
+    "rightAscension": "83.63240",
+    "declination": "22.01740",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "supernova remnant",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
   },
   {
     "id": "helix-nebula",
@@ -1205,7 +1544,182 @@
     "type": "Nebula",
     "distance": "~655 ly",
     "size": "~2.5 ly across",
-    "circumference": "~7.9 ly"
+    "circumference": "~7.9 ly",
+    "rightAscension": "337.41061",
+    "declination": "-20.83715",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "planetary nebula",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "ic-434",
+    "name": "IC 434",
+    "type": "Nebula",
+    "rightAscension": "85.25000",
+    "declination": "-2.50000",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "HII region",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "m-27",
+    "name": "M 27",
+    "type": "Nebula",
+    "rightAscension": "299.90151",
+    "declination": "22.72120",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "planetary nebula",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "m-43",
+    "name": "M 43",
+    "type": "Nebula",
+    "rightAscension": "83.87917",
+    "declination": "-5.27000",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "HII region",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "m-57",
+    "name": "M 57",
+    "type": "Nebula",
+    "rightAscension": "283.39624",
+    "declination": "33.02913",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "planetary nebula",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "m-76",
+    "name": "M 76",
+    "type": "Nebula",
+    "rightAscension": "25.58190",
+    "declination": "51.57543",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "planetary nebula",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "m-78",
+    "name": "M 78",
+    "type": "Nebula",
+    "rightAscension": "86.69083",
+    "declination": "0.07917",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "reflection nebula",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "m-97",
+    "name": "M 97",
+    "type": "Nebula",
+    "rightAscension": "168.69880",
+    "declination": "55.01902",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "planetary nebula",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "ngc-2392",
+    "name": "NGC 2392",
+    "type": "Nebula",
+    "rightAscension": "112.29486",
+    "declination": "20.91180",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "planetary nebula",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "ngc-281",
+    "name": "NGC 281",
+    "type": "Nebula",
+    "rightAscension": "13.10458",
+    "declination": "56.56500",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "HII region",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "ngc-3132",
+    "name": "NGC 3132",
+    "type": "Nebula",
+    "rightAscension": "151.75736",
+    "declination": "-40.43643",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "planetary nebula",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "ngc-3372",
+    "name": "NGC 3372",
+    "type": "Nebula",
+    "rightAscension": "161.25929",
+    "declination": "-59.69994",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "HII region",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "ngc-6302",
+    "name": "NGC 6302",
+    "type": "Nebula",
+    "rightAscension": "258.43540",
+    "declination": "-37.10310",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "planetary nebula",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "ngc-6543",
+    "name": "NGC 6543",
+    "type": "Nebula",
+    "rightAscension": "269.63918",
+    "declination": "66.63299",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "planetary nebula",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "ngc-7635",
+    "name": "NGC 7635",
+    "type": "Nebula",
+    "rightAscension": "350.20125",
+    "declination": "61.20167",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "HII region",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
   },
   {
     "id": "orion-nebula",
@@ -1213,7 +1727,14 @@
     "type": "Nebula",
     "distance": "~1,344 ly",
     "size": "~24 ly across",
-    "circumference": "~75 ly"
+    "circumference": "~75 ly",
+    "rightAscension": "83.82010",
+    "declination": "-5.38760",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "HII region",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
   },
   {
     "id": "psr-b1919-21",
@@ -1264,20 +1785,266 @@
     "circumference": "~21,344 km"
   },
   {
+    "id": "cm-tau",
+    "name": "CM Tau",
+    "type": "Pulsar",
+    "aliases": [
+      "V* CM Tau"
+    ],
+    "rightAscension": "83.63311",
+    "declination": "22.01449",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "pulsar",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "psr-b0329-54",
+    "name": "PSR B0329+54",
+    "type": "Pulsar",
+    "rightAscension": "53.24724",
+    "declination": "54.57917",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "pulsar",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "psr-b1257-12",
+    "name": "PSR B1257+12",
+    "type": "Pulsar",
+    "rightAscension": "195.01295",
+    "declination": "12.68199",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "pulsar",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "psr-b1509-58",
+    "name": "PSR B1509-58",
+    "type": "Pulsar",
+    "rightAscension": "228.44820",
+    "declination": "-59.13180",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "pulsar",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "psr-j0437-47",
+    "name": "PSR J0437-47",
+    "type": "Pulsar",
+    "rightAscension": "69.31583",
+    "declination": "-47.25237",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "pulsar",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "psr-j0633-1746",
+    "name": "PSR J0633+1746",
+    "type": "Pulsar",
+    "rightAscension": "98.47564",
+    "declination": "17.77025",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "pulsar",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "psr-j0740-6620",
+    "name": "PSR J0740+6620",
+    "type": "Pulsar",
+    "rightAscension": "115.19083",
+    "declination": "66.34267",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "pulsar",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "psr-j1614-2230",
+    "name": "PSR J1614-2230",
+    "type": "Pulsar",
+    "rightAscension": "243.65212",
+    "declination": "-22.50876",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "pulsar",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "psr-j1748-2446ad",
+    "name": "PSR J1748-2446ad",
+    "type": "Pulsar",
+    "rightAscension": "267.02042",
+    "declination": "-24.76778",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "pulsar",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "psr-j1915-1606",
+    "name": "PSR J1915+1606",
+    "type": "Pulsar",
+    "rightAscension": "288.86667",
+    "declination": "16.10761",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "pulsar",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "rx-j1856-6-3754",
+    "name": "RX J1856.6-3754",
+    "type": "Pulsar",
+    "rightAscension": "284.14629",
+    "declination": "-37.90847",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "pulsar",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "vela-pulsar",
+    "name": "Vela Pulsar",
+    "type": "Pulsar",
+    "aliases": [
+      "NAME Vela Pulsar"
+    ],
+    "rightAscension": "128.83606",
+    "declination": "-45.17643",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "pulsar",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "51-peg",
+    "name": "51 Peg",
+    "type": "Star",
+    "aliases": [
+      "* 51 Peg",
+      "Spectral type G2IV"
+    ],
+    "rightAscension": "344.36659",
+    "declination": "20.76883",
+    "distance": "~50.6 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "64.4048",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "barnard-s-star",
+    "name": "Barnard's star",
+    "type": "Star",
+    "aliases": [
+      "NAME Barnard's star",
+      "Spectral type M4V"
+    ],
+    "rightAscension": "269.45208",
+    "declination": "4.69336",
+    "distance": "~6.0 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "546.9759",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
     "id": "betelgeuse",
     "name": "Betelgeuse",
     "type": "Star",
-    "distance": "~548 ly",
+    "distance": "~497.9 ly",
     "size": "445 million km",
-    "circumference": "~2.8 billion km"
+    "circumference": "~2.8 billion km",
+    "rightAscension": "88.79294",
+    "declination": "7.40706",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "6.5500",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "cd-23-14742",
+    "name": "CD-23 14742",
+    "type": "Star",
+    "rightAscension": "282.45568",
+    "declination": "-23.83624",
+    "aliases": [
+      "Spectral type M3.5Ve"
+    ],
+    "distance": "~9.7 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "336.0266",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "hd-95735",
+    "name": "HD 95735",
+    "type": "Star",
+    "rightAscension": "165.83415",
+    "declination": "35.96988",
+    "aliases": [
+      "Spectral type M2+V"
+    ],
+    "distance": "~8.3 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "392.7529",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-186",
+    "name": "Kepler-186",
+    "type": "Star",
+    "rightAscension": "298.65272",
+    "declination": "43.95501",
+    "aliases": [
+      "Spectral type M1V"
+    ],
+    "distance": "~578.9 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "5.6336",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
   },
   {
     "id": "proxima-centauri",
     "name": "Proxima Centauri",
     "type": "Star",
-    "distance": "~4.24 ly",
+    "distance": "~4.2 ly",
     "size": "214,000 km",
-    "circumference": "~672,000 km"
+    "circumference": "~672,000 km",
+    "rightAscension": "217.42894",
+    "declination": "-62.67949",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "768.0665",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
   },
   {
     "id": "sirius-a",
@@ -1285,7 +2052,14 @@
     "type": "Star",
     "distance": "~8.6 ly",
     "size": "2.38 million km",
-    "circumference": "~7.5 million km"
+    "circumference": "~7.5 million km",
+    "rightAscension": "101.28716",
+    "declination": "-16.71612",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "379.2100",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
   },
   {
     "id": "sol",
@@ -1294,5 +2068,1112 @@
     "distance": "~8 light-minutes",
     "size": "1.39 million km",
     "circumference": "~4.37 million km"
+  },
+  {
+    "id": "trappist-1",
+    "name": "TRAPPIST-1",
+    "type": "Star",
+    "rightAscension": "346.62237",
+    "declination": "-5.04140",
+    "aliases": [
+      "Spectral type M7.5e"
+    ],
+    "distance": "~40.7 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "80.2123",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "uy-sct",
+    "name": "UY Sct",
+    "type": "Star",
+    "aliases": [
+      "V* UY Sct",
+      "Spectral type M4Iae"
+    ],
+    "rightAscension": "276.90220",
+    "declination": "-12.46636",
+    "distance": "~6,313.5 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "0.5166",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "vy-cma",
+    "name": "VY CMa",
+    "type": "Star",
+    "aliases": [
+      "V* VY CMa",
+      "Spectral type M5Iae"
+    ],
+    "rightAscension": "110.74303",
+    "declination": "-25.76755",
+    "distance": "~7,780.4 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "0.4192",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "wolf-359",
+    "name": "Wolf 359",
+    "type": "Star",
+    "rightAscension": "164.12050",
+    "declination": "7.01472",
+    "aliases": [
+      "Spectral type dM6"
+    ],
+    "distance": "~7.9 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "415.1794",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "alf-and",
+    "name": "alf And",
+    "type": "Star",
+    "aliases": [
+      "* alf And",
+      "Spectral type B8IV-VHgMn"
+    ],
+    "rightAscension": "2.09692",
+    "declination": "29.09043",
+    "distance": "~97.0 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "33.6200",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "alf-aql",
+    "name": "alf Aql",
+    "type": "Star",
+    "aliases": [
+      "* alf Aql",
+      "Spectral type A7Vn"
+    ],
+    "rightAscension": "297.69583",
+    "declination": "8.86832",
+    "distance": "~16.7 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "194.9500",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "alf-ari",
+    "name": "alf Ari",
+    "type": "Star",
+    "aliases": [
+      "* alf Ari",
+      "Spectral type K2-IIIbCa-1"
+    ],
+    "rightAscension": "31.79336",
+    "declination": "23.46242",
+    "distance": "~65.8 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "49.5600",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "alf-aur",
+    "name": "alf Aur",
+    "type": "Star",
+    "aliases": [
+      "* alf Aur",
+      "Spectral type G3III:"
+    ],
+    "rightAscension": "79.17233",
+    "declination": "45.99799",
+    "distance": "~42.8 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "76.2000",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "alf-boo",
+    "name": "alf Boo",
+    "type": "Star",
+    "aliases": [
+      "* alf Boo",
+      "Spectral type K1.5IIIFe-0.5"
+    ],
+    "rightAscension": "213.91530",
+    "declination": "19.18241",
+    "distance": "~36.7 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "88.8300",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "alf-cmi",
+    "name": "alf CMi",
+    "type": "Star",
+    "aliases": [
+      "* alf CMi",
+      "Spectral type F5IV-V+DQZ"
+    ],
+    "rightAscension": "114.82550",
+    "declination": "5.22499",
+    "distance": "~11.5 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "284.5600",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "alf-car",
+    "name": "alf Car",
+    "type": "Star",
+    "aliases": [
+      "* alf Car",
+      "Spectral type A9II"
+    ],
+    "rightAscension": "95.98796",
+    "declination": "-52.69566",
+    "distance": "~309.2 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "10.5500",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "alf-cen-a",
+    "name": "alf Cen A",
+    "type": "Star",
+    "aliases": [
+      "* alf Cen A",
+      "Spectral type G2V"
+    ],
+    "rightAscension": "219.90206",
+    "declination": "-60.83399",
+    "distance": "~4.4 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "742.1200",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "alf-cen-b",
+    "name": "alf Cen B",
+    "type": "Star",
+    "aliases": [
+      "* alf Cen B",
+      "Spectral type K1V"
+    ],
+    "rightAscension": "219.89610",
+    "declination": "-60.83753",
+    "distance": "~4.4 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "742.1200",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "alf-cru",
+    "name": "alf Cru",
+    "type": "Star",
+    "aliases": [
+      "* alf Cru",
+      "Spectral type B0.5IV+B1V"
+    ],
+    "rightAscension": "186.64956",
+    "declination": "-63.09909",
+    "distance": "~322.0 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "10.1300",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "alf-cyg",
+    "name": "alf Cyg",
+    "type": "Star",
+    "aliases": [
+      "* alf Cyg",
+      "Spectral type A2Ia"
+    ],
+    "rightAscension": "310.35798",
+    "declination": "45.28034",
+    "distance": "~1,411.9 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "2.3100",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "alf-eri",
+    "name": "alf Eri",
+    "type": "Star",
+    "aliases": [
+      "* alf Eri",
+      "Spectral type B6Vpe"
+    ],
+    "rightAscension": "24.42852",
+    "declination": "-57.23675",
+    "distance": "~139.4 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "23.3900",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "alf-gem",
+    "name": "alf Gem",
+    "type": "Star",
+    "aliases": [
+      "* alf Gem",
+      "Spectral type A1V+A2Vm"
+    ],
+    "rightAscension": "113.64947",
+    "declination": "31.88828",
+    "distance": "~50.9 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "64.1200",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "alf-gru",
+    "name": "alf Gru",
+    "type": "Star",
+    "aliases": [
+      "* alf Gru",
+      "Spectral type B6V"
+    ],
+    "rightAscension": "332.05827",
+    "declination": "-46.96097",
+    "distance": "~101.0 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "32.2900",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "alf-hya",
+    "name": "alf Hya",
+    "type": "Star",
+    "aliases": [
+      "* alf Hya",
+      "Spectral type K3IIIa"
+    ],
+    "rightAscension": "141.89684",
+    "declination": "-8.65860",
+    "distance": "~180.3 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "18.0900",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "alf-leo",
+    "name": "alf Leo",
+    "type": "Star",
+    "aliases": [
+      "* alf Leo",
+      "Spectral type B8IVn"
+    ],
+    "rightAscension": "152.09296",
+    "declination": "11.96721",
+    "distance": "~79.3 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "41.1300",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "alf-lyr",
+    "name": "alf Lyr",
+    "type": "Star",
+    "aliases": [
+      "* alf Lyr",
+      "Spectral type A0V"
+    ],
+    "rightAscension": "279.23473",
+    "declination": "38.78369",
+    "distance": "~25.0 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "130.2300",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "alf-oph",
+    "name": "alf Oph",
+    "type": "Star",
+    "aliases": [
+      "* alf Oph",
+      "Spectral type A5IVnn"
+    ],
+    "rightAscension": "263.73362",
+    "declination": "12.56004",
+    "distance": "~48.6 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "67.1300",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "alf-pav",
+    "name": "alf Pav",
+    "type": "Star",
+    "aliases": [
+      "* alf Pav",
+      "Spectral type B2IV"
+    ],
+    "rightAscension": "306.41190",
+    "declination": "-56.73509",
+    "distance": "~178.8 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "18.2400",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "alf-per",
+    "name": "alf Per",
+    "type": "Star",
+    "aliases": [
+      "* alf Per",
+      "Spectral type F5Ib"
+    ],
+    "rightAscension": "51.08071",
+    "declination": "49.86118",
+    "distance": "~506.5 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "6.4400",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "alf-psa",
+    "name": "alf PsA",
+    "type": "Star",
+    "aliases": [
+      "* alf PsA",
+      "Spectral type A4V"
+    ],
+    "rightAscension": "344.41269",
+    "declination": "-29.62224",
+    "distance": "~25.1 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "129.8100",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "alf-sco",
+    "name": "alf Sco",
+    "type": "Star",
+    "aliases": [
+      "* alf Sco",
+      "Spectral type M1.5Iab+B2Vn"
+    ],
+    "rightAscension": "247.35192",
+    "declination": "-26.43200",
+    "distance": "~553.7 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "5.8900",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "alf-tau",
+    "name": "alf Tau",
+    "type": "Star",
+    "aliases": [
+      "* alf Tau",
+      "Spectral type K5+III"
+    ],
+    "rightAscension": "68.98016",
+    "declination": "16.50930",
+    "distance": "~66.6 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "48.9400",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "alf-uma",
+    "name": "alf UMa",
+    "type": "Star",
+    "aliases": [
+      "* alf UMa",
+      "Spectral type G9III+A7.5"
+    ],
+    "rightAscension": "165.93196",
+    "declination": "61.75103",
+    "distance": "~122.9 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "26.5400",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "alf-umi",
+    "name": "alf UMi",
+    "type": "Star",
+    "aliases": [
+      "* alf UMi",
+      "Spectral type F8Ib"
+    ],
+    "rightAscension": "37.95456",
+    "declination": "89.26411",
+    "distance": "~432.6 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "7.5400",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "alf-vir",
+    "name": "alf Vir",
+    "type": "Star",
+    "aliases": [
+      "* alf Vir",
+      "Spectral type B1V"
+    ],
+    "rightAscension": "201.29825",
+    "declination": "-11.16132",
+    "distance": "~249.7 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "13.0600",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "bet-cma",
+    "name": "bet CMa",
+    "type": "Star",
+    "aliases": [
+      "* bet CMa",
+      "Spectral type B1II-III"
+    ],
+    "rightAscension": "95.67494",
+    "declination": "-17.95592",
+    "distance": "~492.7 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "6.6200",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "bet-car",
+    "name": "bet Car",
+    "type": "Star",
+    "aliases": [
+      "* bet Car",
+      "Spectral type A1III-"
+    ],
+    "rightAscension": "138.29991",
+    "declination": "-69.71721",
+    "distance": "~113.2 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "28.8200",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "bet-cen",
+    "name": "bet Cen",
+    "type": "Star",
+    "aliases": [
+      "* bet Cen",
+      "Spectral type B1III"
+    ],
+    "rightAscension": "210.95586",
+    "declination": "-60.37304",
+    "distance": "~392.0 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "8.3200",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "bet-cru",
+    "name": "bet Cru",
+    "type": "Star",
+    "aliases": [
+      "* bet Cru",
+      "Spectral type B1IV"
+    ],
+    "rightAscension": "191.93029",
+    "declination": "-59.68877",
+    "distance": "~278.5 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "11.7100",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "bet-gem",
+    "name": "bet Gem",
+    "type": "Star",
+    "aliases": [
+      "* bet Gem",
+      "Spectral type K0IIIb"
+    ],
+    "rightAscension": "116.32896",
+    "declination": "28.02620",
+    "distance": "~33.8 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "96.5400",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "bet-leo",
+    "name": "bet Leo",
+    "type": "Star",
+    "aliases": [
+      "* bet Leo",
+      "Spectral type A3Va"
+    ],
+    "rightAscension": "177.26491",
+    "declination": "14.57206",
+    "distance": "~35.9 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "90.9100",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "bet-ori",
+    "name": "bet Ori",
+    "type": "Star",
+    "aliases": [
+      "* bet Ori",
+      "Spectral type B8Ia"
+    ],
+    "rightAscension": "78.63447",
+    "declination": "-8.20164",
+    "distance": "~862.8 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "3.7800",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "bet-per",
+    "name": "bet Per",
+    "type": "Star",
+    "aliases": [
+      "* bet Per",
+      "Spectral type B8V"
+    ],
+    "rightAscension": "47.04222",
+    "declination": "40.95565",
+    "distance": "~89.9 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "36.2700",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "bet-tau",
+    "name": "bet Tau",
+    "type": "Star",
+    "aliases": [
+      "* bet Tau",
+      "Spectral type B7III"
+    ],
+    "rightAscension": "81.57297",
+    "declination": "28.60745",
+    "distance": "~133.9 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "24.3600",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "bet-umi",
+    "name": "bet UMi",
+    "type": "Star",
+    "aliases": [
+      "* bet UMi",
+      "Spectral type K4-III"
+    ],
+    "rightAscension": "222.67636",
+    "declination": "74.15550",
+    "distance": "~130.9 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "24.9100",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "del-cma",
+    "name": "del CMa",
+    "type": "Star",
+    "aliases": [
+      "* del CMa",
+      "Spectral type F8Ia"
+    ],
+    "rightAscension": "107.09785",
+    "declination": "-26.39320",
+    "distance": "~1,606.7 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "2.0300",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "del-cep",
+    "name": "del Cep",
+    "type": "Star",
+    "aliases": [
+      "* del Cep",
+      "Spectral type F5Iab:+B7-8"
+    ],
+    "rightAscension": "337.29276",
+    "declination": "58.41519",
+    "distance": "~917.4 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "3.5551",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "eps-cma",
+    "name": "eps CMa",
+    "type": "Star",
+    "aliases": [
+      "* eps CMa",
+      "Spectral type B1.5II"
+    ],
+    "rightAscension": "104.65645",
+    "declination": "-28.97209",
+    "distance": "~405.2 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "8.0500",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "eps-eri",
+    "name": "eps Eri",
+    "type": "Star",
+    "aliases": [
+      "* eps Eri",
+      "Spectral type K2V"
+    ],
+    "rightAscension": "53.23269",
+    "declination": "-9.45826",
+    "distance": "~10.5 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "310.5773",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "eps-ori",
+    "name": "eps Ori",
+    "type": "Star",
+    "aliases": [
+      "* eps Ori",
+      "Spectral type B0Ia"
+    ],
+    "rightAscension": "84.05339",
+    "declination": "-1.20192",
+    "distance": "~1,976.7 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "1.6500",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "eps-sgr",
+    "name": "eps Sgr",
+    "type": "Star",
+    "aliases": [
+      "* eps Sgr",
+      "Spectral type B9IVp_lB?"
+    ],
+    "rightAscension": "276.04299",
+    "declination": "-34.38462",
+    "distance": "~143.3 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "22.7600",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "eps-uma",
+    "name": "eps UMa",
+    "type": "Star",
+    "aliases": [
+      "* eps UMa",
+      "Spectral type A1III-IVpkB9"
+    ],
+    "rightAscension": "193.50729",
+    "declination": "55.95982",
+    "distance": "~82.6 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "39.5100",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "eta-car",
+    "name": "eta Car",
+    "type": "Star",
+    "aliases": [
+      "* eta Car",
+      "Spectral type LBV"
+    ],
+    "rightAscension": "161.26477",
+    "declination": "-59.68443",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "blue supergiant",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "eta-uma",
+    "name": "eta UMa",
+    "type": "Star",
+    "aliases": [
+      "* eta UMa",
+      "Spectral type B3V"
+    ],
+    "rightAscension": "206.88516",
+    "declination": "49.31327",
+    "distance": "~103.9 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "31.3800",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "gam-cru",
+    "name": "gam Cru",
+    "type": "Star",
+    "aliases": [
+      "* gam Cru",
+      "Spectral type M3.5III"
+    ],
+    "rightAscension": "187.79150",
+    "declination": "-57.11321",
+    "distance": "~88.6 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "36.8300",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "gam-gem",
+    "name": "gam Gem",
+    "type": "Star",
+    "aliases": [
+      "* gam Gem",
+      "Spectral type A1.5IV+"
+    ],
+    "rightAscension": "99.42796",
+    "declination": "16.39928",
+    "distance": "~109.3 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "29.8400",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "gam-ori",
+    "name": "gam Ori",
+    "type": "Star",
+    "aliases": [
+      "* gam Ori",
+      "Spectral type B2III"
+    ],
+    "rightAscension": "81.28276",
+    "declination": "6.34970",
+    "distance": "~252.4 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "12.9200",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kap-ori",
+    "name": "kap Ori",
+    "type": "Star",
+    "aliases": [
+      "* kap Ori",
+      "Spectral type B0.5Ia"
+    ],
+    "rightAscension": "86.93912",
+    "declination": "-9.66960",
+    "distance": "~647.1 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "5.0400",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "lam-sco",
+    "name": "lam Sco",
+    "type": "Star",
+    "aliases": [
+      "* lam Sco",
+      "Spectral type B2IV+DA7.9"
+    ],
+    "rightAscension": "263.40217",
+    "declination": "-37.10382",
+    "distance": "~571.2 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "5.7100",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "omi-cet",
+    "name": "omi Cet",
+    "type": "Star",
+    "aliases": [
+      "* omi Cet",
+      "Spectral type M5/6IIIe"
+    ],
+    "rightAscension": "34.83663",
+    "declination": "-2.97764",
+    "distance": "~299.0 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "10.9100",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "sig-sgr",
+    "name": "sig Sgr",
+    "type": "Star",
+    "aliases": [
+      "* sig Sgr",
+      "Spectral type B2.5V"
+    ],
+    "rightAscension": "283.81636",
+    "declination": "-26.29672",
+    "distance": "~227.8 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "14.3200",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "tau-cet",
+    "name": "tau Cet",
+    "type": "Star",
+    "aliases": [
+      "* tau Cet",
+      "Spectral type G8V"
+    ],
+    "rightAscension": "26.01701",
+    "declination": "-15.93748",
+    "distance": "~11.9 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "273.8097",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "zet-ori",
+    "name": "zet Ori",
+    "type": "Star",
+    "aliases": [
+      "* zet Ori",
+      "Spectral type O9.7Ib+B0III"
+    ],
+    "rightAscension": "85.18969",
+    "declination": "-1.94257",
+    "distance": "~736.2 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "4.4300",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "zet-uma",
+    "name": "zet UMa",
+    "type": "Star",
+    "aliases": [
+      "* zet UMa"
+    ],
+    "rightAscension": "200.98142",
+    "declination": "54.92535",
+    "distance": "~85.8 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "38.0100",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "ic-1396",
+    "name": "IC 1396",
+    "type": "Star Cluster",
+    "rightAscension": "324.74500",
+    "declination": "57.51389",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "open cluster",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "m-16",
+    "name": "M 16",
+    "type": "Star Cluster",
+    "rightAscension": "274.68800",
+    "declination": "-13.79200",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "open cluster",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "m-20",
+    "name": "M 20",
+    "type": "Star Cluster",
+    "rightAscension": "270.67500",
+    "declination": "-22.97167",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "open cluster",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "m-8",
+    "name": "M 8",
+    "type": "Star Cluster",
+    "rightAscension": "270.90417",
+    "declination": "-24.38667",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "open cluster",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "ngc-2024",
+    "name": "NGC 2024",
+    "type": "Star Cluster",
+    "rightAscension": "85.42917",
+    "declination": "-1.84167",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "cluster of stars",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "ngc-2237",
+    "name": "NGC 2237",
+    "type": "Star Cluster",
+    "rightAscension": "97.65042",
+    "declination": "4.98072",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "cluster of stars",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "ngc-2264",
+    "name": "NGC 2264",
+    "type": "Star Cluster",
+    "rightAscension": "100.21708",
+    "declination": "9.87694",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "open cluster",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "ngc-6618",
+    "name": "NGC 6618",
+    "type": "Star Cluster",
+    "rightAscension": "275.19583",
+    "declination": "-16.17167",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "open cluster",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "ngc-7000",
+    "name": "NGC 7000",
+    "type": "Star Cluster",
+    "rightAscension": "314.69583",
+    "declination": "44.33000",
+    "measurementLabel": "SIMBAD classification",
+    "measurementValue": "cluster of stars",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-26"
   }
 ]

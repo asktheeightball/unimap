@@ -46,6 +46,7 @@ const el = {
   detailMeasurementLabel: document.getElementById("detail-measurement-label"),
   detailMeasurementValue: document.getElementById("detail-measurement-value"),
   detailSource: document.getElementById("detail-source"),
+  rowDistance: document.getElementById("detail-row-distance"),
   rowSize: document.getElementById("detail-row-size"),
   rowCircumference: document.getElementById("detail-row-circumference"),
   rowMeasurement: document.getElementById("detail-row-measurement"),
@@ -143,9 +144,13 @@ function createResultItem(body) {
   name.className = "result-name";
   name.textContent = body.name;
 
+  // Distance is optional: SIMBAD's basic table has no distance column, so its
+  // galaxies, nebulae, clusters and pulsars carry coordinates and a
+  // classification but no distance. Show the type alone rather than "undefined".
   const meta = document.createElement("span");
   meta.className = "result-meta";
-  meta.textContent = `${body.type} · ${body.distance}`;
+  const distance = typeof body.distance === "string" ? body.distance.trim() : "";
+  meta.textContent = distance ? `${body.type} · ${distance}` : body.type;
 
   button.append(name, meta);
   button.addEventListener("click", () => renderDetails(body));
@@ -165,8 +170,8 @@ function setDetailRow(row, valueElement, value) {
 function renderDetails(body) {
   el.detailName.textContent = body.name;
   el.detailTypeValue.textContent = body.type;
-  el.detailDistance.textContent = body.distance;
 
+  setDetailRow(el.rowDistance, el.detailDistance, body.distance);
   setDetailRow(el.rowSize, el.detailSize, body.size);
   setDetailRow(el.rowCircumference, el.detailCircumference, body.circumference);
   setDetailRow(el.rowSource, el.detailSource, body.sourceName);
