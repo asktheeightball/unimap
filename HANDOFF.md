@@ -27,6 +27,7 @@ There is no framework, package manager, build command, backend, database, or aut
 - `styles.css` contains presentation and responsive styling.
 - `app.js` loads data, manages state, filters results, renders browse/detail views, and switches between Browse and Quiz.
 - `quiz.js` implements quiz mode: question generation, timing, scoring and leaderboards.
+- The detail view renders a description, preferring hand-written `summary` over generated `sourceSummary`.
 - `celestial-bodies.json` contains the catalogue (208 records).
 - `README.md` explains local running and basic static deployment.
 - Project-control documents define product scope, priorities, roadmap, decisions, deployment, and contributor instructions.
@@ -48,9 +49,9 @@ The existing application is documented to provide:
 
 ## Current priority
 
-Read `PRIORITY.md`. **P0 (catalogue expansion) and P1 (quiz mode) are both complete.** The active task is now **P2 — Add educational object descriptions**.
+Read `PRIORITY.md`. **P0 (catalogue expansion) and P1 (quiz mode) are complete. P2 (descriptions) is partially complete** — sourced descriptions ship, the notability half is blocked on source data.
 
-`celestial-bodies.json` holds **208 records**, 197 of them carrying source metadata and 192 carrying coordinates. Quiz mode ships in `quiz.js`.
+`celestial-bodies.json` holds **208 records**: 197 carry source metadata, 197 carry a generated `sourceSummary`, 192 carry coordinates, and none carries a hand-written `summary` yet. Quiz mode ships in `quiz.js`.
 
 Correction: an earlier version of this file stated that "the current JSON appears smaller than the original supplied prototype dataset." That was an assumption and it is false. No prototype dataset exists in this repository — the full history contains only 12 files and never included one. The original 20 records were authored in commit `c55b9bb`. There is nothing to reconcile or restore.
 
@@ -84,6 +85,64 @@ Do not test by double-clicking `index.html`; browser `file://` security prevents
 ## End-of-session update template
 
 Replace or append this section after meaningful work:
+
+### Last session — object descriptions (2026-07-26)
+
+- Branch: `claude/catalogue-expansion-200-250-ygs28r`
+- Starting commit: `c68ae74`
+- Commits: `2ee5395` detail-view rendering, `a4fdc7e` description promotion,
+  plus the documentation commit
+- Status: **P2 partially complete.**
+
+**Descriptions ship on 197 of 208 records.** Every one is assembled from values
+its source actually returned (D12). Examples:
+
+> Ceres orbits the Sun at a mean distance of 2.77 AU. Its measured diameter is
+> 939 km. NASA/JPL's Small-Body Database records its orbit class as Main-belt
+> Asteroid. Discovered 1801-01-01 by Piazzi, G. at Palermo.
+
+> 51 Peg is classified by SIMBAD as a high proper-motion star of spectral type
+> G2IV. Its measured parallax of 64.4048 mas puts it about 50.6 light years from
+> Earth. It lies at right ascension 344.36659°, declination 20.76883° (J2000).
+
+**Two description fields, never merged.** `summary` is hand-written and no
+importer touches it; `sourceSummary` is importer-owned and refreshed on a rerun.
+The detail view prefers `summary`. A record with neither renders no paragraph.
+
+**"Why it is notable" is not implemented and was not faked.** No cached response
+carries anything supporting it. It needs a new authoritative source or
+hand-written `summary` text; the schema and rendering are ready for the latter
+today.
+
+**Re-import was cache-only.** All seven confirmed sources were re-run and every
+request was a cache hit — no network call. The blocked black-hole and moon
+sources were not touched.
+
+**Nothing but descriptions changed.** A field-level diff of all 208 records
+before and after promotion reports zero changes to id, name, type, aliases,
+coordinates, measurements, distance or size. Record count, ids and category
+balance are identical. Promotion reported +0 new, 2 refused — the two pulsars
+whose ids collide with curated Neutron Star records.
+
+**11 records have no description**, all hand-authored originals with no
+provenance: `cygnus-x-1`, `m87-star`, `sagittarius-a-star`, `milky-way`,
+`psr-b1919-21`, `psr-j0348-0432`, `earth`, `jupiter`, `kepler-452b`, `mars`,
+`sol`. They are the first candidates for hand-written `summary`.
+
+**One defect found and fixed during verification:** the classification sentence
+read "a active galaxy nucleus". `article()` now handles vowel-initial glosses
+and "HII region".
+
+**Validation:** catalogue valid with 0 warnings; 61/61 browse checks; 52/52 quiz
+checks; 34/34 quiz requirements; description rendering verified for hand-written,
+generated and absent cases, and across exoplanet, star, galaxy and dwarf-planet
+records; 0px overflow at 320px; no console errors.
+
+- Files changed: `celestial-bodies.json`, `app.js`, `index.html`, `styles.css`,
+  `tools/import_catalogue.py`, `tools/promote_staging.py`,
+  `tools/validate_catalogue.py`, `tools/README.md`, and root documentation
+- Next priority: finish P2 — decide between a new descriptive source and
+  hand-written `summary` text for notability
 
 ### Last session — expansion promoted, quiz mode shipped (2026-07-26)
 

@@ -171,6 +171,29 @@ This mapping is why nine objects requested from the nebula list — M 8, M 16,
 M 20, IC 1396, NGC 2264, NGC 6618, NGC 2024, NGC 2237, NGC 7000 — are imported as
 Star Clusters. SIMBAD types them `OpC` or `Cl*`.
 
+### Generated descriptions
+
+Importers assemble a `sourceSummary` from values the source returned, using
+`describe()`, which joins sentence fragments and silently drops any whose value
+is missing. A source that starts returning a new field extends its description by
+adding one fragment.
+
+| Source | Description covers |
+|---|---|
+| Exoplanet archive | Host star, system distance, radius, best mass estimate, discovery year and method |
+| SIMBAD stars | Classification gloss, spectral type, parallax-derived distance, J2000 coordinates |
+| SIMBAD deep-sky | Classification gloss, J2000 coordinates, and a plain statement that no distance is published |
+| JPL bulk | Mean orbital distance, orbit class, diameter (or that none is measured) |
+| JPL single object | The above plus the discovery sentence, used verbatim |
+
+`sourceSummary` is importer-owned and listed in `MANAGED_FIELDS`, so a rerun
+refreshes it. `summary` is **not** managed: it holds hand-written prose that an
+importer must never overwrite. See `DECISIONS.md` D12.
+
+**"Why an object is notable" is not generated.** No response carries anything
+supporting it. Do not add a fragment that asserts significance — that is
+authoring a claim, not rendering a value.
+
 ### Editorial overrides
 
 `id_overrides` maps a SIMBAD `main_id` onto a record UniMap already carries, so

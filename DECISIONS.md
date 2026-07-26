@@ -313,6 +313,49 @@ Consequences:
 - A shared global leaderboard is still out of scope: it needs hosted writes,
   anti-cheat and privacy decisions.
 
+## D12 — Descriptions are assembled from source values; "why it is notable" is not
+
+Status: **Accepted** (refines D7)
+
+Decision:
+
+Records carry two separate description fields, and an importer owns only one of
+them:
+
+- **`summary`** — editorial prose a person wrote. An importer never reads,
+  writes, merges or overwrites it. It is absent from `MANAGED_FIELDS`.
+- **`sourceSummary`** — assembled by an importer from values the source actually
+  returned, via `describe()`, which joins sentence fragments and drops any whose
+  value is missing. It is importer-owned, so a rerun refreshes it.
+
+The detail view prefers `summary` and falls back to `sourceSummary`. A record
+with neither renders no paragraph at all.
+
+**"Why an object is notable" is deliberately not generated.** No cached response
+carries anything supporting it.
+
+Rationale:
+
+- The roadmap's four questions are not equally answerable. "What is it", "where
+  is it" and "how was it discovered" are all in the retrieved data; "why is it
+  notable" is a judgement no field encodes.
+- Assembling retrieved values into prose is rendering, the same as formatting a
+  parallax into a distance string. Writing that an object is *famous* or
+  *important* would be authoring a claim, which D7 forbids.
+- Two fields rather than one because the promoter's guarantee that hand-written
+  text survives a rerun is worth keeping. Putting generated prose in `summary`
+  would have silently broken it the first time someone wrote a real description.
+
+Consequences:
+
+- 197 of 208 records carry a `sourceSummary`. The 11 without are hand-authored
+  originals with no provenance to generate one from.
+- Filling the notability gap needs either a new authoritative source or
+  hand-written `summary` text. The schema and the rendering are already ready for
+  it; nothing further has to change to start writing them.
+- A source that begins returning a new field can extend its description by adding
+  one fragment, because `describe()` drops fragments whose value is absent.
+
 ## Decision template
 
 ### D# — Title

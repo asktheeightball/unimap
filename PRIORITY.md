@@ -6,37 +6,52 @@ This is the authoritative source for selecting the next unit of work.
 
 ### P2 — Add educational object descriptions
 
-Status: **Not started** — this is now the highest-ranked open item.
+Status: **Partially complete.** Sourced descriptions ship on 197 of 208 records;
+the notability half is blocked on source data.
 
-Add a concise sourced profile for each object explaining:
+**Done.** Every imported record carries a `sourceSummary` assembled from values
+its source actually returned (D12), and the detail view renders it. Between
+them the descriptions answer three of the roadmap's four questions:
 
-- what it is;
-- why it is notable;
-- where it is located; and
-- how it was discovered or observed.
+| Question | Status |
+|---|---|
+| What is it | Yes — type, classification gloss, spectral type, orbit class |
+| Where is it | Yes — distance where published, J2000 coordinates |
+| How was it discovered | Exoplanets and Ceres only |
+| Why is it notable | **No — not present in any source** |
 
-The `summary` field is already validated and preserved through promotion; no
-record carries one yet. Descriptions must be sourced, not authored from recall
-(D7). The JPL `sbdb.api` response shows one viable pattern: its `discovery`
-block carries a citable sentence ("Discovered 1801-01-01 by Piazzi, G. at
-Palermo"). No equivalent has been identified for SIMBAD objects yet.
+**Remaining work, in priority order:**
 
-Also outstanding from P0, and the reason it is closed rather than complete:
+1. **"Why it is notable" needs a source or an author.** No cached response
+   carries anything supporting it and it will not be written from recall (D7).
+   Two routes: probe an authoritative descriptive source, or hand-write
+   `summary` text for a curated subset. The schema and rendering are ready for
+   hand-written text today — `summary` is preferred over `sourceSummary` and is
+   never touched by an importer.
+2. **11 records have no description at all**, all hand-authored originals with
+   no provenance: `cygnus-x-1`, `m87-star`, `sagittarius-a-star`, `milky-way`,
+   `psr-b1919-21`, `psr-j0348-0432`, `earth`, `jupiter`, `kepler-452b`, `mars`,
+   `sol`. These are the natural first candidates for hand-written `summary`.
+3. **Discovery data is missing for SIMBAD objects.** Only the exoplanet archive
+   and the JPL single-object endpoint return it. A SIMBAD equivalent has not been
+   identified.
+4. **Most stars display Bayer designations** (`alf CMa`, not Sirius) because
+   translating a designation into a common name would be fabrication. A sourced
+   name mapping would fix this and is a natural fit here.
 
-1. **Black holes cannot be imported.** `simbad-black-holes` is blocked: none of
+**Also outstanding, carried from P0:**
+
+5. **Black holes cannot be imported.** `simbad-black-holes` is blocked: none of
    its 13 rows is typed as a black hole. Needs an authoritative catalogue of
-   dynamically confirmed masses, or per-object documented evidence. The
-   catalogue still has only the 3 original hand-authored black holes.
-2. **Moons are deferred.** `sat_phys_par.api` returned HTTP 404. A replacement
-   must be probed, and must answer the distance question first: a moon's orbital
-   distance is measured from its parent planet.
-3. **Alias search does not exist**, so the aliases on 189 records are
-   unsearchable. Queued as P5.
-4. **Nebulae came in at 17**, below the 20-30 target, because nine of the
-   requested objects are clusters. Reaching the target needs more curated
-   objects, not a looser classification.
-5. **`attribution` and `terms` strings remain unverified** against each
-   service's current terms page.
+   dynamically confirmed masses.
+6. **Moons are deferred.** `sat_phys_par.api` returned HTTP 404. A replacement
+   must be probed, and must settle the parent-planet distance semantic first.
+7. **Alias search does not exist**, so aliases on 189 records are unsearchable.
+   Queued as P5.
+8. **Nebulae came in at 17**, below the 20-30 target, because nine requested
+   objects are clusters.
+9. **`attribution` and `terms` strings remain unverified** against each service's
+   current terms page.
 
 ## Completed
 

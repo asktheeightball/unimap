@@ -185,36 +185,30 @@ A shared online/global leaderboard would require a hosted write service, anti-ch
 
 ### R3 — Educational object profiles
 
+Status: **Partially complete** (2026-07-26)
+
 Goal: make every celestial-object page useful for learning, not merely a list of measurements.
 
-Each object should include a concise summary explaining:
+**Done.** 197 of 208 records carry a `sourceSummary` assembled from values their
+source actually returned (D12), rendered in the detail view above the measurement
+list. Three of the four questions are answered:
 
-- What it is
-- Why it is notable
-- Where it is located
-- How it was discovered or observed
+| Question | Status |
+|---|---|
+| What is it | Yes — type, SIMBAD classification gloss, spectral type, JPL orbit class |
+| Where is it | Yes — distance where published, J2000 coordinates |
+| How was it discovered | Exoplanets (year and method) and Ceres (discoverer, date, site) |
+| Why is it notable | **No** |
 
-#### Required and optional profile fields
+**Blocked: "why it is notable".** Nothing in any cached response supports it, and
+it will not be written from recall (D7). It needs either a new authoritative
+descriptive source or hand-written `summary` text. The schema and rendering are
+already ready — `summary` is preferred over `sourceSummary` and no importer ever
+touches it — so authoring can start whenever a decision is made.
 
-- Concise two-to-four-sentence description
-- Object type and category
-- Location information such as constellation, host system, galaxy, or solar-system region where applicable
-- Discovery or observation method and date where known
-- Why the object is notable
-- Alternate names and catalogue identifiers
-- Clearly named measurements rather than an ambiguous generic `size`
-- Source name, source URL, and `lastReviewed` date
-- Related-object IDs
-
-Descriptions must be concise, readable, factually supported, and written for a general audience. Do not invent discovery details where the source does not support them.
-
-#### Exit criteria
-
-- Every quiz-eligible object has enough validated descriptive data to support questions
-- Summaries answer the four required educational prompts where the information is known
-- Missing optional facts render gracefully
-- Sources and review dates are visible
-- Ambiguous measurements are relabelled or omitted rather than presented misleadingly
+The 11 records with no description are the hand-authored originals that have no
+provenance to generate one from, and are the natural first candidates for
+hand-written text.
 
 ### R4 — Images for objects
 

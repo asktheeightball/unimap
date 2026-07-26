@@ -102,6 +102,7 @@ Each record in `celestial-bodies.json` has a stable lowercase `id` slug:
   that preserves the query, category and result list
 - Responsive centered layout for phones, tablets and desktops
 - Keyboard-accessible controls with visible focus states
+- A sourced description on each object's detail view, where one is available
 - A user-facing error message (and a console log) if the dataset cannot be loaded
 
 ## Quiz mode
@@ -235,9 +236,28 @@ catalogue up to `celestial-bodies.json.bak`.
 Required on every record: `id` (stable, lowercase, hyphenated), `name`, `type`.
 
 Optional: `distance`, `size`, `circumference`, `aliases`, `summary`,
-`measurementLabel`, `measurementValue`, `sourceName`, `sourceUrl`,
-`lastReviewed`, `rightAscension`, `declination`, `image`, `imageAlt`,
-`imageCredit`.
+`sourceSummary`, `measurementLabel`, `measurementValue`, `sourceName`,
+`sourceUrl`, `lastReviewed`, `rightAscension`, `declination`, `image`,
+`imageAlt`, `imageCredit`.
+
+### Descriptions
+
+Two fields hold prose, and they are never merged:
+
+- **`summary`** — editorial text a person wrote. **No importer ever touches it**,
+  so a rerun cannot overwrite it.
+- **`sourceSummary`** — assembled by an importer from values the source actually
+  returned. Importer-owned, so a rerun refreshes it.
+
+The detail view prefers `summary` and falls back to `sourceSummary`; a record
+with neither shows no paragraph. 197 of 208 records currently carry a
+`sourceSummary` and none carries a hand-written `summary`.
+
+A description states what an object is, where it is, and — for exoplanets and
+Ceres, the only sources that publish it — how it was discovered. **Why an object
+is notable is deliberately absent**: no source supplies it, and it is not
+written from recall (`DECISIONS.md` D7 and D12). Adding hand-written `summary`
+text is the intended route.
 
 `distance`, `size` and `circumference` are deliberately optional. Many real
 objects have no published diameter, and SIMBAD's `basic` table has no distance
