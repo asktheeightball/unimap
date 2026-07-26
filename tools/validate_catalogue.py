@@ -35,10 +35,13 @@ KNOWN_TYPES = {
     "Planet",
     "Exoplanet",
     "Dwarf Planet",
+    "Moon",
     "Nebula",
     "Black Hole",
     "Neutron Star",
+    "Pulsar",
     "Galaxy",
+    "Star Cluster",
 }
 
 # Optional fields and the type each must have when present.

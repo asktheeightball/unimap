@@ -37,7 +37,13 @@ Goal: expand UniMap from a small demonstration catalogue into a much broader cur
 
 This is the highest product priority.
 
-Progress as of 2026-07-26: the import and validation pipeline exists and is tested (`tools/`), the app renders imported records including a new `Exoplanet` category, and the "restore the original prototype dataset" line item is closed — no prototype ever existed in this repository. The catalogue itself is still at its 20-record baseline because every astronomy host is blocked by the sandbox network policy. See the P0 blocker in `PRIORITY.md` and decisions D6 and D7.
+Progress as of 2026-07-26: the import and validation pipeline exists and is tested (`tools/`), the app renders imported records including a new `Exoplanet` category, and the "restore the original prototype dataset" line item is closed — no prototype ever existed in this repository.
+
+**First expansion promoted: 84 records** (60 exoplanets and 4 dwarf planets imported from responses fetched on a networked machine, plus the original 20).
+
+**Second expansion, target 200–250, is prepared but blocked.** Curated source definitions for stars, galaxies, nebulae, pulsars, black holes, moons and Ceres are written, the interface and validator accept `Moon`, `Pulsar` and `Star Cluster`, and the app is verified at 250 records. Nothing could be imported: every astronomy host remains blocked by the sandbox network policy, and records are never authored from recall (D7). See the P0 blocker in `PRIORITY.md`, `tools/README.md` for the probe commands, and decisions D6, D7, D8 and D9.
+
+Two data problems must be solved by probing before the deep-sky sets can be imported at all: SIMBAD's `basic` table carries no distance column for galaxies and nebulae, and SIMBAD types black-hole systems by what is observed rather than as black holes. Neither may be worked around by assuming a value or forcing a category.
 
 #### Source strategy
 

@@ -10,10 +10,14 @@ const CATEGORY_TYPES = {
   planets: ["planet"],
   exoplanets: ["exoplanet"],
   "dwarf planets": ["dwarf planet"],
+  moons: ["moon"],
   nebulae: ["nebula", "nebulae"],
   "black holes": ["black hole"],
-  "neutron stars": ["neutron star"],
+  // A pulsar is a neutron star, so one filter reaches both. Catalogue sources
+  // distinguish them, and the record keeps whichever type its source reports.
+  "neutron stars": ["neutron star", "pulsar"],
   galaxies: ["galaxy", "galaxies"],
+  "star clusters": ["star cluster"],
 };
 
 const state = {

@@ -244,6 +244,15 @@ NORMALIZERS = {
 # --- fetching ------------------------------------------------------------
 
 
+def quote_identifiers(identifiers: list) -> str:
+    """Render a curated identifier list as an ADQL string list.
+
+    Doubling an embedded apostrophe is the ADQL/SQL escape, and it matters:
+    "Barnard's star" is a real SIMBAD identifier.
+    """
+    return ", ".join("'" + str(name).replace("'", "''") + "'" for name in identifiers)
+
+
 def build_url(source: dict, limit: int | None) -> str:
     params = dict(source.get("params") or {})
     query = source.get("query")
@@ -254,6 +263,17 @@ def build_url(source: dict, limit: int | None) -> str:
         limit = None
 
     if query:
+        identifiers = source.get("select_identifiers")
+        if "{identifiers}" in query:
+            if not identifiers:
+                raise SystemExit(f"error: source {source['id']!r} uses {{identifiers}} "
+                                 f"but defines no select_identifiers")
+            query = query.replace("{identifiers}", quote_identifiers(identifiers))
+            # The query already names every object wanted, so a row cap could
+            # only truncate the curated set. Asking for exactly these objects is
+            # also the polite way to query a shared service.
+            limit = None
+
         # TAP/ADQL uses TOP rather than LIMIT.
         query = query.replace("{limit}", f"top {int(limit)}" if limit else "")
         params["query"] = re.sub(r"\s+", " ", query).strip()
@@ -387,17 +407,36 @@ def load_sources() -> list[dict]:
 def import_source(source: dict, args, existing_ids: set[str]) -> int:
     print(f"\n=== {source['id']} — {source['name']} ===")
 
-    normalizer = NORMALIZERS.get(source.get("normalizer"))
-    if normalizer is None:
-        raise SystemExit(f"error: unknown normalizer {source.get('normalizer')!r} "
-                         f"for source {source['id']!r}")
+    # A source nobody has ever seen a response from may be probed but not
+    # imported. Its column names are assumptions, and an assumption that
+    # silently normalizes into a record would put invented values in the
+    # catalogue under a real source's name -- fabricated provenance, which is
+    # the one failure this pipeline exists to prevent (DECISIONS.md D7).
+    if source.get("unprobed") and not args.probe:
+        print(f"  refusing to import: {source['id']!r} is marked unprobed.\n"
+              f"  Probe it first and inspect the real response:\n"
+              f"      python3 tools/import_catalogue.py --source {source['id']} --probe\n"
+              f"  Then write or correct its normalizer against that cached response and\n"
+              f"  remove \"unprobed\" from tools/sources.json.", file=sys.stderr)
+        if source.get("note_unprobed"):
+            print(f"  note: {source['note_unprobed']}", file=sys.stderr)
+        return 1
 
     url = build_url(source, args.limit)
     body, path = fetch(source, url, args.timeout, args.refresh,
                        ssl_context(args.ca_bundle))
 
+    # Probing deliberately happens before the normalizer is resolved: the whole
+    # point of a probe is to see the response BEFORE writing the normalizer, so
+    # a source may legitimately carry "normalizer": null until it has been run.
     if args.probe:
         return probe(source, body, path)
+
+    normalizer = NORMALIZERS.get(source.get("normalizer"))
+    if normalizer is None:
+        raise SystemExit(f"error: source {source['id']!r} has no usable normalizer "
+                         f"({source.get('normalizer')!r}). Probe the source, then write "
+                         f"a normalizer against its real response.")
 
     try:
         rows = rows_from_payload(json.loads(body))
@@ -491,7 +530,11 @@ def main() -> int:
     if args.list:
         for source in sources:
             produces = ", ".join(source.get("produces") or [])
-            print(f"{source['id']:<28} {source['name']}  -> {produces}")
+            if source.get("unprobed"):
+                status = "PROBE FIRST"
+            else:
+                status = f"confirmed {source.get('probe_confirmed', '?')}"
+            print(f"{source['id']:<28} {status:<22} -> {produces}")
         return 0
 
     if args.all:

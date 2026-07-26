@@ -166,6 +166,70 @@ Consequences:
 - A field with no supporting source is left absent rather than estimated.
 - Where a source is missing, the record carries no provenance and the validator warns.
 
+## D8 — A source must be probed before it may be imported
+
+Status: **Accepted** (refines D6 and D7)
+
+Decision:
+
+Every entry in `tools/sources.json` carries either `"probe_confirmed": "<date>"`
+or `"unprobed": true`. The importer refuses to import from an unprobed source
+and permits only `--probe`. A source may carry `"normalizer": null` until it has
+been probed, and `--probe` runs before the normalizer is resolved.
+
+Rationale:
+
+A normalizer written from assumed column names does not fail loudly. Missing
+columns normalize into records that look finished and carry a real service's
+`sourceName` and `sourceUrl` — fabricated provenance, which D7 forbids and which
+is unfixable later because it looks verified. The 2026-07-26 JPL probe already
+proved the risk is real: `sb-class=TNO` would have labelled hundreds of small
+bodies "Dwarf Planet".
+
+The gate converts that risk into a refusal at the one point where a human is
+present.
+
+Consequences:
+
+- Adding a source is a two-step job: define and probe, then normalize and
+  import. The definition can be written and reviewed before network access
+  exists.
+- `--all` reports unprobed sources as failures. That is intended.
+- Removing `"unprobed"` is the reviewable moment where someone asserts they read
+  the real response.
+
+## D9 — Category filters may ship ahead of their data
+
+Status: **Accepted**
+
+Decision:
+
+`app.js` may map a category filter to record types the catalogue does not yet
+contain. `hideEmptyCategories()` hides any chip no record can match, so an
+unpopulated category is invisible rather than a dead control. `Moon`, `Pulsar`
+and `Star Cluster` are registered in `CATEGORY_TYPES` and in the validator's
+`KNOWN_TYPES` ahead of the data.
+
+A pulsar is a neutron star, so both types are reached through the single
+`Neutron Stars` filter rather than splitting the interface. Records keep
+whichever of the two types their source reports; the filter does not rewrite a
+classification.
+
+Rationale:
+
+- The validator rejects a type no filter can reach, so an import would otherwise
+  fail at promotion time on a category the interface simply had not been told
+  about yet.
+- Registering the categories first lets a catalogue slice be imported and
+  promoted without an interface change in the same step.
+- The type still comes from the source. The filter is a view over types, not an
+  assertion about an object.
+
+Consequences:
+
+- A category with no records shows no chip; the filter appears when data does.
+- Adding a type means updating `CATEGORY_TYPES` and `KNOWN_TYPES` together.
+
 ## Decision template
 
 ### D# — Title

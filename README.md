@@ -54,7 +54,8 @@ See `DEPLOYMENT.md` for the complete pre-deployment, verification, and rollback 
 ├── app.js                 # data loading, state, search, filtering, rendering
 ├── celestial-bodies.json  # the dataset
 ├── tools/                 # maintainer scripts (never needed to run the site)
-│   ├── sources.json          # source endpoints, queries, attribution
+│   ├── README.md             # pipeline, probe rule, source limitations
+│   ├── sources.json          # source endpoints, queries, curation, attribution
 │   ├── import_catalogue.py   # fetch -> cache -> normalize -> stage
 │   ├── promote_staging.py    # validate, then update the catalogue
 │   ├── validate_catalogue.py # standalone catalogue validation
@@ -88,8 +89,10 @@ Each record in `celestial-bodies.json` has a stable lowercase `id` slug:
 - Case-insensitive, partial-match search by name
 - Search button and the Enter key behave identically
 - An empty search shows the full catalogue rather than nothing
-- Category filters: All, Stars, Planets, Nebulae, Black Holes, Neutron Stars,
-  Galaxies — matching tolerates singular and plural type values
+- Category filters: All, Stars, Planets, Exoplanets, Dwarf Planets, Moons,
+  Nebulae, Black Holes, Neutron Stars, Galaxies, Star Clusters — matching
+  tolerates singular and plural type values, pulsars are reached through Neutron
+  Stars, and a filter no record can match is hidden rather than left dead
 - Result count and a clear no-results message, announced via an ARIA live region
 - Clear Search button that resets both the query and the category
 - Detail view with name, type, distance, size and circumference, plus a Back button
@@ -143,12 +146,25 @@ real response shape without importing; run it first against any new or changed
 source. Responses are cached, so reruns do not refetch unless you pass
 `--refresh`.
 
-A source may also carry `select_names`, an editorial allow-list applied after
-normalization. This exists because a broad query filter is not a claim about an
-object's type: `sb-class=TNO` returns every trans-Neptunian object, and only a
-few of those are dwarf planets. Widening that list is a curation decision, made
-in `sources.json` and reviewable in the diff. A source with `select_names`
-always fetches its full result set, so `--limit` does not apply to it.
+**A source must be probed before it may be imported** (`DECISIONS.md` D8). Each
+entry carries either `"probe_confirmed": "<date>"` or `"unprobed": true`, and the
+importer refuses to import from an unprobed one. Probe it, read the real columns,
+write or correct the normalizer against the cached response, then drop the flag.
+
+Curation uses two mechanisms, both editorial decisions recorded in
+`sources.json`. Neither invents a value — a name the source does not resolve
+simply produces no record:
+
+- `select_identifiers` is substituted into a query's `{identifiers}` placeholder,
+  so the service is asked only for the objects UniMap wants.
+- `select_names` is an allow-list applied after normalization, for sources that
+  cannot be queried by name. It exists because a broad class filter is not a
+  claim about an object's type: `sb-class=TNO` returns every trans-Neptunian
+  object and only a few are dwarf planets.
+
+Both suppress `--limit`, which could only truncate a curated set.
+
+See `tools/README.md` for per-source limitations and distance semantics.
 
 If TLS verification fails locally (`CERTIFICATE_VERIFY_FAILED`), point the
 importer at a CA bundle rather than disabling verification:

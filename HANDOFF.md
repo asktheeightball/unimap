@@ -18,8 +18,8 @@ There is no framework, package manager, build command, backend, database, or aut
 ## Repository
 
 - GitHub: `asktheeightball/unimap`
-- Current documented working branch: `claude/unimap-static-app-uj0ql5`
-- Important: this branch is currently configured as the repository default branch. Confirm the intended long-term branch strategy before changing deployment settings or creating automation.
+- Current working branch: `claude/catalogue-expansion-200-250-ygs28r`
+- Previous branch: `claude/unimap-static-app-uj0ql5`, which is configured as the repository default branch. Confirm the intended long-term branch strategy before changing deployment settings or creating automation.
 
 ## Current implementation
 
@@ -46,9 +46,11 @@ The existing application is documented to provide:
 
 ## Current priority
 
-Read `PRIORITY.md`. The active task is **P0 — Expand the celestial-body catalogue substantially**, now *In progress* and blocked on network access for the bulk import.
+Read `PRIORITY.md`. The active task is **P0 — Expand the celestial-body catalogue substantially**, *In progress* and blocked on network access for the bulk import.
 
-Correction: an earlier version of this file stated that "the current JSON appears smaller than the original supplied prototype dataset." That was an assumption and it is false. No prototype dataset exists in this repository — the full history contains only 12 files and never included one. The 20 records in `celestial-bodies.json` were authored in commit `c55b9bb` and are the baseline. There is nothing to reconcile or restore.
+The first expansion is committed and pushed: `celestial-bodies.json` holds **84 records**, 64 of them carrying source metadata. The second expansion (target 200–250) is prepared but could not import anything — see the last-session notes below.
+
+Correction: an earlier version of this file stated that "the current JSON appears smaller than the original supplied prototype dataset." That was an assumption and it is false. No prototype dataset exists in this repository — the full history contains only 12 files and never included one. The original 20 records were authored in commit `c55b9bb`. There is nothing to reconcile or restore.
 
 ## Local start
 
@@ -81,7 +83,69 @@ Do not test by double-clicking `index.html`; browser `file://` security prevents
 
 Replace or append this section after meaningful work:
 
-### Last session
+### Last session — second catalogue expansion (2026-07-26)
+
+- Branch: `claude/catalogue-expansion-200-250-ygs28r`
+- Starting commit: `10998fa` (working tree clean, in sync with origin)
+- Task selected: P0 — second catalogue expansion, target 200–250 records
+- Status: **In progress / blocked.** Preparation complete; no record imported.
+
+**Baseline verified.** 84 records, all ids unique, catalogue valid with 0
+warnings, 64/84 carrying source metadata. Counts: Exoplanet 60, Dwarf Planet 4,
+Galaxy 4, Planet 4, Star 4, Black Hole 3, Nebula 3, Neutron Star 2. The 84-record
+promotion is committed and pushed. 58/58 browser checks passed against it.
+
+**Blocked on the same network policy as the first expansion.** Every astronomy
+host is still refused at the proxy CONNECT stage, and so are the mirrors tried
+this session (`simbad.u-strasbg.fr`, `cdsarc.cds.unistra.fr`,
+`ned.ipac.caltech.edu`, `ssd.jpl.nasa.gov`). The SIMBAD probe, the Ceres probe,
+and the star, deep-sky and moon imports all need a real response and could not be
+run. Nothing was authored from recall (D7), so the catalogue is unchanged.
+
+**Done anyway, none of it network-dependent:**
+
+- Seven new source definitions in `tools/sources.json` with curated object lists —
+  68 notable stars, 28 galaxies, 28 nebulae, 15 pulsars, 14 black-hole
+  candidates, 21 moons, and Ceres as its own object-specific JPL source.
+- `{identifiers}` query substitution, so a curated source asks a service only for
+  the objects it wants. ADQL apostrophe escaping included (`Barnard's star`).
+- Probe-before-import gate (D8): an `"unprobed": true` source can only be probed,
+  never imported. `--probe` now runs before the normalizer is resolved, so a
+  source may carry `"normalizer": null` until it has been seen.
+- `Moon`, `Pulsar` and `Star Cluster` registered in `CATEGORY_TYPES` and
+  `KNOWN_TYPES` (D9). Pulsars are reached through the `Neutron Stars` filter.
+- `tools/README.md` documenting the pipeline, the probe rule, curation
+  mechanisms, TLS handling, per-source limitations and distance semantics.
+
+**Validation:** 58/58 browser checks on the production 84-record catalogue;
+64/64 on a throwaway 250-record fixture exercising the three new categories,
+absent optional fields, and every filter. Load 41 ms at 250 records, mean
+re-render 0.15 ms, no horizontal overflow at 320 px, no console errors. Offline
+tests of URL building, identifier quoting and the unprobed guard.
+
+**Known gaps carried forward:**
+
+1. **Alias search does not exist.** `matchesQuery` searches `name` only, so the
+   aliases on 64 records are unsearchable. It is queued as P5 and was left there
+   rather than pulled forward into this slice.
+2. **Deep-sky distance is unsolved.** SIMBAD's `basic` table has no distance
+   column and galaxies have no useful parallax. The field, units and semantics
+   must be read off a real probe before galaxies or nebulae can be imported.
+3. **Black holes may not be importable as a category** — SIMBAD types them by
+   what is observed, not as black holes. Do not force the category.
+4. **Moons may not have a usable distance** in the physical-parameters endpoint.
+5. Descriptions/summaries were not added. The schema already supports `summary`;
+   no trustworthy automated source for them exists yet.
+
+- Files changed: `tools/sources.json`, `tools/import_catalogue.py`,
+  `tools/validate_catalogue.py`, `tools/README.md` (new), `app.js`, `index.html`,
+  `PRIORITY.md`, `DECISIONS.md`, `HANDOFF.md`, `ROADMAP.md`, `README.md`
+- Catalogue changed: **no.** `celestial-bodies.json` is untouched.
+- Deployment performed: none
+- Next priority: unblock the imports (probe commands in `tools/README.md`), finish
+  P0, then start P1 quiz mode
+
+### Earlier session — import pipeline
 
 - Date: 2026-07-26
 - Branch: `claude/unimap-static-app-uj0ql5`
@@ -135,19 +199,24 @@ Consequences to carry into the next session:
    unverified** and must be checked against each service's current terms page
    before a catalogue built from them is published.
 
-### Catalogue baseline (2026-07-26)
+### Catalogue state (2026-07-26, after the first expansion)
 
-| Type | Records |
-|---|---:|
-| Galaxy | 4 |
-| Planet | 4 |
-| Star | 4 |
-| Black Hole | 3 |
-| Nebula | 3 |
-| Neutron Star | 2 |
-| **Total** | **20** |
+| Type | Records | Target for the 200–250 slice |
+|---|---:|---|
+| Exoplanet | 60 | keep 60 |
+| Dwarf Planet | 4 | 5 (add Ceres) |
+| Galaxy | 4 | 20–30 |
+| Planet | 4 | 4 |
+| Star | 4 | 40–60 |
+| Black Hole | 3 | 10–15 |
+| Nebula | 3 | 20–30 |
+| Neutron Star | 2 | 10–15 with pulsars |
+| Moon | 0 | 15–25 if source-ready |
+| Star Cluster | 0 | optional |
+| **Total** | **84** | **200–250** |
 
-Records carrying source metadata: 0 of 20. The baseline predates D7 and has no provenance; adding it is part of finishing P0.
+Records carrying source metadata: 64 of 84. The 20 original records predate D7
+and have no provenance; adding it is part of finishing P0.
 
 ## Known cautions
 

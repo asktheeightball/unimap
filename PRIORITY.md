@@ -6,7 +6,38 @@ This is the authoritative source for selecting the next unit of work.
 
 ### P0 — Expand the celestial-body catalogue substantially
 
-Status: **In progress** — import pipeline built and validated; bulk import blocked on network access.
+Status: **In progress** — first expansion promoted (84 records); second expansion
+(target 200–250) staged as far as it can go without network access, and **blocked
+on the same network policy**.
+
+#### Second expansion slice (2026-07-26)
+
+Target: approximately 200–250 curated objects with a better category balance —
+40–60 stars, 20–30 galaxies, 20–30 nebulae, 10–15 neutron stars and pulsars,
+10–15 black holes, 15–25 moons, Ceres, and the existing 60 exoplanets kept as-is.
+
+Done in this slice, none of it requiring network access:
+
+- Seven new source definitions with curated object lists: notable stars,
+  galaxies, nebulae, pulsars, black holes, Ceres (a separate object-specific JPL
+  source, deliberately not a widened small-body query), and major moons.
+- A `{identifiers}` query mechanism so a curated source asks the service only
+  for the objects UniMap wants instead of downloading a catalogue and discarding
+  most of it.
+- A probe-before-import gate (D8) so an unprobed source cannot produce records.
+- `Moon`, `Pulsar` and `Star Cluster` registered in the interface and the
+  validator ahead of their data (D9).
+- Application verified against a 250-record catalogue: 64/64 checks, 41 ms load.
+
+**Blocked.** Items 2–6 of the slice — the SIMBAD shape probe, Ceres, and the
+star, deep-sky and moon imports — all require a real response from a service, and
+every astronomy host is still refused at the proxy CONNECT stage (403). Records
+cannot be authored from model recall and labelled with a source URL that was
+never fetched (D7). No record was added; the catalogue stays at 84.
+
+Unblocking step: run the probe commands in `tools/README.md` from a networked
+machine and return the cached responses, or grant the sandbox access to the
+hosts listed under the blocker below.
 
 Objective: reconcile the original dataset, identify authoritative import sources, and expand UniMap into a much larger locally stored catalogue without making the user-facing application dependent on live APIs.
 
@@ -23,6 +54,12 @@ The earlier claim that "the current JSON appears smaller than the original suppl
 #### Blocker
 
 Bulk import cannot proceed in the current environment. Every astronomy host is refused by the sandbox network policy at the CONNECT stage (HTTP 403), including `exoplanetarchive.ipac.caltech.edu`, `simbad.cds.unistra.fr`, `vizier.cds.unistra.fr`, `ssd-api.jpl.nasa.gov`, `images-api.nasa.gov`, and `api.nasa.gov`. Documentation sites for those services are blocked too, so their terms could not be read first-hand.
+
+Re-verified 2026-07-26 during the second expansion slice. Still 403, and the
+mirrors and alternatives tried alongside them — `simbad.u-strasbg.fr`,
+`cdsarc.cds.unistra.fr`, `ned.ipac.caltech.edu`, `ssd.jpl.nasa.gov` — are refused
+as well. The 84 exoplanet and dwarf-planet records already in the catalogue were
+imported from responses fetched on a networked machine, not from this sandbox.
 
 Records must not be authored from model recall and labelled with source URLs that were never fetched — that would fabricate provenance and violate the "do not invent values" rule. Expansion resumes when a maintainer either runs the importer from a networked machine or grants the sandbox access to those hosts.
 
