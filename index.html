@@ -15,6 +15,10 @@
       <div class="wrap">
         <h1>UniMap</h1>
         <p class="tagline">A small map of very large things.</p>
+        <nav class="mode-nav" id="mode-nav" aria-label="Sections">
+          <button type="button" class="chip is-active" data-mode="browse" aria-pressed="true">Browse</button>
+          <button type="button" class="chip" data-mode="quiz" aria-pressed="false">Quiz</button>
+        </nav>
       </div>
     </header>
 
@@ -98,6 +102,74 @@
         </article>
       </section>
 
+      <!-- Quiz -->
+      <section class="panel" id="quiz-view" aria-labelledby="quiz-heading" hidden>
+        <h2 id="quiz-heading">Quiz</h2>
+
+        <div id="quiz-setup">
+          <fieldset class="filters">
+            <legend>Choose a difficulty</legend>
+            <div class="filter-buttons" id="quiz-difficulty">
+              <button type="button" class="chip is-active" data-difficulty="easy" aria-pressed="true">Easy — 15s</button>
+              <button type="button" class="chip" data-difficulty="medium" aria-pressed="false">Medium — 10s</button>
+              <button type="button" class="chip" data-difficulty="hard" aria-pressed="false">Hard — 7s</button>
+              <button type="button" class="chip" data-difficulty="impossible" aria-pressed="false">Impossible — 5s</button>
+            </div>
+          </fieldset>
+
+          <div class="search-field quiz-name-field">
+            <label for="quiz-name">Your name (for the leaderboard)</label>
+            <input type="text" id="quiz-name" name="player" autocomplete="off" maxlength="24" placeholder="Anonymous" />
+          </div>
+
+          <p class="quiz-rules">
+            10 questions per game. Each correct answer is worth up to 100 points,
+            counting down to zero as the timer runs. Incorrect and expired
+            answers score nothing.
+          </p>
+
+          <button type="button" class="btn btn-primary" id="quiz-start">Start quiz</button>
+          <p class="error" id="quiz-setup-error" role="alert" hidden></p>
+        </div>
+
+        <div id="quiz-play" hidden>
+          <div class="quiz-status">
+            <p id="quiz-progress"></p>
+            <p>Score: <span id="quiz-score-value">0</span></p>
+            <p>Available: <span id="quiz-points-value">100</span></p>
+          </div>
+
+          <div class="quiz-timer" role="presentation">
+            <div class="quiz-timer-bar" id="quiz-timer-bar"></div>
+          </div>
+          <p class="quiz-timer-value" id="quiz-timer-value" aria-hidden="true"></p>
+
+          <h3 class="quiz-prompt" id="quiz-prompt"></h3>
+          <ul class="quiz-choices" id="quiz-choices"></ul>
+
+          <div class="quiz-feedback" id="quiz-feedback" role="status" aria-live="polite" hidden></div>
+          <button type="button" class="btn btn-primary" id="quiz-next" hidden>Next question</button>
+        </div>
+
+        <div id="quiz-results" hidden>
+          <h3>Game over</h3>
+          <p class="quiz-final-score" id="quiz-results-score"></p>
+          <p class="status" id="quiz-results-detail"></p>
+          <button type="button" class="btn btn-primary" id="quiz-play-again">Play again</button>
+        </div>
+
+        <section class="quiz-leaderboard" id="quiz-leaderboard" aria-labelledby="quiz-leaderboard-title">
+          <h3 id="quiz-leaderboard-title">Leaderboard</h3>
+          <p class="status" id="quiz-leaderboard-empty" hidden>No scores recorded yet for this difficulty.</p>
+          <table class="quiz-table" id="quiz-leaderboard-table" hidden>
+            <thead>
+              <tr><th scope="col">#</th><th scope="col">Player</th><th scope="col">Score</th><th scope="col">Date</th></tr>
+            </thead>
+            <tbody id="quiz-leaderboard-body"></tbody>
+          </table>
+        </section>
+      </section>
+
       <p class="error" id="error" role="alert" hidden></p>
     </main>
 
@@ -108,5 +180,6 @@
     </footer>
 
     <script src="app.js"></script>
+    <script src="quiz.js"></script>
   </body>
 </html>

@@ -37,6 +37,8 @@ const el = {
   error: document.getElementById("error"),
   browseView: document.getElementById("browse-view"),
   detailView: document.getElementById("detail-view"),
+  quizView: document.getElementById("quiz-view"),
+  modeNav: document.getElementById("mode-nav"),
   backButton: document.getElementById("back-button"),
   detailName: document.getElementById("detail-name"),
   detailTypeValue: document.getElementById("detail-type-value"),
@@ -228,7 +230,34 @@ function resetSearch() {
   el.input.focus();
 }
 
+/* Browse and quiz are the two top-level sections. app.js owns which one is on
+   screen; quiz.js owns everything inside the quiz panel and listens for the
+   mode event so it can stop its timer when the player leaves. */
+function setMode(mode) {
+  const quizzing = mode === "quiz";
+  el.quizView.hidden = !quizzing;
+  // Switching mode always returns Browse to the results list rather than a
+  // stale detail view.
+  el.detailView.hidden = true;
+  el.browseView.hidden = quizzing;
+
+  for (const button of el.modeNav.querySelectorAll(".chip")) {
+    const isActive = button.dataset.mode === mode;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  }
+
+  document.dispatchEvent(new CustomEvent("unimap:mode", { detail: mode }));
+}
+
 function attachHandlers() {
+  el.modeNav.addEventListener("click", (event) => {
+    const button = event.target.closest(".chip");
+    if (button) {
+      setMode(button.dataset.mode);
+    }
+  });
+
   // Submitting the form covers both the Search button and the Enter key.
   el.form.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -262,6 +291,10 @@ async function init() {
   }
   hideEmptyCategories();
   renderResults();
+
+  // Hand the loaded catalogue to quiz mode. Gameplay makes no request of its
+  // own, so a quiz never depends on the network (DECISIONS.md D6).
+  document.dispatchEvent(new CustomEvent("unimap:data", { detail: state.bodies }));
 }
 
 init();

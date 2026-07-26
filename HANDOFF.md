@@ -25,8 +25,9 @@ There is no framework, package manager, build command, backend, database, or aut
 
 - `index.html` contains the semantic page structure.
 - `styles.css` contains presentation and responsive styling.
-- `app.js` loads data, manages state, filters results, and renders browse/detail views.
-- `celestial-bodies.json` contains the catalogue.
+- `app.js` loads data, manages state, filters results, renders browse/detail views, and switches between Browse and Quiz.
+- `quiz.js` implements quiz mode: question generation, timing, scoring and leaderboards.
+- `celestial-bodies.json` contains the catalogue (208 records).
 - `README.md` explains local running and basic static deployment.
 - Project-control documents define product scope, priorities, roadmap, decisions, deployment, and contributor instructions.
 
@@ -42,13 +43,14 @@ The existing application is documented to provide:
 - detail view and Back navigation;
 - preserved query/category/results when returning;
 - responsive phone, tablet, and desktop layout;
-- a visible data-load error.
+- a visible data-load error;
+- quiz mode with four timed difficulties and per-difficulty local leaderboards.
 
 ## Current priority
 
-Read `PRIORITY.md`. The active task is **P0 — Expand the celestial-body catalogue substantially**, *In progress* and blocked on network access for the bulk import.
+Read `PRIORITY.md`. **P0 (catalogue expansion) and P1 (quiz mode) are both complete.** The active task is now **P2 — Add educational object descriptions**.
 
-The first expansion is committed and pushed: `celestial-bodies.json` holds **84 records**, 64 of them carrying source metadata. The second expansion (target 200–250) is prepared but could not import anything — see the last-session notes below.
+`celestial-bodies.json` holds **208 records**, 197 of them carrying source metadata and 192 carrying coordinates. Quiz mode ships in `quiz.js`.
 
 Correction: an earlier version of this file stated that "the current JSON appears smaller than the original supplied prototype dataset." That was an assumption and it is false. No prototype dataset exists in this repository — the full history contains only 12 files and never included one. The original 20 records were authored in commit `c55b9bb`. There is nothing to reconcile or restore.
 
@@ -82,6 +84,66 @@ Do not test by double-clicking `index.html`; browser `file://` security prevents
 ## End-of-session update template
 
 Replace or append this section after meaningful work:
+
+### Last session — expansion promoted, quiz mode shipped (2026-07-26)
+
+- Branch: `claude/catalogue-expansion-200-250-ygs28r`
+- Starting commit: `dd6124c`
+- Commits: `09aebb1` (catalogue promotion), plus the quiz-mode commit
+- Status: **P0 complete, P1 complete.**
+
+**All seven probes were run on a networked machine and the cache returned.** The
+sandbox itself still has no access to any astronomy host; every normalizer in
+this session was written against `tools/cache/*.json`, not against a live call.
+
+**Catalogue: 84 -> 208 records.** Star 68, Exoplanet 60, Galaxy 28, Nebula 17,
+Pulsar 12, Star Cluster 9, Dwarf Planet 5, Planet 4, Black Hole 3,
+Neutron Star 2. Dry run reported +124 new, 9 refreshed, 2 refused.
+
+Three findings from the real responses changed the design, all resolved by
+narrowing rather than assuming (D10):
+
+1. **The SIMBAD deep-sky queries return no distance column.** `distance` is now
+   optional; 60 records legitimately have none. The result row shows the type
+   alone and the detail row hides.
+2. **Classification comes from `otype_txt`, not from the curated list.** Nine
+   requested "nebulae" are typed `OpC`/`Cl*` and were imported as Star Clusters.
+3. **`simbad-black-holes` is blocked, not imported.** None of its 13 rows is
+   typed as a black hole (9 `HXB`, plus `BLL`, `AGN`, `Sy2`, `X`). Black holes
+   remain the 3 original hand-authored records.
+
+**Ceres** was staged from its own object endpoint (`sbdb.api`, nested response,
+`response: "object"`), using `orbit.elements` `a`=2.77 au and `phys_par`
+`diameter`=939.4 km with units read from the response. JPL's orbit class
+"Main-belt Asteroid" is preserved as an alias.
+
+**Moons deferred:** `sat_phys_par.api` returned HTTP 404.
+
+**Rejected during curation:** Centaurus A (`BLL`), NGC 6960 (`ISM`), NGC 6992
+(`sh`), one duplicate `alf Cen A` row, and two pulsars whose ids collide with
+curated Neutron Star records (promotion correctly refuses to retype them).
+
+**Quiz mode** (`quiz.js`, D11): four difficulties (15/10/7/5s), 10 questions,
+four choices, 100-to-0 continuous scoring, per-difficulty top-10 `localStorage`
+leaderboards, keyboard and touch input, no network calls during gameplay. Five
+question kinds; the generator refuses ambiguous pairings (pulsar/neutron star,
+planet/exoplanet) and compares values only within one type.
+
+**Validation:** 61/61 browse checks, 52/52 quiz checks, an audit of 400
+generated questions across 40 games with 0 ambiguity or duplicate-option
+problems, catalogue valid with 0 warnings, all ids and names unique, no
+duplicate aliases, 44 ms load at 208 records, no console errors, no horizontal
+overflow at 320 px.
+
+**Known gaps:** black holes, moons, alias search (P5), nebulae at 17 vs the
+20-30 target, no `summary` on any record yet (that is P2), and unverified
+`attribution`/`terms` strings.
+
+- Files changed: `celestial-bodies.json`, `quiz.js` (new), `app.js`,
+  `index.html`, `styles.css`, `tools/sources.json`,
+  `tools/import_catalogue.py`, `tools/validate_catalogue.py`, `tools/README.md`,
+  and all root documentation
+- Next priority: **P2 — educational object descriptions**
 
 ### Last session — second catalogue expansion (2026-07-26)
 
@@ -199,24 +261,27 @@ Consequences to carry into the next session:
    unverified** and must be checked against each service's current terms page
    before a catalogue built from them is published.
 
-### Catalogue state (2026-07-26, after the first expansion)
+### Catalogue state (2026-07-26, after the second expansion)
 
 | Type | Records | Target for the 200–250 slice |
 |---|---:|---|
-| Exoplanet | 60 | keep 60 |
-| Dwarf Planet | 4 | 5 (add Ceres) |
-| Galaxy | 4 | 20–30 |
-| Planet | 4 | 4 |
-| Star | 4 | 40–60 |
-| Black Hole | 3 | 10–15 |
-| Nebula | 3 | 20–30 |
-| Neutron Star | 2 | 10–15 with pulsars |
-| Moon | 0 | 15–25 if source-ready |
-| Star Cluster | 0 | optional |
-| **Total** | **84** | **200–250** |
+| Star | 68 | 40–60 (over) |
+| Exoplanet | 60 | keep 60 ✓ |
+| Galaxy | 28 | 20–30 ✓ |
+| Nebula | 17 | 20–30 (under) |
+| Pulsar | 12 | 10–15 with neutron stars ✓ |
+| Star Cluster | 9 | optional ✓ |
+| Dwarf Planet | 5 | 5 including Ceres ✓ |
+| Planet | 4 | 4 ✓ |
+| Black Hole | 3 | 10–15 (blocked) |
+| Neutron Star | 2 | counted with pulsars |
+| Moon | 0 | 15–25 (deferred, endpoint 404) |
+| **Total** | **208** | **200–250** ✓ |
 
-Records carrying source metadata: 64 of 84. The 20 original records predate D7
-and have no provenance; adding it is part of finishing P0.
+197 of 208 records carry source metadata and 192 carry coordinates. The 11
+without provenance are the surviving hand-authored originals, which predate D7.
+60 records legitimately carry no distance — SIMBAD supplies none for deep-sky
+objects (D10).
 
 ## Known cautions
 

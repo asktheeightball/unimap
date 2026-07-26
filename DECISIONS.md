@@ -230,6 +230,89 @@ Consequences:
 - A category with no records shows no chip; the filter appears when data does.
 - Adding a type means updating `CATEGORY_TYPES` and `KNOWN_TYPES` together.
 
+## D10 — `distance` is optional, and classification comes only from the source
+
+Status: **Accepted** (refines D5, D6a and D7)
+
+Decision:
+
+`distance` is no longer a required field. A record requires only `id`, `name` and
+`type`.
+
+An imported record's `type` is derived from the source's own classification, never
+from the curated list that selected it. For SIMBAD that means `otype_txt` mapped
+through an explicit allow-list of codes observed in a real response
+(`OTYPE_TO_TYPE` in `tools/import_catalogue.py`); an unmapped or refused code
+skips the row.
+
+Rationale:
+
+The 2026-07-26 probes settled both questions with evidence:
+
+- The SIMBAD deep-sky queries return `main_id`, `ra`, `dec` and `otype_txt` and
+  **no distance column at all**. SIMBAD's `basic` table has none, and galaxies
+  and nebulae have no useful parallax. Requiring `distance` would have forced
+  either an invented value (forbidden by D7) or the loss of every deep-sky
+  record. 60 of 208 records now legitimately have no distance.
+- The curated nebula list asked for 28 famous objects and SIMBAD typed nine of
+  them as clusters (`OpC`, `Cl*`) — M 8, M 16, M 20, NGC 7000 among them. Had
+  the source's `produces` field decided the type, the catalogue would assert
+  that four open clusters are nebulae.
+
+Consequences:
+
+- The detail view hides an absent distance row; a result row shows the type
+  alone rather than `undefined`.
+- A source may produce more than one type, and `simbad-nebulae` does.
+- Quiz mode compares a field only within one type, because `distance` is light
+  years for deep-sky objects and mean orbital distance in AU for dwarf planets.
+- Adding an otype code is a reviewable edit backed by a cached response, not a
+  convenience. In particular, `simbad-black-holes` must not be unblocked by
+  widening the map: its rows are typed `HXB`, `AGN`, `Sy2`, `BLL` and `X`, and
+  none of those is a black-hole classification.
+
+## D11 — Quiz mode lives in `quiz.js` and generates questions from validated fields
+
+Status: **Accepted**
+
+Decision:
+
+Quiz behaviour lives in `quiz.js`, a second plain script beside `app.js`. It
+receives the catalogue from `app.js` through a `unimap:data` DOM event and makes
+no request of its own. `app.js` owns which top-level section is visible and
+announces changes with `unimap:mode`; `quiz.js` owns everything inside the quiz
+panel.
+
+Questions are generated only from fields a record actually carries, and a
+question is discarded unless exactly one option can be correct:
+
+- Value questions (`distance`, `size`) compare within a single type only.
+- Overlapping types are never used as distractors for each other, because a
+  pulsar *is* a neutron star and an exoplanet *is* a planet.
+- One question per object per game.
+
+Rationale:
+
+- A separate file keeps browse logic readable; it is still vanilla JavaScript
+  with no build step, framework or package manager, so D1 holds.
+- Handing the already-loaded catalogue over keeps gameplay free of network
+  dependency (D6) and avoids fetching the JSON twice.
+- Generated questions multiply any data defect, so the generator refuses
+  anything ambiguous rather than producing a question with two right answers.
+
+Consequences:
+
+- Classic scripts share one global scope, so `quiz.js` must not redeclare
+  `app.js` top-level names. It uses `ui` and `attachQuizHandlers` for that
+  reason.
+- Leaving the quiz cancels the running timer, or it would keep counting down and
+  auto-reveal an answer while the browse view is on screen.
+- Leaderboards are per-difficulty `localStorage` keys
+  (`unimap.leaderboard.<difficulty>`), top 10 each. Storage failure degrades to
+  "no scores" rather than breaking the game.
+- A shared global leaderboard is still out of scope: it needs hosted writes,
+  anti-cheat and privacy decisions.
+
 ## Decision template
 
 ### D# — Title

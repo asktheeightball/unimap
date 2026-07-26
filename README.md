@@ -1,8 +1,10 @@
 # UniMap
 
-UniMap is a small static web app for browsing a catalogue of celestial bodies — stars,
-planets, nebulae, black holes, neutron stars and galaxies. Search by name, filter by
-category, and open any result to see its type, distance, size and circumference.
+UniMap is a small static web app for browsing a catalogue of 208 celestial bodies —
+stars, planets, exoplanets, dwarf planets, nebulae, galaxies, star clusters, black
+holes, neutron stars and pulsars. Search by name, filter by category, and open any
+result to see its type, distance, size and circumference. A timed quiz mode builds
+questions from the same catalogue.
 
 ## Technology stack
 
@@ -52,6 +54,7 @@ See `DEPLOYMENT.md` for the complete pre-deployment, verification, and rollback 
 ├── index.html             # semantic page structure
 ├── styles.css             # all presentation
 ├── app.js                 # data loading, state, search, filtering, rendering
+├── quiz.js                # quiz mode: questions, timing, scoring, leaderboards
 ├── celestial-bodies.json  # the dataset
 ├── tools/                 # maintainer scripts (never needed to run the site)
 │   ├── README.md             # pipeline, probe rule, source limitations
@@ -100,6 +103,46 @@ Each record in `celestial-bodies.json` has a stable lowercase `id` slug:
 - Responsive centered layout for phones, tablets and desktops
 - Keyboard-accessible controls with visible focus states
 - A user-facing error message (and a console log) if the dataset cannot be loaded
+
+## Quiz mode
+
+Switch to **Quiz** in the header. Four difficulties set the time allowed per
+question:
+
+| Mode | Seconds per question |
+|---|---:|
+| Easy | 15 |
+| Medium | 10 |
+| Hard | 7 |
+| Impossible | 5 |
+
+Each game is 10 questions with four choices and exactly one correct answer. A
+correct answer is worth up to 100 points, decreasing continuously to zero as the
+timer runs:
+
+```text
+points = round(100 × remaining milliseconds ÷ total milliseconds)
+```
+
+Incorrect and expired answers score zero, so a game is out of 1000. After each
+question the correct answer is shown with a short explanation assembled from the
+record's own fields.
+
+Questions are generated only from validated fields that a record actually
+carries, and the generator discards anything ambiguous:
+
+- value questions (distance, size) compare only within one type, because
+  `distance` means light years for a galaxy and mean orbital distance in AU for a
+  dwarf planet;
+- overlapping types are never used as distractors for each other, since a pulsar
+  is a neutron star and an exoplanet is a planet;
+- each object supplies at most one question per game.
+
+Each difficulty keeps its own top-10 leaderboard in `localStorage` under
+`unimap.leaderboard.<difficulty>`, recording player name, score, question count
+and date. Nothing is uploaded and there is no shared leaderboard. Gameplay makes
+no network request at all — `app.js` hands the already-loaded catalogue to
+`quiz.js`. Answer with a click, a tap, the keyboard, or the number keys 1–4.
 
 ## Maintaining the catalogue
 
@@ -189,16 +232,18 @@ catalogue up to `celestial-bodies.json.bak`.
 
 ### Record schema
 
-Required on every record: `id` (stable, lowercase, hyphenated), `name`, `type`,
-`distance`.
+Required on every record: `id` (stable, lowercase, hyphenated), `name`, `type`.
 
-Optional: `size`, `circumference`, `aliases`, `summary`, `measurementLabel`,
-`measurementValue`, `sourceName`, `sourceUrl`, `lastReviewed`, `rightAscension`,
-`declination`, `image`, `imageAlt`, `imageCredit`.
+Optional: `distance`, `size`, `circumference`, `aliases`, `summary`,
+`measurementLabel`, `measurementValue`, `sourceName`, `sourceUrl`,
+`lastReviewed`, `rightAscension`, `declination`, `image`, `imageAlt`,
+`imageCredit`.
 
-`size` and `circumference` are deliberately optional — many real objects have no
-published diameter, and the detail view hides a row rather than showing a blank
-or an invented value.
+`distance`, `size` and `circumference` are deliberately optional. Many real
+objects have no published diameter, and SIMBAD's `basic` table has no distance
+column at all — so its galaxies, nebulae, clusters and pulsars carry coordinates
+and a classification but no distance. The detail view hides a row rather than
+showing a blank or an invented value. See `DECISIONS.md` D10.
 
 ## Project workflow
 

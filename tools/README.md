@@ -111,44 +111,99 @@ python tools\import_catalogue.py --ca-bundle "<CERTIFI_PATH>" --source simbad-st
 
 ## Configured sources
 
-| Source id | Produces | Status |
+| Source id | Produces | Records | Status |
+|---|---|---:|---|
+| `exoplanet-archive` | Exoplanet | 60 | Confirmed 2026-07-26 |
+| `simbad-notable-stars` | Star | 67 | Confirmed 2026-07-26 |
+| `simbad-galaxies` | Galaxy | 27 | Confirmed 2026-07-26 |
+| `simbad-nebulae` | Nebula, Star Cluster | 26 | Confirmed 2026-07-26 |
+| `simbad-pulsars` | Pulsar | 14 | Confirmed 2026-07-26 |
+| `jpl-sbdb-dwarf-planets` | Dwarf Planet | 4 | Confirmed 2026-07-26 |
+| `jpl-sbdb-ceres` | Dwarf Planet | 1 | Confirmed 2026-07-26 |
+| `simbad-stars` | Star | — | **Probe first** (superseded by `simbad-notable-stars`) |
+| `simbad-black-holes` | Black Hole | — | **BLOCKED** — probed and rejected |
+| `jpl-satellites` | Moon | — | **BLOCKED** — endpoint returned HTTP 404 |
+
+### Confirmed response shapes
+
+**SIMBAD TAP** returns `{"metadata": [...], "data": [[...]]}`. `metadata` gives
+each column's `name`, `datatype` and `unit`. Confirmed columns:
+
+| Column | Type | Unit |
 |---|---|---|
-| `exoplanet-archive` | Exoplanet | Confirmed 2026-07-26 |
-| `jpl-sbdb-dwarf-planets` | Dwarf Planet | Confirmed 2026-07-26 |
-| `simbad-stars` | Star | **Probe first** |
-| `simbad-notable-stars` | Star | **Probe first** |
-| `simbad-galaxies` | Galaxy | **Probe first** |
-| `simbad-nebulae` | Nebula | **Probe first** |
-| `simbad-pulsars` | Neutron Star, Pulsar | **Probe first** |
-| `simbad-black-holes` | Black Hole | **Probe first** |
-| `jpl-sbdb-ceres` | Dwarf Planet | **Probe first**, no normalizer yet |
-| `jpl-satellites` | Moon | **Probe first**, no normalizer yet |
+| `main_id` | CHAR | — |
+| `ra` | DOUBLE | deg |
+| `dec` | DOUBLE | deg |
+| `otype_txt` | CHAR | — |
+| `plx_value` (star query only) | DOUBLE | mas |
+| `sp_type` (star query only) | CHAR | — |
+
+There is **no distance column**. Star distance is derived as `1000 / plx_value`
+parsecs; everything else carries no distance.
+
+`main_id` is space-padded (`"M  31"`, `"*  51 Peg"`) and may carry a leading
+kind marker (`NAME `, `V* `, `** `, `* `). The importer collapses the whitespace,
+strips the marker for display, and keeps the full identifier as an alias. It
+never translates a designation into a common name — `* alf CMa` becomes
+`alf CMa`, never `Sirius`.
+
+**JPL `sbdb.api`** returns a nested document with top-level keys `discovery`,
+`object`, `orbit`, `phys_par` and `signature` — not a row table. Sources using it
+set `"response": "object"` and the whole payload goes to the normalizer. Values
+used for Ceres: `object.fullname`, the `orbit.elements` entry named `a`
+(2.77, units `au`), and the `phys_par` entry named `diameter` (939.4, units
+`km`). Units are read from the response; a value in an unexpected unit is
+skipped, not reinterpreted.
+
+**JPL `sbdb_query.api`** returns `{"fields": [...], "data": [[...]]}`.
+
+### Classification mapping
+
+A curated list decides which objects to ask for. **Only the source decides what
+they are.** `OTYPE_TO_TYPE` in `import_catalogue.py` maps SIMBAD `otype_txt`
+codes onto UniMap types, and every code in it was observed in a cached response.
+An unmapped code skips the row.
+
+`OTYPE_REFUSED` records codes seen in a real response that are deliberately not
+mapped, with the reason: `BLL`, `ISM`, `sh`, `HXB`, `X`.
+
+This mapping is why nine objects requested from the nebula list — M 8, M 16,
+M 20, IC 1396, NGC 2264, NGC 6618, NGC 2024, NGC 2237, NGC 7000 — are imported as
+Star Clusters. SIMBAD types them `OpC` or `Cl*`.
+
+### Editorial overrides
+
+`id_overrides` maps a SIMBAD `main_id` onto a record UniMap already carries, so
+an import refreshes that record instead of adding a duplicate under a catalogue
+designation. It supplies only an id and the existing record's own name — never a
+value. Eight are configured, e.g. `M 31` → `andromeda`, `* alf CMa` →
+`sirius-a`.
 
 ### Known source limitations
 
-- **SIMBAD has never returned a response to this project.** Every column name in
-  the SIMBAD entries is an assumption from its documented `basic` table. The
-  `ident`/`basic` join used by the curated sets is also unconfirmed.
-- **`jpl-sbdb-ceres` uses a different endpoint**, not a different query.
-  `sbdb.api` returns a nested `{object, orbit, phys_par}` document, not the
-  `{fields, data}` table shape, so `rows_from_payload` cannot read it and
-  `jpl_sbdb` cannot normalize it. It needs its own normalizer, written against a
-  real probe.
-- **Deep-sky distance is unsolved.** SIMBAD's `basic` table has no distance
-  column. Star distance is derived from parallax (`1000/plx` parsecs), but
-  galaxies and nebulae have no useful parallax. Their distance must come from a
-  confirmed field whose units and semantics are read off a real probe.
-- **Black holes may not be importable as a category.** SIMBAD types these
-  objects by what is observed (`HighMassXBin`, `AGN`, `Seyfert`), not as black
-  holes, because the black hole is an inference from the system's dynamics.
-  Stamping every row `Black Hole` would assert a classification the source does
-  not make. Decide after probing; do not force the category.
-- **Moon distance semantics differ again.** A moon's orbital distance is from
-  its *parent planet*, not from the Sun or Earth, and must be labelled with the
-  parent body or it is misleading beside a galaxy's light-year distance. Confirm
-  the physical-parameters endpoint even carries an orbital radius.
+- **Black holes cannot be imported from SIMBAD.** `simbad-black-holes` was
+  probed and rejected. Of its 13 rows, 9 are `HXB` (high-mass X-ray binary) and
+  the rest are `BLL` (3C 273), `AGN` (M 87), `Sy2` (M 106) and `X` (Sgr A*).
+  Not one is typed as a black hole, because SIMBAD types these objects by what
+  is *observed* — the black hole is an inference from the system's dynamics.
+  Importing them as `Black Hole` would assert a classification the source does
+  not make. **Do not unblock this by widening `OTYPE_TO_TYPE`.** It needs an
+  authoritative catalogue of dynamically confirmed masses, or a curated list
+  carrying its own documented per-object evidence.
+- **Moons are deferred.** `sat_phys_par.api` returned HTTP 404 and is not a
+  current JPL API. A replacement must be probed, and must settle the distance
+  question first: a moon's orbital distance is measured from its *parent
+  planet*, a third semantic alongside light years and AU, and must be labelled
+  with the parent body or it is misleading.
+- **Deep-sky objects have no distance**, and this is a property of the source,
+  not a gap to be filled in. 60 of 208 records carry none.
+- **Nebulae came in at 17**, below the 20-30 target, because nine requested
+  objects are clusters. Closing that gap needs more curated objects, not a
+  looser mapping.
+- **`simbad-stars` is superseded.** The parallax-sweep query was never probed;
+  `simbad-notable-stars` supplies stars by curated identifier instead.
 - **`attribution` and `terms` strings are unverified** — the documentation sites
-  were unreachable too. Confirm them against each service's current terms page
+  were unreachable. Confirm them against each service's current terms page
   before publishing a catalogue built from these sources.
 
 ## Distance semantics
@@ -158,7 +213,8 @@ across types. Each record says which it is:
 
 | Type | Quantity |
 |---|---|
-| Star, deep-sky | Distance from Earth in light years |
+| Star | Distance from Earth in light years, derived from parallax |
+| Galaxy, nebula, cluster, pulsar | **No distance** — the source supplies none |
 | Dwarf planet | Mean orbital distance from the Sun in AU |
 | Moon | Orbital distance from its parent planet |
 

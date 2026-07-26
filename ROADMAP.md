@@ -27,23 +27,35 @@ Status: **Complete**
 - Clear load-error handling
 - Basic local-run and deployment instructions
 
-## Active roadmap
+## Completed features
 
 ### R1 — Major catalogue expansion
 
-Status: **In progress — blocked on source access**
+Status: **Complete** (2026-07-26)
 
 Goal: expand UniMap from a small demonstration catalogue into a much broader curated collection of celestial bodies.
 
-This is the highest product priority.
+**Result.** The catalogue holds **208 records**, grown
+from a 20-record baseline through two reviewed expansions. All seven configured
+sources were probed against the live services and every normalizer is written
+from a cached real response.
 
-Progress as of 2026-07-26: the import and validation pipeline exists and is tested (`tools/`), the app renders imported records including a new `Exoplanet` category, and the "restore the original prototype dataset" line item is closed — no prototype ever existed in this repository.
+Final counts: Star 68, Exoplanet 60, Galaxy 28, Nebula 17, Pulsar 12,
+Star Cluster 9, Dwarf Planet 5, Planet 4, Black Hole 3, Neutron Star 2.
+197 of 208 carry provenance, 192 carry coordinates.
 
-**First expansion promoted: 84 records** (60 exoplanets and 4 dwarf planets imported from responses fetched on a networked machine, plus the original 20).
+Two findings from the real responses shaped the result, and both were resolved by
+narrowing scope rather than by assuming values (see D10):
 
-**Second expansion, target 200–250, is prepared but blocked.** Curated source definitions for stars, galaxies, nebulae, pulsars, black holes, moons and Ceres are written, the interface and validator accept `Moon`, `Pulsar` and `Star Cluster`, and the app is verified at 250 records. Nothing could be imported: every astronomy host remains blocked by the sandbox network policy, and records are never authored from recall (D7). See the P0 blocker in `PRIORITY.md`, `tools/README.md` for the probe commands, and decisions D6, D7, D8 and D9.
+- The SIMBAD deep-sky queries carry **no distance column**, so `distance` became
+  optional and 60 records have none.
+- Classification comes from SIMBAD's `otype_txt`, not from the curated list. Nine
+  requested "nebulae" are typed as clusters and were imported as Star Clusters,
+  and `simbad-black-holes` is blocked outright because none of its rows is typed
+  as a black hole.
 
-Two data problems must be solved by probing before the deep-sky sets can be imported at all: SIMBAD's `basic` table carries no distance column for galaxies and nebulae, and SIMBAD types black-hole systems by what is observed rather than as black holes. Neither may be worked around by assuming a value or forcing a category.
+Still open, carried into R3 and R5: black holes, moons, alias search, nebula
+count, and unverified terms strings. See `PRIORITY.md`.
 
 #### Source strategy
 
@@ -82,7 +94,18 @@ Do not make the user-facing static application depend on these services being on
 
 ### R2 — Quiz mode
 
+Status: **Complete** (2026-07-26)
+
 Goal: turn the catalogue into a fast, replayable educational game.
+
+Implemented in `quiz.js` (see D11). All four timed modes, 10 questions per game,
+four choices with exactly one correct answer, continuous 100-to-0 scoring, and a
+separate top-10 `localStorage` leaderboard per difficulty. Five question kinds are
+generated from validated fields, and the generator discards anything ambiguous.
+
+Two exit criteria are met with a documented narrowing: picture questions are not
+generated (no images exist yet — that is R4), and "identify why an object is
+notable" is not generated because no record carries a `summary` yet (that is R3).
 
 #### Core game rules
 
@@ -157,6 +180,8 @@ A shared online/global leaderboard would require a hosted write service, anti-ch
 - Keyboard and touch input both work
 - Quiz questions are generated only from validated catalogue fields
 - A full quiz can be completed without console errors or blocked navigation
+
+## Active roadmap
 
 ### R3 — Educational object profiles
 
