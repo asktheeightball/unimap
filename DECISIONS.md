@@ -91,6 +91,81 @@ Consequences:
 - Document discrepancies before correcting them.
 - Add sources and clearer field semantics as a planned data-quality feature.
 
+## D6 — Use external astronomy APIs at import time only, via `tools/`
+
+Status: **Accepted**
+
+Decision:
+
+Catalogue growth happens through maintainer-run import scripts in `tools/` that write reviewed records into `celestial-bodies.json`. The browser application continues to fetch nothing but its own local JSON.
+
+Sources are declared in `tools/sources.json`; `tools/import_catalogue.py` fetches and stages them, and `tools/promote_staging.py` is the only script that writes the catalogue.
+
+Three sources are configured:
+
+| Source | Produces | Why |
+|---|---|---|
+| NASA Exoplanet Archive TAP | Exoplanet | No key, documented ADQL endpoint, one row per confirmed planet in `pscomppars`, carries distance and radius directly |
+| SIMBAD TAP | Star | Authoritative identifiers and coordinates; restricted to objects with a measured parallax so distance is derived from a published value |
+| NASA/JPL Small-Body Database | Dwarf Planet | Public JSON query API covering solar-system bodies with measured diameters |
+
+VizieR was evaluated and deferred: it is a catalogue-of-catalogues, so each table needs its own column mapping and curation decision, which is more valuable once the simpler sources are flowing. The NASA Image and Video Library belongs to R4 (images), not to this priority.
+
+Scripts must use only the Python standard library. Python is a development tool, never an application runtime dependency; the site remains deployable as a static folder.
+
+Rationale:
+
+- Page views stay fast, offline-capable, and free of third-party availability risk.
+- Provenance is captured once, at review time, instead of being re-derived per visit.
+- A rerunnable script keeps the catalogue refreshable without a build system.
+
+Consequences:
+
+- Imports require network access that the current sandbox denies (see P0 blocker).
+- Each importer owns a declared set of fields and must preserve curated ones.
+- Importers validate their output before replacing the catalogue.
+- Adding a source means adding a script, not a runtime dependency.
+
+## D6a — `size` and `circumference` are optional
+
+Status: **Accepted** (refines D6)
+
+Decision:
+
+A record requires only `id`, `name`, `type` and `distance`. `size` and `circumference` are optional, and the detail view hides a row whose value is absent.
+
+Rationale:
+
+- SIMBAD's basic table has no radius; requiring `size` would mean inventing one, which D7 forbids.
+- Many small bodies have no measured diameter.
+- A hidden row reads as "not measured"; a blank row reads as a bug.
+
+Consequences:
+
+- The validator no longer requires those two fields.
+- `[hidden] { display: none !important; }` is needed in `styles.css` because an explicit `display` otherwise beats the UA stylesheet.
+- Existing records are unaffected — they keep both fields.
+
+## D7 — Never fabricate catalogue values or provenance
+
+Status: **Accepted**
+
+Decision:
+
+A record's values and its `sourceName`/`sourceUrl` must come from a source that was actually retrieved. Records are not authored from model recall, and attribution is never attached to a value that did not come from the cited source. Derived numbers (unit conversions, a circumference computed from a radius) are permitted, must be arithmetic on a published value, and must be labelled as approximate.
+
+Rationale:
+
+- UniMap is educational; a plausible-looking wrong number is worse than a missing one.
+- False attribution is unfixable later because it looks verified.
+- Quiz mode (R2) will generate questions from these fields, multiplying any error.
+
+Consequences:
+
+- Catalogue growth is gated on real source access, not on effort available.
+- A field with no supporting source is left absent rather than estimated.
+- Where a source is missing, the record carries no provenance and the validator warns.
+
 ## Decision template
 
 ### D# — Title

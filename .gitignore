@@ -1,0 +1,15 @@
+# Raw API responses cached by tools/import_catalogue.py.
+# Useful locally for auditing an import and for reruns without refetching;
+# not committed because they are large, regenerable, and not the deliverable.
+tools/cache/
+
+# Generated staging output from tools/import_catalogue.py.
+# Commit the promoted celestial-bodies.json instead.
+tools/staging/
+
+# Backup written by tools/promote_staging.py.
+celestial-bodies.json.bak
+
+# Python bytecode from the development tools.
+__pycache__/
+*.pyc

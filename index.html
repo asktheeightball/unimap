@@ -47,6 +47,8 @@
             <button type="button" class="chip is-active" data-category="All" aria-pressed="true">All</button>
             <button type="button" class="chip" data-category="Stars" aria-pressed="false">Stars</button>
             <button type="button" class="chip" data-category="Planets" aria-pressed="false">Planets</button>
+            <button type="button" class="chip" data-category="Exoplanets" aria-pressed="false">Exoplanets</button>
+            <button type="button" class="chip" data-category="Dwarf Planets" aria-pressed="false">Dwarf Planets</button>
             <button type="button" class="chip" data-category="Nebulae" aria-pressed="false">Nebulae</button>
             <button type="button" class="chip" data-category="Black Holes" aria-pressed="false">Black Holes</button>
             <button type="button" class="chip" data-category="Neutron Stars" aria-pressed="false">Neutron Stars</button>
@@ -74,13 +76,21 @@
               <dt>Distance</dt>
               <dd id="detail-distance"></dd>
             </div>
-            <div class="detail-row">
+            <div class="detail-row" id="detail-row-size">
               <dt>Size</dt>
               <dd id="detail-size"></dd>
             </div>
-            <div class="detail-row">
+            <div class="detail-row" id="detail-row-circumference">
               <dt>Circumference</dt>
               <dd id="detail-circumference"></dd>
+            </div>
+            <div class="detail-row" id="detail-row-measurement">
+              <dt id="detail-measurement-label"></dt>
+              <dd id="detail-measurement-value"></dd>
+            </div>
+            <div class="detail-row" id="detail-row-source">
+              <dt>Source</dt>
+              <dd id="detail-source"></dd>
             </div>
           </dl>
         </article>

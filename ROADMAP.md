@@ -31,9 +31,13 @@ Status: **Complete**
 
 ### R1 — Major catalogue expansion
 
+Status: **In progress — blocked on source access**
+
 Goal: expand UniMap from a small demonstration catalogue into a much broader curated collection of celestial bodies.
 
 This is the highest product priority.
+
+Progress as of 2026-07-26: the import and validation pipeline exists and is tested (`tools/`), the app renders imported records including a new `Exoplanet` category, and the "restore the original prototype dataset" line item is closed — no prototype ever existed in this repository. The catalogue itself is still at its 20-record baseline because every astronomy host is blocked by the sandbox network policy. See the P0 blocker in `PRIORITY.md` and decisions D6 and D7.
 
 #### Source strategy
 
@@ -51,7 +55,7 @@ Do not make the user-facing static application depend on these services being on
 
 #### Required work
 
-- Reconcile and restore the complete original prototype dataset
+- ~~Reconcile and restore the complete original prototype dataset~~ — closed 2026-07-26: no prototype dataset exists in this repository
 - Define the target catalogue scope and practical record-count goal
 - Add many more objects across all supported categories
 - Expand or add categories where useful, including moons, dwarf planets, asteroids, comets, star clusters, and exoplanets

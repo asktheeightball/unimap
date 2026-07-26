@@ -46,11 +46,9 @@ The existing application is documented to provide:
 
 ## Current priority
 
-Read `PRIORITY.md`. At the time this handoff was created, the next task is:
+Read `PRIORITY.md`. The active task is **P0 — Expand the celestial-body catalogue substantially**, now *In progress* and blocked on network access for the bulk import.
 
-**P0 — Verify the static baseline and full dataset migration.**
-
-The current JSON appears smaller than the original supplied prototype dataset, so the first task is reconciliation and validation rather than adding new features.
+Correction: an earlier version of this file stated that "the current JSON appears smaller than the original supplied prototype dataset." That was an assumption and it is false. No prototype dataset exists in this repository — the full history contains only 12 files and never included one. The 20 records in `celestial-bodies.json` were authored in commit `c55b9bb` and are the baseline. There is nothing to reconcile or restore.
 
 ## Local start
 
@@ -85,18 +83,60 @@ Replace or append this section after meaningful work:
 
 ### Last session
 
-- Date:
-- Branch:
-- Starting commit:
-- Ending commit:
-- Task selected:
-- Status:
-- Files changed:
-- Validation performed:
-- Deployment performed:
-- Known issues:
-- Next priority:
-- Uncommitted files:
+- Date: 2026-07-26
+- Branch: `claude/unimap-static-app-uj0ql5`
+- Starting commit: `a3f6036`
+- Ending commit: uncommitted at time of writing
+- Task selected: P0 — Expand the celestial-body catalogue substantially
+- Status: **In progress / blocked.** Reconciliation closed, import and validation pipeline built and tested, bulk import blocked on sandbox network policy.
+- Files changed: `tools/sources.json`, `tools/import_catalogue.py`, `tools/promote_staging.py`, `tools/validate_catalogue.py`, `.gitignore` (all new), `app.js`, `index.html`, `styles.css`, `PRIORITY.md`, `DECISIONS.md`, `HANDOFF.md`, `ROADMAP.md`, `README.md`
+- Validation performed: 46 importer unit checks (response shapes, normalizers, URL/cache); 9 pipeline safety checks against a local fixture server (staging, promotion, idempotency, invalid-data refusal, cross-source collision refusal, cache, unreachable source); 11-case validator negative test; 64/64 baseline browser checks; 19/19 category-growth checks; 24/24 checks against a promoted 27-record catalogue. 162 checks, 0 failures.
+- Deployment performed: none
+- Known issues: catalogue is still at its 20-record baseline. See the external network limitation below.
+- Next priority: run the import locally (commands in `README.md`), return the outputs, then finish P0
+- Uncommitted files: none — tooling and documentation committed; catalogue unchanged
+
+### External network limitation (2026-07-26)
+
+The environment this work was done in denies outbound access to every astronomy
+service. Each returns HTTP 403 at the proxy CONNECT stage:
+
+| Host | Purpose |
+|---|---|
+| `exoplanetarchive.ipac.caltech.edu` | NASA Exoplanet Archive TAP |
+| `simbad.cds.unistra.fr` | SIMBAD TAP |
+| `vizier.cds.unistra.fr` | VizieR |
+| `ssd-api.jpl.nasa.gov` | JPL Small-Body Database |
+| `images-api.nasa.gov` | NASA Image and Video Library |
+| `api.nasa.gov` | NASA APIs generally |
+
+Consequences to carry into the next session:
+
+1. **No record was imported.** The catalogue is unchanged at 20 records.
+2. **The HTTP path of the importer is the one untested part.** Everything after
+   the response — parsing, normalizing, staging, validating, promoting — is
+   tested against fixtures in all three response shapes these services use.
+3. **The normalizers were written without being able to read the services' API
+   documentation.** Column names and response shapes are the expected ones but
+   are unconfirmed. Run `--probe` first; it caches the raw response and prints
+   the true columns, which is exactly what is needed to correct a normalizer.
+4. **The `attribution` and `terms` strings in `tools/sources.json` are
+   unverified** and must be checked against each service's current terms page
+   before a catalogue built from them is published.
+
+### Catalogue baseline (2026-07-26)
+
+| Type | Records |
+|---|---:|
+| Galaxy | 4 |
+| Planet | 4 |
+| Star | 4 |
+| Black Hole | 3 |
+| Nebula | 3 |
+| Neutron Star | 2 |
+| **Total** | **20** |
+
+Records carrying source metadata: 0 of 20. The baseline predates D7 and has no provenance; adding it is part of finishing P0.
 
 ## Known cautions
 

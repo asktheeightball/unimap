@@ -6,28 +6,45 @@ This is the authoritative source for selecting the next unit of work.
 
 ### P0 — Expand the celestial-body catalogue substantially
 
-Status: **Not started**
+Status: **In progress** — import pipeline built and validated; bulk import blocked on network access.
 
 Objective: reconcile the original dataset, identify authoritative import sources, and expand UniMap into a much larger locally stored catalogue without making the user-facing application dependent on live APIs.
 
-Required work:
+#### Reconciliation finding (resolved 2026-07-26)
 
-1. Compare the current JSON catalogue with the original supplied prototype dataset.
-2. Report record totals by category for both sources.
-3. Restore omitted valid records and document renamed, duplicated, or materially altered records.
+Items 1–3 below are **closed as not applicable**. No original prototype dataset exists in this repository. Verified by:
+
+- `git log --all --diff-filter=A --name-only` — only 12 files have ever existed, none of them a prototype;
+- the current catalogue was authored in the commit that created the app (`c55b9bb`), not migrated from a prior source;
+- the remote has no other branches.
+
+The earlier claim that "the current JSON appears smaller than the original supplied prototype dataset" was an assumption, not an observation, and has been corrected in `HANDOFF.md`. The 20 existing records are the baseline; there is nothing to restore.
+
+#### Blocker
+
+Bulk import cannot proceed in the current environment. Every astronomy host is refused by the sandbox network policy at the CONNECT stage (HTTP 403), including `exoplanetarchive.ipac.caltech.edu`, `simbad.cds.unistra.fr`, `vizier.cds.unistra.fr`, `ssd-api.jpl.nasa.gov`, `images-api.nasa.gov`, and `api.nasa.gov`. Documentation sites for those services are blocked too, so their terms could not be read first-hand.
+
+Records must not be authored from model recall and labelled with source URLs that were never fetched — that would fabricate provenance and violate the "do not invent values" rule. Expansion resumes when a maintainer either runs the importer from a networked machine or grants the sandbox access to those hosts.
+
+The import and validation workflow is built and tested; only the network-dependent
+step remains. See `README.md` for the commands and `HANDOFF.md` for the full
+limitation notes.
+
+Remaining work:
+
 4. Define the target categories and practical first expansion size.
 5. Test authoritative source options:
    - SIMBAD and VizieR for non-solar-system objects;
    - NASA Exoplanet Archive TAP for exoplanets;
    - NASA/JPL Small-Body Database and Horizons for solar-system objects;
    - NASA Image and Video Library for candidate imagery and attribution.
-6. Define a controlled import or curation workflow that writes reviewed records into local JSON.
-7. Do not add live API calls as a required page-view dependency.
+6. Define a controlled import or curation workflow that writes reviewed records into local JSON. **Done** — `tools/import_catalogue.py` + `tools/promote_staging.py`, see D6.
+7. Do not add live API calls as a required page-view dependency. **Held** — the site still fetches only local JSON.
 8. Add many more objects across existing and approved new categories.
-9. Preserve source identifiers, aliases, coordinates where available, source attribution, and review dates.
-10. Verify unique IDs, required fields, category consistency, duplicate detection, and mobile search performance.
-11. Run the application through a local static server and validate all existing core behavior.
-12. Update `HANDOFF.md`, `ROADMAP.md`, and this file with counts, source decisions, and the next task.
+9. Preserve source identifiers, aliases, coordinates where available, source attribution, and review dates. **Schema ready** — validated optional fields exist; the importer populates them.
+10. Verify unique IDs, required fields, category consistency, duplicate detection, and mobile search performance. **Done** — `tools/validate_catalogue.py`.
+11. Run the application through a local static server and validate all existing core behavior. **Done** — 64/64 behavioural checks plus 19 catalogue-growth checks.
+12. Update `HANDOFF.md`, `ROADMAP.md`, and this file with counts, source decisions, and the next task. **Done**.
 
 Acceptance criteria:
 

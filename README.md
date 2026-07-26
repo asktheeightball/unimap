@@ -53,6 +53,13 @@ See `DEPLOYMENT.md` for the complete pre-deployment, verification, and rollback 
 ├── styles.css             # all presentation
 ├── app.js                 # data loading, state, search, filtering, rendering
 ├── celestial-bodies.json  # the dataset
+├── tools/                 # maintainer scripts (never needed to run the site)
+│   ├── sources.json          # source endpoints, queries, attribution
+│   ├── import_catalogue.py   # fetch -> cache -> normalize -> stage
+│   ├── promote_staging.py    # validate, then update the catalogue
+│   ├── validate_catalogue.py # standalone catalogue validation
+│   ├── cache/                # raw API responses (git-ignored)
+│   └── staging/              # generated staging JSON (git-ignored)
 ├── README.md              # project overview and local setup
 ├── PRODUCT.md             # product purpose, scope, and architecture guardrails
 ├── ROADMAP.md             # planned product outcomes
@@ -90,6 +97,76 @@ Each record in `celestial-bodies.json` has a stable lowercase `id` slug:
 - Responsive centered layout for phones, tablets and desktops
 - Keyboard-accessible controls with visible focus states
 - A user-facing error message (and a console log) if the dataset cannot be loaded
+
+## Maintaining the catalogue
+
+`tools/` holds development scripts. They use only the Python standard library, and
+**the site never needs them** — UniMap stays a static folder of HTML, CSS,
+JavaScript and JSON with no runtime dependencies. External astronomy services are
+contacted only here, at import time, never from the browser. See `DECISIONS.md`
+D6 and D7.
+
+### The pipeline
+
+```text
+authoritative source  ->  tools/cache/     raw response, kept for audit
+                      ->  tools/staging/   normalized records, validated
+                      ->  celestial-bodies.json   (only via promote_staging.py)
+```
+
+`import_catalogue.py` never writes the production catalogue. Promotion is a
+separate, deliberate step that validates the merged result first and backs up the
+previous catalogue.
+
+### Validate
+
+```bash
+python3 tools/validate_catalogue.py
+```
+
+Checks JSON syntax, unique lowercase ids, required fields, category values the
+interface can actually reach, duplicate names, alias collisions and local image
+references, then prints totals by category. Exits non-zero on any error.
+
+### Import
+
+```bash
+python3 tools/import_catalogue.py --list
+python3 tools/import_catalogue.py --source exoplanet-archive --probe
+python3 tools/import_catalogue.py --source exoplanet-archive --limit 50
+python3 tools/import_catalogue.py --all --limit 40
+```
+
+Sources are declared in `tools/sources.json` — endpoint, query, attribution and
+which normalizer converts its rows. `--probe` fetches a source and reports the
+real response shape without importing; run it first against any new or changed
+source. Responses are cached, so reruns do not refetch unless you pass
+`--refresh`.
+
+### Promote
+
+```bash
+python3 tools/promote_staging.py --dry-run
+python3 tools/promote_staging.py
+```
+
+Promotion refuses to write unless the merged catalogue validates. It preserves
+hand-curated fields and records, refuses to overwrite a record owned by a
+different source, produces deterministic output, and backs the previous
+catalogue up to `celestial-bodies.json.bak`.
+
+### Record schema
+
+Required on every record: `id` (stable, lowercase, hyphenated), `name`, `type`,
+`distance`.
+
+Optional: `size`, `circumference`, `aliases`, `summary`, `measurementLabel`,
+`measurementValue`, `sourceName`, `sourceUrl`, `lastReviewed`, `rightAscension`,
+`declination`, `image`, `imageAlt`, `imageCredit`.
+
+`size` and `circumference` are deliberately optional — many real objects have no
+published diameter, and the detail view hides a row rather than showing a blank
+or an invented value.
 
 ## Project workflow
 

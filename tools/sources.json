@@ -1,0 +1,70 @@
+{
+  "_comment": [
+    "Source configuration for tools/import_catalogue.py.",
+    "Each entry describes one authoritative service, the exact query sent to it,",
+    "and which normalizer converts its rows into UniMap records.",
+    "",
+    "IMPORTANT: the 'attribution' and 'terms' strings below were written without",
+    "network access and could NOT be checked against each service's current terms",
+    "page. Confirm them before publishing a catalogue built from these sources.",
+    "",
+    "The '{limit}' placeholder in a query is replaced with the --limit value, or",
+    "removed entirely when no limit is given."
+  ],
+  "sources": [
+    {
+      "id": "exoplanet-archive",
+      "name": "NASA Exoplanet Archive",
+      "url": "https://exoplanetarchive.ipac.caltech.edu/",
+      "endpoint": "https://exoplanetarchive.ipac.caltech.edu/TAP/sync",
+      "docs": "https://exoplanetarchive.ipac.caltech.edu/docs/TAP/usingTAP.html",
+      "normalizer": "exoplanet_archive",
+      "produces": ["Exoplanet"],
+      "requires_key": false,
+      "attribution": "This research has made use of the NASA Exoplanet Archive, which is operated by the California Institute of Technology, under contract with the National Aeronautics and Space Administration under the Exoplanet Exploration Program.",
+      "terms": "Public domain / open access. CONFIRM before publishing.",
+      "params": {
+        "format": "json"
+      },
+      "query": "select {limit} pl_name, hostname, sy_dist, pl_rade, pl_bmasse, disc_year, discoverymethod, ra, dec from pscomppars where sy_dist is not null and pl_rade is not null order by sy_dist asc, pl_name asc"
+    },
+    {
+      "id": "simbad-stars",
+      "name": "SIMBAD (CDS, Strasbourg)",
+      "url": "https://simbad.cds.unistra.fr/",
+      "endpoint": "https://simbad.cds.unistra.fr/simbad/sim-tap/sync",
+      "docs": "https://simbad.cds.unistra.fr/simbad/sim-tap",
+      "normalizer": "simbad_star",
+      "produces": ["Star"],
+      "requires_key": false,
+      "attribution": "This research has made use of the SIMBAD database, operated at CDS, Strasbourg, France.",
+      "terms": "Attribution required; bulk querying discouraged. Use modest limits. CONFIRM before publishing.",
+      "note": "Restricted to objects with a measured parallax so distance is derived from a published value rather than estimated. SIMBAD's basic table carries no radius, so these records have no size/circumference.",
+      "params": {
+        "request": "doQuery",
+        "lang": "ADQL",
+        "format": "json"
+      },
+      "query": "select {limit} main_id, ra, dec, plx_value, otype_txt, sp_type from basic where otype_txt = 'Star' and plx_value > 20 and ra is not null and dec is not null order by plx_value desc, main_id asc"
+    },
+    {
+      "id": "jpl-sbdb-dwarf-planets",
+      "name": "NASA/JPL Small-Body Database",
+      "url": "https://ssd.jpl.nasa.gov/tools/sbdb_query.html",
+      "endpoint": "https://ssd-api.jpl.nasa.gov/sbdb_query.api",
+      "docs": "https://ssd-api.jpl.nasa.gov/doc/sbdb_query.html",
+      "normalizer": "jpl_sbdb",
+      "produces": ["Dwarf Planet"],
+      "requires_key": false,
+      "attribution": "Data courtesy of NASA/JPL Solar System Dynamics, Small-Body Database.",
+      "terms": "Public domain, attribution appreciated. CONFIRM before publishing.",
+      "note": "Solar-system 'distance' is reported as a mean orbital distance in AU, which is a different quantity from the light-year distances used for deep-sky objects. The record labels it explicitly.",
+      "params": {
+        "fields": "full_name,diameter,class,H,a",
+        "sb-class": "TNO",
+        "limit": "40"
+      },
+      "query": null
+    }
+  ]
+}

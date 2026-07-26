@@ -1,0 +1,458 @@
+#!/usr/bin/env python3
+"""Import celestial bodies from authoritative sources into a staging file.
+
+A development tool only. UniMap itself is static HTML, CSS, vanilla JavaScript
+and JSON; Python is never required to run, build, or deploy the site, and the
+browser never calls these services.
+
+Pipeline:
+
+    authoritative source -> raw response cache -> normalized records
+                         -> tools/staging/<source>.staged.json -> validation
+
+This script NEVER writes celestial-bodies.json. Promoting a validated staging
+file into the production catalogue is a separate, deliberate step:
+
+    python3 tools/promote_staging.py
+
+Usage:
+    python3 tools/import_catalogue.py --list
+    python3 tools/import_catalogue.py --source exoplanet-archive --probe
+    python3 tools/import_catalogue.py --source exoplanet-archive --limit 50
+    python3 tools/import_catalogue.py --all --limit 40
+
+Uses only the Python standard library.
+"""
+
+import argparse
+import hashlib
+import json
+import math
+import re
+import subprocess
+import sys
+import urllib.error
+import urllib.parse
+import urllib.request
+from datetime import datetime, timezone
+from pathlib import Path
+
+TOOLS = Path(__file__).resolve().parent
+ROOT = TOOLS.parent
+CATALOGUE = ROOT / "celestial-bodies.json"
+SOURCES_FILE = TOOLS / "sources.json"
+CACHE_DIR = TOOLS / "cache"
+STAGING_DIR = TOOLS / "staging"
+
+PARSEC_IN_LIGHT_YEARS = 3.261563777
+EARTH_RADIUS_KM = 6371.0
+AU_IN_KM = 149_597_870.7
+
+# Fields an importer owns. Anything else on a record it previously wrote --
+# a hand-written summary, a curated image -- survives a rerun untouched.
+MANAGED_FIELDS = (
+    "name", "type", "distance", "size", "circumference",
+    "measurementLabel", "measurementValue",
+    "rightAscension", "declination",
+    "sourceName", "sourceUrl", "lastReviewed",
+)
+
+
+# --- helpers -------------------------------------------------------------
+
+
+def slugify(name: str) -> str:
+    """Turn an object name into a stable lowercase id."""
+    slug = re.sub(r"[^a-z0-9]+", "-", str(name).strip().lower()).strip("-")
+    if not slug:
+        raise ValueError(f"cannot derive an id from name {name!r}")
+    return slug
+
+
+def number(value, field: str):
+    """Coerce a source value to float, refusing anything unusable.
+
+    Sources use null, "", and occasionally "null" for absent measurements.
+    None of those may become a displayed number.
+    """
+    if value is None or (isinstance(value, str) and value.strip().lower() in ("", "null", "nan")):
+        raise ValueError(f"{field} is absent")
+    try:
+        result = float(value)
+    except (TypeError, ValueError):
+        raise ValueError(f"{field} is not numeric: {value!r}")
+    if math.isnan(result) or math.isinf(result):
+        raise ValueError(f"{field} is not a finite number: {value!r}")
+    return result
+
+
+def rows_from_payload(payload):
+    """Normalize the three response shapes these services return.
+
+    Handles a plain array of objects, the IVOA TAP {"metadata": [...],
+    "data": [[...]]} shape, and the JPL {"fields": [...], "data": [[...]]}
+    shape, so a source that changes format does not silently import nothing.
+    """
+    if isinstance(payload, list):
+        if payload and not isinstance(payload[0], dict):
+            raise ValueError("array response did not contain objects")
+        return payload
+
+    if not isinstance(payload, dict):
+        raise ValueError(f"unexpected response type: {type(payload).__name__}")
+
+    data = payload.get("data")
+    if data is None:
+        raise ValueError(f"response has no 'data' key (keys: {sorted(payload)})")
+
+    columns = payload.get("fields") or payload.get("metadata")
+    if not columns:
+        raise ValueError(f"response has no column names (keys: {sorted(payload)})")
+
+    names = []
+    for column in columns:
+        if isinstance(column, dict):
+            names.append(column.get("name") or column.get("colname"))
+        else:
+            names.append(str(column))
+
+    return [dict(zip(names, row)) for row in data]
+
+
+# --- normalizers ---------------------------------------------------------
+#
+# Each returns a UniMap record or raises ValueError to skip the row.
+# Every displayed number is arithmetic on a published value. Nothing is
+# estimated, inferred, or filled in from general knowledge (DECISIONS.md D7).
+
+
+def exoplanet_archive(row: dict, source: dict, reviewed: str) -> dict:
+    name = str(row.get("pl_name") or "").strip()
+    if not name:
+        raise ValueError("row has no pl_name")
+
+    light_years = number(row.get("sy_dist"), "sy_dist") * PARSEC_IN_LIGHT_YEARS
+    radius_earths = number(row.get("pl_rade"), "pl_rade")
+    diameter_km = 2.0 * radius_earths * EARTH_RADIUS_KM
+
+    record = {
+        "id": slugify(name),
+        "name": name,
+        "type": "Exoplanet",
+        "distance": f"~{light_years:,.1f} ly",
+        "size": f"~{diameter_km:,.0f} km (diameter)",
+        "circumference": f"~{math.pi * diameter_km:,.0f} km",
+        "measurementLabel": "Radius (Earth radii)",
+        "measurementValue": f"{radius_earths:.2f}",
+    }
+
+    host = str(row.get("hostname") or "").strip()
+    if host and host != name:
+        record["aliases"] = [f"{host} system"]
+
+    try:
+        record["rightAscension"] = f"{number(row.get('ra'), 'ra'):.5f}"
+        record["declination"] = f"{number(row.get('dec'), 'dec'):.5f}"
+    except ValueError:
+        pass  # Coordinates are optional; the rest of the record is still good.
+
+    return record
+
+
+def simbad_star(row: dict, source: dict, reviewed: str) -> dict:
+    name = str(row.get("main_id") or "").strip()
+    if not name:
+        raise ValueError("row has no main_id")
+
+    # SIMBAD reports parallax in milliarcseconds; distance(pc) = 1000 / plx.
+    parallax_mas = number(row.get("plx_value"), "plx_value")
+    if parallax_mas <= 0:
+        raise ValueError(f"non-positive parallax: {parallax_mas}")
+    light_years = (1000.0 / parallax_mas) * PARSEC_IN_LIGHT_YEARS
+
+    # SIMBAD's basic table carries no radius, so no size/circumference is set.
+    record = {
+        "id": slugify(name),
+        "name": re.sub(r"\s+", " ", name),
+        "type": "Star",
+        "distance": f"~{light_years:,.1f} ly",
+        "measurementLabel": "Parallax (mas)",
+        "measurementValue": f"{parallax_mas:.2f}",
+    }
+
+    spectral = str(row.get("sp_type") or "").strip()
+    if spectral:
+        record["aliases"] = [f"Spectral type {spectral}"]
+
+    try:
+        record["rightAscension"] = f"{number(row.get('ra'), 'ra'):.5f}"
+        record["declination"] = f"{number(row.get('dec'), 'dec'):.5f}"
+    except ValueError:
+        pass
+
+    return record
+
+
+def jpl_sbdb(row: dict, source: dict, reviewed: str) -> dict:
+    name = str(row.get("full_name") or row.get("name") or "").strip()
+    if not name:
+        raise ValueError("row has no full_name")
+
+    # Solar-system distance is an orbital semi-major axis in AU -- a different
+    # quantity from the light-year distances used for deep-sky objects, so the
+    # record says so explicitly rather than implying they are comparable.
+    semi_major_au = number(row.get("a"), "a")
+
+    record = {
+        "id": slugify(name),
+        "name": name,
+        "type": "Dwarf Planet",
+        "distance": f"~{semi_major_au:,.1f} AU (mean orbital distance)",
+        "measurementLabel": "Semi-major axis (AU)",
+        "measurementValue": f"{semi_major_au:.3f}",
+    }
+
+    try:
+        diameter_km = number(row.get("diameter"), "diameter")
+    except ValueError:
+        diameter_km = None  # Many small bodies have no measured diameter.
+
+    if diameter_km is not None:
+        record["size"] = f"~{diameter_km:,.0f} km (diameter)"
+        record["circumference"] = f"~{math.pi * diameter_km:,.0f} km"
+
+    return record
+
+
+NORMALIZERS = {
+    "exoplanet_archive": exoplanet_archive,
+    "simbad_star": simbad_star,
+    "jpl_sbdb": jpl_sbdb,
+}
+
+
+# --- fetching ------------------------------------------------------------
+
+
+def build_url(source: dict, limit: int | None) -> str:
+    params = dict(source.get("params") or {})
+    query = source.get("query")
+
+    if query:
+        # TAP/ADQL uses TOP rather than LIMIT.
+        query = query.replace("{limit}", f"top {int(limit)}" if limit else "")
+        params["query"] = re.sub(r"\s+", " ", query).strip()
+    elif limit:
+        params["limit"] = str(int(limit))
+
+    return f"{source['endpoint']}?{urllib.parse.urlencode(params)}"
+
+
+def cache_path(source: dict, url: str) -> Path:
+    digest = hashlib.sha256(url.encode("utf-8")).hexdigest()[:12]
+    return CACHE_DIR / f"{source['id']}-{digest}.json"
+
+
+def fetch(source: dict, url: str, timeout: int, refresh: bool) -> tuple[str, Path]:
+    """Fetch a source response, caching the raw body for audit and reruns."""
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    path = cache_path(source, url)
+
+    if path.is_file() and not refresh:
+        print(f"  cache hit: {path.relative_to(ROOT)} (use --refresh to refetch)")
+        return path.read_text(encoding="utf-8"), path
+
+    print(f"  GET {url[:120]}{'...' if len(url) > 120 else ''}")
+    request = urllib.request.Request(url, headers={
+        "User-Agent": "UniMap-importer/1.0 (static astronomy catalogue; contact repository owner)",
+        "Accept": "application/json",
+    })
+
+    try:
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            body = response.read().decode("utf-8", "replace")
+    except urllib.error.HTTPError as exc:
+        detail = exc.read().decode("utf-8", "replace")[:800]
+        raise SystemExit(f"error: {source['id']} request failed "
+                         f"({exc.code} {exc.reason})\n{detail}")
+    except urllib.error.URLError as exc:
+        raise SystemExit(f"error: cannot reach {source['id']} ({source['endpoint']}): "
+                         f"{exc.reason}")
+
+    path.write_text(body, encoding="utf-8")
+    print(f"  cached -> {path.relative_to(ROOT)} ({len(body):,} bytes)")
+    return body, path
+
+
+def probe(source: dict, body: str, path: Path) -> int:
+    """Report a response's real shape without importing anything.
+
+    Run this first against a new or changed source. The normalizers were written
+    without network access, so the cached file this produces is the ground truth
+    for correcting them.
+    """
+    print(f"\n--- probe: {source['id']} ---")
+    print(f"raw response cached at: {path.relative_to(ROOT)}")
+
+    try:
+        payload = json.loads(body)
+    except json.JSONDecodeError as exc:
+        print(f"response is not JSON ({exc}); first 400 characters:\n{body[:400]}")
+        return 1
+
+    print(f"top-level type: {type(payload).__name__}")
+    if isinstance(payload, dict):
+        print(f"top-level keys: {sorted(payload)}")
+
+    try:
+        rows = rows_from_payload(payload)
+    except ValueError as exc:
+        print(f"could not extract rows: {exc}")
+        return 1
+
+    print(f"rows: {len(rows)}")
+    if rows:
+        print(f"columns: {sorted(rows[0])}")
+        print("first row:")
+        print(json.dumps(rows[0], indent=2, default=str)[:1200])
+    return 0
+
+
+# --- import --------------------------------------------------------------
+
+
+def load_sources() -> list[dict]:
+    config = json.loads(SOURCES_FILE.read_text(encoding="utf-8"))
+    sources = config.get("sources")
+    if not isinstance(sources, list) or not sources:
+        raise SystemExit(f"error: {SOURCES_FILE.name} defines no sources")
+    return sources
+
+
+def import_source(source: dict, args, existing_ids: set[str]) -> int:
+    print(f"\n=== {source['id']} — {source['name']} ===")
+
+    normalizer = NORMALIZERS.get(source.get("normalizer"))
+    if normalizer is None:
+        raise SystemExit(f"error: unknown normalizer {source.get('normalizer')!r} "
+                         f"for source {source['id']!r}")
+
+    url = build_url(source, args.limit)
+    body, path = fetch(source, url, args.timeout, args.refresh)
+
+    if args.probe:
+        return probe(source, body, path)
+
+    try:
+        rows = rows_from_payload(json.loads(body))
+    except (json.JSONDecodeError, ValueError) as exc:
+        raise SystemExit(f"error: {source['id']} returned an unusable response: {exc}\n"
+                         f"       run with --probe to inspect {path.relative_to(ROOT)}")
+
+    print(f"  rows: {len(rows)}")
+
+    reviewed = datetime.now(timezone.utc).date().isoformat()
+    records, skipped, seen = [], 0, set()
+
+    for row in rows:
+        try:
+            record = normalizer(row, source, reviewed)
+        except (ValueError, TypeError) as exc:
+            if args.verbose:
+                print(f"  skip: {exc}", file=sys.stderr)
+            skipped += 1
+            continue
+
+        if record["id"] in seen:
+            print(f"  skip: duplicate id {record['id']!r} within this import", file=sys.stderr)
+            skipped += 1
+            continue
+        if record["id"] in existing_ids:
+            print(f"  note: {record['id']!r} already in the catalogue; "
+                  f"promote will refresh it in place")
+
+        seen.add(record["id"])
+        record["sourceName"] = source["name"]
+        record["sourceUrl"] = source["url"]
+        record["lastReviewed"] = reviewed
+        records.append(record)
+
+    records.sort(key=lambda r: (r["type"], r["name"]))
+    print(f"  normalized: {len(records)} record(s), {skipped} skipped")
+
+    if not records:
+        print("  nothing to stage", file=sys.stderr)
+        return 1
+
+    if args.dry_run:
+        print("  dry run: no staging file written")
+        print(json.dumps(records[0], indent=2, ensure_ascii=False))
+        return 0
+
+    STAGING_DIR.mkdir(parents=True, exist_ok=True)
+    staged = STAGING_DIR / f"{source['id']}.staged.json"
+    staged.write_text(json.dumps(records, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    print(f"  staged -> {staged.relative_to(ROOT)}")
+
+    validator = TOOLS / "validate_catalogue.py"
+    result = subprocess.run([sys.executable, str(validator), "--quiet", str(staged)])
+    if result.returncode != 0:
+        print(f"  error: staged file failed validation; it was NOT promoted.",
+              file=sys.stderr)
+        return 1
+
+    print("  staged file is valid")
+    return 0
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("--source", help="source id from tools/sources.json")
+    parser.add_argument("--all", action="store_true", help="import every configured source")
+    parser.add_argument("--list", action="store_true", help="list configured sources and exit")
+    parser.add_argument("--limit", type=int, default=None, help="maximum records per source")
+    parser.add_argument("--probe", action="store_true",
+                        help="fetch and report the response shape without importing")
+    parser.add_argument("--dry-run", action="store_true", help="normalize but write no staging file")
+    parser.add_argument("--refresh", action="store_true", help="refetch even if cached")
+    parser.add_argument("--timeout", type=int, default=120, help="HTTP timeout in seconds")
+    parser.add_argument("--verbose", action="store_true", help="report every skipped row")
+    args = parser.parse_args()
+
+    sources = load_sources()
+
+    if args.list:
+        for source in sources:
+            produces = ", ".join(source.get("produces") or [])
+            print(f"{source['id']:<28} {source['name']}  -> {produces}")
+        return 0
+
+    if args.all:
+        selected = sources
+    elif args.source:
+        selected = [s for s in sources if s["id"] == args.source]
+        if not selected:
+            raise SystemExit(f"error: no source with id {args.source!r}. "
+                             f"Run --list to see the options.")
+    else:
+        parser.error("choose --source <id>, --all, or --list")
+
+    existing_ids = set()
+    if CATALOGUE.is_file():
+        catalogue = json.loads(CATALOGUE.read_text(encoding="utf-8"))
+        existing_ids = {r["id"] for r in catalogue if isinstance(r, dict) and "id" in r}
+        print(f"production catalogue: {len(catalogue)} record(s)")
+
+    failures = sum(import_source(s, args, existing_ids) != 0 for s in selected)
+
+    if args.probe or args.dry_run:
+        return 1 if failures else 0
+
+    print(f"\n{len(selected) - failures}/{len(selected)} source(s) staged successfully")
+    if not failures:
+        print("Review the staged files, then run:  python3 tools/promote_staging.py")
+    return 1 if failures else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -8,6 +8,8 @@ const CATEGORY_TYPES = {
   all: null,
   stars: ["star"],
   planets: ["planet"],
+  exoplanets: ["exoplanet"],
+  "dwarf planets": ["dwarf planet"],
   nebulae: ["nebula", "nebulae"],
   "black holes": ["black hole"],
   "neutron stars": ["neutron star"],
@@ -37,6 +39,13 @@ const el = {
   detailDistance: document.getElementById("detail-distance"),
   detailSize: document.getElementById("detail-size"),
   detailCircumference: document.getElementById("detail-circumference"),
+  detailMeasurementLabel: document.getElementById("detail-measurement-label"),
+  detailMeasurementValue: document.getElementById("detail-measurement-value"),
+  detailSource: document.getElementById("detail-source"),
+  rowSize: document.getElementById("detail-row-size"),
+  rowCircumference: document.getElementById("detail-row-circumference"),
+  rowMeasurement: document.getElementById("detail-row-measurement"),
+  rowSource: document.getElementById("detail-row-source"),
 };
 
 /* --- Data ---------------------------------------------------------------- */
@@ -140,12 +149,28 @@ function createResultItem(body) {
   return item;
 }
 
+/* Fill a detail row, hiding it when the record has no value for that field.
+   Not every object has a published diameter, and a blank row reads as missing
+   data rather than as data that was never measured. */
+function setDetailRow(row, valueElement, value) {
+  const text = typeof value === "string" ? value.trim() : "";
+  valueElement.textContent = text;
+  row.hidden = text === "";
+}
+
 function renderDetails(body) {
   el.detailName.textContent = body.name;
   el.detailTypeValue.textContent = body.type;
   el.detailDistance.textContent = body.distance;
-  el.detailSize.textContent = body.size;
-  el.detailCircumference.textContent = body.circumference;
+
+  setDetailRow(el.rowSize, el.detailSize, body.size);
+  setDetailRow(el.rowCircumference, el.detailCircumference, body.circumference);
+  setDetailRow(el.rowSource, el.detailSource, body.sourceName);
+
+  const hasMeasurement = Boolean(body.measurementLabel && body.measurementValue);
+  el.detailMeasurementLabel.textContent = hasMeasurement ? body.measurementLabel : "";
+  setDetailRow(el.rowMeasurement, el.detailMeasurementValue,
+    hasMeasurement ? body.measurementValue : "");
 
   el.browseView.hidden = true;
   el.detailView.hidden = false;
@@ -161,6 +186,16 @@ function showBrowseView() {
 }
 
 /* --- Interaction --------------------------------------------------------- */
+
+/* Hide category buttons no record can match. This lets a category be added to
+   the markup ahead of its data without leaving a dead filter in the interface. */
+function hideEmptyCategories() {
+  for (const button of el.filterButtons.querySelectorAll(".chip")) {
+    const category = button.dataset.category;
+    const isAll = normalizeText(category) === "all";
+    button.hidden = !isAll && !state.bodies.some((body) => matchesCategory(body, category));
+  }
+}
 
 function setCategory(category) {
   state.category = category;
@@ -216,6 +251,7 @@ async function init() {
     );
     return;
   }
+  hideEmptyCategories();
   renderResults();
 }
 
