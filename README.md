@@ -43,15 +43,24 @@ Because the app is entirely static, deployment is just "publish this folder":
 - **Netlify** — connect the repo (or drag the folder into the dashboard), leave the
   build command empty, set the publish directory to `/`.
 
+See `DEPLOYMENT.md` for the complete pre-deployment, verification, and rollback runbook.
+
 ## File structure
 
 ```text
 /
-├── index.html            # semantic page structure
-├── styles.css            # all presentation
-├── app.js                # data loading, state, search, filtering, rendering
-├── celestial-bodies.json # the dataset
-└── README.md
+├── index.html             # semantic page structure
+├── styles.css             # all presentation
+├── app.js                 # data loading, state, search, filtering, rendering
+├── celestial-bodies.json  # the dataset
+├── README.md              # project overview and local setup
+├── PRODUCT.md             # product purpose, scope, and architecture guardrails
+├── ROADMAP.md             # planned product outcomes
+├── PRIORITY.md            # authoritative next-work ordering
+├── HANDOFF.md             # current state and session handoff
+├── DEPLOYMENT.md          # deployment and rollback runbook
+├── DECISIONS.md           # durable product and architecture decisions
+└── CLAUDE.md              # Claude Code operating instructions
 ```
 
 Each record in `celestial-bodies.json` has a stable lowercase `id` slug:
@@ -81,3 +90,18 @@ Each record in `celestial-bodies.json` has a stable lowercase `id` slug:
 - Responsive centered layout for phones, tablets and desktops
 - Keyboard-accessible controls with visible focus states
 - A user-facing error message (and a console log) if the dataset cannot be loaded
+
+## Project workflow
+
+Before starting work, read the root documentation in this order:
+
+1. `PRODUCT.md`
+2. `PRIORITY.md`
+3. `ROADMAP.md`
+4. `HANDOFF.md`
+5. `DECISIONS.md`
+6. `DEPLOYMENT.md`
+7. `CLAUDE.md`
+
+`PRIORITY.md` is the authoritative source for what to work on next. Update
+`HANDOFF.md` at the end of every meaningful work session.
