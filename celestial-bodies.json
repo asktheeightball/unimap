@@ -1,75 +1,1195 @@
 [
   {
-    "id": "sol",
-    "name": "Sol",
-    "type": "Star",
-    "distance": "~8 light-minutes",
-    "size": "1.39 million km",
-    "circumference": "~4.37 million km"
+    "id": "cygnus-x-1",
+    "name": "Cygnus X-1",
+    "type": "Black Hole",
+    "distance": "~7,200 ly",
+    "size": "~127 km",
+    "circumference": "~399 km"
   },
   {
-    "id": "betelgeuse",
-    "name": "Betelgeuse",
-    "type": "Star",
-    "distance": "~548 ly",
-    "size": "445 million km",
-    "circumference": "~2.8 billion km"
+    "id": "m87-star",
+    "name": "M87*",
+    "type": "Black Hole",
+    "distance": "~53.5 million ly",
+    "size": "~38 billion km",
+    "circumference": "~120 billion km"
   },
   {
-    "id": "sirius-a",
-    "name": "Sirius A",
-    "type": "Star",
-    "distance": "~8.6 ly",
-    "size": "2.38 million km",
-    "circumference": "~7.5 million km"
+    "id": "sagittarius-a-star",
+    "name": "Sagittarius A*",
+    "type": "Black Hole",
+    "distance": "~26,000 ly",
+    "size": "~23.5 million km",
+    "circumference": "~74 million km"
   },
   {
-    "id": "proxima-centauri",
-    "name": "Proxima Centauri",
-    "type": "Star",
-    "distance": "~4.24 ly",
-    "size": "214,000 km",
-    "circumference": "~672,000 km"
+    "id": "eris",
+    "name": "Eris",
+    "type": "Dwarf Planet",
+    "distance": "~67.9 AU (mean orbital distance)",
+    "measurementLabel": "Semi-major axis (AU)",
+    "measurementValue": "67.930",
+    "aliases": [
+      "136199 Eris (2003 UB313)"
+    ],
+    "sourceName": "NASA/JPL Small-Body Database",
+    "sourceUrl": "https://ssd.jpl.nasa.gov/tools/sbdb_query.html",
+    "lastReviewed": "2026-07-26"
   },
   {
-    "id": "earth",
-    "name": "Earth",
-    "type": "Planet",
+    "id": "haumea",
+    "name": "Haumea",
+    "type": "Dwarf Planet",
+    "distance": "~43.1 AU (mean orbital distance)",
+    "measurementLabel": "Semi-major axis (AU)",
+    "measurementValue": "43.060",
+    "aliases": [
+      "136108 Haumea (2003 EL61)"
+    ],
+    "sourceName": "NASA/JPL Small-Body Database",
+    "sourceUrl": "https://ssd.jpl.nasa.gov/tools/sbdb_query.html",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "makemake",
+    "name": "Makemake",
+    "type": "Dwarf Planet",
+    "distance": "~45.6 AU (mean orbital distance)",
+    "measurementLabel": "Semi-major axis (AU)",
+    "measurementValue": "45.570",
+    "aliases": [
+      "136472 Makemake (2005 FY9)"
+    ],
+    "sourceName": "NASA/JPL Small-Body Database",
+    "sourceUrl": "https://ssd.jpl.nasa.gov/tools/sbdb_query.html",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "pluto",
+    "name": "Pluto",
+    "type": "Dwarf Planet",
+    "distance": "~39.6 AU (mean orbital distance)",
+    "measurementLabel": "Semi-major axis (AU)",
+    "measurementValue": "39.590",
+    "aliases": [
+      "134340 Pluto (1930 BM)"
+    ],
+    "sourceName": "NASA/JPL Small-Body Database",
+    "sourceUrl": "https://ssd.jpl.nasa.gov/tools/sbdb_query.html",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "koi-1599-02",
+    "name": "KOI-1599.02",
+    "type": "Exoplanet",
+    "distance": "~3,690.9 ly",
+    "size": "~24,210 km (diameter)",
+    "circumference": "~76,057 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "1.90",
+    "aliases": [
+      "KOI-1599 system"
+    ],
+    "rightAscension": "298.37384",
+    "declination": "40.61845",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-114-b",
+    "name": "Kepler-114 b",
+    "type": "Exoplanet",
+    "distance": "~846.5 ly",
+    "size": "~16,055 km (diameter)",
+    "circumference": "~50,438 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "1.26",
+    "aliases": [
+      "Kepler-114 system"
+    ],
+    "rightAscension": "294.12148",
+    "declination": "48.34980",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-1176-b",
+    "name": "Kepler-1176 b",
+    "type": "Exoplanet",
+    "distance": "~2,820.3 ly",
+    "size": "~31,218 km (diameter)",
+    "circumference": "~98,074 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "2.45",
+    "aliases": [
+      "Kepler-1176 system"
+    ],
+    "rightAscension": "297.91972",
+    "declination": "45.27420",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-1207-b",
+    "name": "Kepler-1207 b",
+    "type": "Exoplanet",
+    "distance": "~5,721.4 ly",
+    "size": "~20,642 km (diameter)",
+    "circumference": "~64,849 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "1.62",
+    "aliases": [
+      "Kepler-1207 system"
+    ],
+    "rightAscension": "295.06420",
+    "declination": "49.35896",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-1225-b",
+    "name": "Kepler-1225 b",
+    "type": "Exoplanet",
+    "distance": "~4,395.0 ly",
+    "size": "~23,190 km (diameter)",
+    "circumference": "~72,855 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "1.82",
+    "aliases": [
+      "Kepler-1225 system"
+    ],
+    "rightAscension": "290.63327",
+    "declination": "40.13697",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-1244-b",
+    "name": "Kepler-1244 b",
+    "type": "Exoplanet",
+    "distance": "~3,508.8 ly",
+    "size": "~17,202 km (diameter)",
+    "circumference": "~54,041 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "1.35",
+    "aliases": [
+      "Kepler-1244 system"
+    ],
+    "rightAscension": "282.30125",
+    "declination": "46.51618",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-1249-b",
+    "name": "Kepler-1249 b",
+    "type": "Exoplanet",
+    "distance": "~6,211.8 ly",
+    "size": "~30,326 km (diameter)",
+    "circumference": "~95,272 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "2.38",
+    "aliases": [
+      "Kepler-1249 system"
+    ],
+    "rightAscension": "296.89485",
+    "declination": "44.37174",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-1275-b",
+    "name": "Kepler-1275 b",
+    "type": "Exoplanet",
+    "distance": "~3,763.8 ly",
+    "size": "~18,858 km (diameter)",
+    "circumference": "~59,245 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "1.48",
+    "aliases": [
+      "Kepler-1275 system"
+    ],
+    "rightAscension": "293.50050",
+    "declination": "44.93245",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-130-d",
+    "name": "Kepler-130 d",
+    "type": "Exoplanet",
+    "distance": "~1,032.8 ly",
+    "size": "~20,897 km (diameter)",
+    "circumference": "~65,649 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "1.64",
+    "aliases": [
+      "Kepler-130 system"
+    ],
+    "rightAscension": "288.45059",
+    "declination": "40.24520",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-1388-b",
+    "name": "Kepler-1388 b",
+    "type": "Exoplanet",
+    "distance": "~1,480.1 ly",
+    "size": "~33,002 km (diameter)",
+    "circumference": "~103,678 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "2.59",
+    "aliases": [
+      "Kepler-1388 system"
+    ],
+    "rightAscension": "283.33602",
+    "declination": "47.17445",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-1408-b",
+    "name": "Kepler-1408 b",
+    "type": "Exoplanet",
+    "distance": "~1,745.1 ly",
+    "size": "~11,340 km (diameter)",
+    "circumference": "~35,627 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "0.89",
+    "aliases": [
+      "Kepler-1408 system"
+    ],
+    "rightAscension": "282.69988",
+    "declination": "45.42579",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-1427-b",
+    "name": "Kepler-1427 b",
+    "type": "Exoplanet",
+    "distance": "~3,979.1 ly",
+    "size": "~14,016 km (diameter)",
+    "circumference": "~44,033 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "1.10",
+    "aliases": [
+      "Kepler-1427 system"
+    ],
+    "rightAscension": "295.34965",
+    "declination": "45.11454",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-1490-b",
+    "name": "Kepler-1490 b",
+    "type": "Exoplanet",
+    "distance": "~2,814.5 ly",
+    "size": "~38,736 km (diameter)",
+    "circumference": "~121,692 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "3.04",
+    "aliases": [
+      "Kepler-1490 system"
+    ],
+    "rightAscension": "295.69357",
+    "declination": "42.60945",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-1491-b",
+    "name": "Kepler-1491 b",
+    "type": "Exoplanet",
+    "distance": "~6,737.1 ly",
+    "size": "~19,240 km (diameter)",
+    "circumference": "~60,446 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "1.51",
+    "aliases": [
+      "Kepler-1491 system"
+    ],
+    "rightAscension": "293.62976",
+    "declination": "45.74063",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-1494-b",
+    "name": "Kepler-1494 b",
+    "type": "Exoplanet",
+    "distance": "~4,192.7 ly",
+    "size": "~39,118 km (diameter)",
+    "circumference": "~122,893 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "3.07",
+    "aliases": [
+      "Kepler-1494 system"
+    ],
+    "rightAscension": "282.65739",
+    "declination": "43.16253",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-150-c",
+    "name": "Kepler-150 c",
+    "type": "Exoplanet",
+    "distance": "~2,906.4 ly",
+    "size": "~47,018 km (diameter)",
+    "circumference": "~147,711 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "3.69",
+    "aliases": [
+      "Kepler-150 system"
+    ],
+    "rightAscension": "288.23410",
+    "declination": "40.52090",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-1502-b",
+    "name": "Kepler-1502 b",
+    "type": "Exoplanet",
+    "distance": "~4,938.1 ly",
+    "size": "~40,520 km (diameter)",
+    "circumference": "~127,296 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "3.18",
+    "aliases": [
+      "Kepler-1502 system"
+    ],
+    "rightAscension": "296.10793",
+    "declination": "39.31992",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-1585-b",
+    "name": "Kepler-1585 b",
+    "type": "Exoplanet",
+    "distance": "~3,080.4 ly",
+    "size": "~22,808 km (diameter)",
+    "circumference": "~71,654 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "1.79",
+    "aliases": [
+      "Kepler-1585 system"
+    ],
+    "rightAscension": "296.15899",
+    "declination": "44.56305",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-1596-b",
+    "name": "Kepler-1596 b",
+    "type": "Exoplanet",
+    "distance": "~7,000.1 ly",
+    "size": "~24,210 km (diameter)",
+    "circumference": "~76,057 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "1.90",
+    "aliases": [
+      "Kepler-1596 system"
+    ],
+    "rightAscension": "285.55751",
+    "declination": "49.33009",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-1597-b",
+    "name": "Kepler-1597 b",
+    "type": "Exoplanet",
+    "distance": "~3,982.5 ly",
+    "size": "~13,507 km (diameter)",
+    "circumference": "~42,432 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "1.06",
+    "aliases": [
+      "Kepler-1597 system"
+    ],
+    "rightAscension": "288.16397",
+    "declination": "42.48101",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-1631-b",
+    "name": "Kepler-1631 b",
+    "type": "Exoplanet",
+    "distance": "~4,259.6 ly",
+    "size": "~17,202 km (diameter)",
+    "circumference": "~54,041 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "1.35",
+    "aliases": [
+      "Kepler-1631 system"
+    ],
+    "rightAscension": "294.63258",
+    "declination": "43.80767",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-1665-b",
+    "name": "Kepler-1665 b",
+    "type": "Exoplanet",
+    "distance": "~1,094.3 ly",
+    "size": "~36,176 km (diameter)",
+    "circumference": "~113,650 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "2.84",
+    "aliases": [
+      "Kepler-1665 system"
+    ],
+    "rightAscension": "290.39624",
+    "declination": "41.03992",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-171-b",
+    "name": "Kepler-171 b",
+    "type": "Exoplanet",
+    "distance": "~2,817.5 ly",
+    "size": "~29,816 km (diameter)",
+    "circumference": "~93,671 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "2.34",
+    "aliases": [
+      "Kepler-171 system"
+    ],
+    "rightAscension": "296.77191",
+    "declination": "41.75560",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-1738-b",
+    "name": "Kepler-1738 b",
+    "type": "Exoplanet",
+    "distance": "~4,249.4 ly",
+    "size": "~35,993 km (diameter)",
+    "circumference": "~113,074 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "2.82",
+    "aliases": [
+      "Kepler-1738 system"
+    ],
+    "rightAscension": "296.13135",
+    "declination": "47.43881",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-174-d",
+    "name": "Kepler-174 d",
+    "type": "Exoplanet",
+    "distance": "~1,254.9 ly",
+    "size": "~27,905 km (diameter)",
+    "circumference": "~87,666 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "2.19",
+    "aliases": [
+      "Kepler-174 system"
+    ],
+    "rightAscension": "287.43895",
+    "declination": "43.83201",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-1792-b",
+    "name": "Kepler-1792 b",
+    "type": "Exoplanet",
+    "distance": "~1,960.3 ly",
+    "size": "~32,109 km (diameter)",
+    "circumference": "~100,872 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "2.52",
+    "aliases": [
+      "Kepler-1792 system"
+    ],
+    "rightAscension": "294.84008",
+    "declination": "39.08598",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-1805-b",
+    "name": "Kepler-1805 b",
+    "type": "Exoplanet",
+    "distance": "~722.9 ly",
+    "size": "~19,687 km (diameter)",
+    "circumference": "~61,848 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "1.55",
+    "aliases": [
+      "Kepler-1805 system"
+    ],
+    "rightAscension": "285.08654",
+    "declination": "40.89905",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-1859-b",
+    "name": "Kepler-1859 b",
+    "type": "Exoplanet",
+    "distance": "~4,342.0 ly",
+    "size": "~20,172 km (diameter)",
+    "circumference": "~63,373 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "1.58",
+    "aliases": [
+      "Kepler-1859 system"
+    ],
+    "rightAscension": "293.98868",
+    "declination": "46.71800",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-1926-b",
+    "name": "Kepler-1926 b",
+    "type": "Exoplanet",
+    "distance": "~2,176.8 ly",
+    "size": "~29,497 km (diameter)",
+    "circumference": "~92,668 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "2.31",
+    "aliases": [
+      "Kepler-1926 system"
+    ],
+    "rightAscension": "291.19879",
+    "declination": "44.16620",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-200-c",
+    "name": "Kepler-200 c",
+    "type": "Exoplanet",
+    "distance": "~2,171.9 ly",
+    "size": "~20,260 km (diameter)",
+    "circumference": "~63,648 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "1.59",
+    "aliases": [
+      "Kepler-200 system"
+    ],
+    "rightAscension": "284.40995",
+    "declination": "41.23749",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-213-c",
+    "name": "Kepler-213 c",
+    "type": "Exoplanet",
+    "distance": "~2,070.9 ly",
+    "size": "~29,816 km (diameter)",
+    "circumference": "~93,671 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "2.34",
+    "aliases": [
+      "Kepler-213 system"
+    ],
+    "rightAscension": "290.82419",
+    "declination": "44.64728",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-233-c",
+    "name": "Kepler-233 c",
+    "type": "Exoplanet",
+    "distance": "~2,793.3 ly",
+    "size": "~34,531 km (diameter)",
+    "circumference": "~108,482 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "2.71",
+    "aliases": [
+      "Kepler-233 system"
+    ],
+    "rightAscension": "296.36651",
+    "declination": "51.31945",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-258-c",
+    "name": "Kepler-258 c",
+    "type": "Exoplanet",
+    "distance": "~1,878.6 ly",
+    "size": "~45,999 km (diameter)",
+    "circumference": "~144,509 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "3.61",
+    "aliases": [
+      "Kepler-258 system"
+    ],
+    "rightAscension": "294.06841",
+    "declination": "46.57914",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-267-b",
+    "name": "Kepler-267 b",
+    "type": "Exoplanet",
+    "distance": "~864.3 ly",
+    "size": "~25,229 km (diameter)",
+    "circumference": "~79,260 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "1.98",
+    "aliases": [
+      "Kepler-267 system"
+    ],
+    "rightAscension": "299.83057",
+    "declination": "47.15757",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-272-c",
+    "name": "Kepler-272 c",
+    "type": "Exoplanet",
+    "distance": "~2,901.5 ly",
+    "size": "~22,808 km (diameter)",
+    "circumference": "~71,654 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "1.79",
+    "aliases": [
+      "Kepler-272 system"
+    ],
+    "rightAscension": "299.12753",
+    "declination": "47.59383",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-276-d",
+    "name": "Kepler-276 d",
+    "type": "Exoplanet",
+    "distance": "~3,734.0 ly",
+    "size": "~35,678 km (diameter)",
+    "circumference": "~112,084 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "2.80",
+    "aliases": [
+      "Kepler-276 system"
+    ],
+    "rightAscension": "293.56820",
+    "declination": "39.03631",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-288-c",
+    "name": "Kepler-288 c",
+    "type": "Exoplanet",
+    "distance": "~3,894.8 ly",
+    "size": "~36,315 km (diameter)",
+    "circumference": "~114,086 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "2.85",
+    "aliases": [
+      "Kepler-288 system"
+    ],
+    "rightAscension": "288.91640",
+    "declination": "39.59475",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-324-e",
+    "name": "Kepler-324 e",
+    "type": "Exoplanet",
+    "distance": "~1,635.9 ly",
+    "size": "~25,976 km (diameter)",
+    "circumference": "~81,606 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "2.04",
+    "aliases": [
+      "Kepler-324 system"
+    ],
+    "rightAscension": "286.47145",
+    "declination": "49.64909",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-330-b",
+    "name": "Kepler-330 b",
+    "type": "Exoplanet",
+    "distance": "~2,340.3 ly",
+    "size": "~17,202 km (diameter)",
+    "circumference": "~54,041 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "1.35",
+    "aliases": [
+      "Kepler-330 system"
+    ],
+    "rightAscension": "288.44740",
+    "declination": "44.80176",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-333-b",
+    "name": "Kepler-333 b",
+    "type": "Exoplanet",
+    "distance": "~1,058.1 ly",
+    "size": "~16,819 km (diameter)",
+    "circumference": "~52,840 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "1.32",
+    "aliases": [
+      "Kepler-333 system"
+    ],
+    "rightAscension": "292.28612",
+    "declination": "40.91354",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-340-c",
+    "name": "Kepler-340 c",
+    "type": "Exoplanet",
+    "distance": "~2,637.8 ly",
+    "size": "~42,941 km (diameter)",
+    "circumference": "~134,902 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "3.37",
+    "aliases": [
+      "Kepler-340 system"
+    ],
+    "rightAscension": "295.93347",
+    "declination": "40.30055",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-342-e",
+    "name": "Kepler-342 e",
+    "type": "Exoplanet",
+    "distance": "~2,549.3 ly",
+    "size": "~11,213 km (diameter)",
+    "circumference": "~35,227 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "0.88",
+    "aliases": [
+      "Kepler-342 system"
+    ],
+    "rightAscension": "292.67805",
+    "declination": "46.72668",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-355-b",
+    "name": "Kepler-355 b",
+    "type": "Exoplanet",
+    "distance": "~4,671.1 ly",
+    "size": "~18,603 km (diameter)",
+    "circumference": "~58,444 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "1.46",
+    "aliases": [
+      "Kepler-355 system"
+    ],
+    "rightAscension": "285.79949",
+    "declination": "42.81174",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-372-c",
+    "name": "Kepler-372 c",
+    "type": "Exoplanet",
+    "distance": "~4,872.6 ly",
+    "size": "~26,631 km (diameter)",
+    "circumference": "~83,663 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "2.09",
+    "aliases": [
+      "Kepler-372 system"
+    ],
+    "rightAscension": "291.25623",
+    "declination": "49.25893",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-485-b",
+    "name": "Kepler-485 b",
+    "type": "Exoplanet",
+    "distance": "~3,721.3 ly",
+    "size": "~183,612 km (diameter)",
+    "circumference": "~576,835 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "14.41",
+    "aliases": [
+      "Kepler-485 system"
+    ],
+    "rightAscension": "294.99634",
+    "declination": "50.47005",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-498-b",
+    "name": "Kepler-498 b",
+    "type": "Exoplanet",
+    "distance": "~3,062.1 ly",
+    "size": "~38,608 km (diameter)",
+    "circumference": "~121,291 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "3.03",
+    "aliases": [
+      "Kepler-498 system"
+    ],
+    "rightAscension": "290.35816",
+    "declination": "44.51872",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-541-b",
+    "name": "Kepler-541 b",
+    "type": "Exoplanet",
+    "distance": "~3,459.5 ly",
+    "size": "~42,813 km (diameter)",
+    "circumference": "~134,501 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "3.36",
+    "aliases": [
+      "Kepler-541 system"
+    ],
+    "rightAscension": "294.14965",
+    "declination": "38.45821",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-60-d",
+    "name": "Kepler-60 d",
+    "type": "Exoplanet",
+    "distance": "~3,343.4 ly",
+    "size": "~25,357 km (diameter)",
+    "circumference": "~79,660 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "1.99",
+    "aliases": [
+      "Kepler-60 system"
+    ],
+    "rightAscension": "288.96125",
+    "declination": "42.26505",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-66-b",
+    "name": "Kepler-66 b",
+    "type": "Exoplanet",
+    "distance": "~3,923.5 ly",
+    "size": "~35,678 km (diameter)",
+    "circumference": "~112,084 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "2.80",
+    "aliases": [
+      "Kepler-66 system"
+    ],
+    "rightAscension": "293.98154",
+    "declination": "46.68773",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-687-b",
+    "name": "Kepler-687 b",
+    "type": "Exoplanet",
+    "distance": "~2,066.7 ly",
+    "size": "~44,852 km (diameter)",
+    "circumference": "~140,906 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "3.52",
+    "aliases": [
+      "Kepler-687 system"
+    ],
+    "rightAscension": "289.31546",
+    "declination": "39.15329",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-692-b",
+    "name": "Kepler-692 b",
+    "type": "Exoplanet",
+    "distance": "~3,233.3 ly",
+    "size": "~39,628 km (diameter)",
+    "circumference": "~124,494 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "3.11",
+    "aliases": [
+      "Kepler-692 system"
+    ],
+    "rightAscension": "294.77681",
+    "declination": "40.15370",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-719-b",
+    "name": "Kepler-719 b",
+    "type": "Exoplanet",
+    "distance": "~8,145.8 ly",
+    "size": "~108,562 km (diameter)",
+    "circumference": "~341,057 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "8.52",
+    "aliases": [
+      "Kepler-719 system"
+    ],
+    "rightAscension": "295.53606",
+    "declination": "43.88441",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-734-b",
+    "name": "Kepler-734 b",
+    "type": "Exoplanet",
+    "distance": "~3,774.3 ly",
+    "size": "~45,362 km (diameter)",
+    "circumference": "~142,507 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "3.56",
+    "aliases": [
+      "Kepler-734 system"
+    ],
+    "rightAscension": "297.04561",
+    "declination": "46.02739",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-746-b",
+    "name": "Kepler-746 b",
+    "type": "Exoplanet",
+    "distance": "~1,467.7 ly",
+    "size": "~14,144 km (diameter)",
+    "circumference": "~44,433 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "1.11",
+    "aliases": [
+      "Kepler-746 system"
+    ],
+    "rightAscension": "290.68221",
+    "declination": "37.35516",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-760-b",
+    "name": "Kepler-760 b",
+    "type": "Exoplanet",
+    "distance": "~2,584.3 ly",
+    "size": "~38,991 km (diameter)",
+    "circumference": "~122,492 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "3.06",
+    "aliases": [
+      "Kepler-760 system"
+    ],
+    "rightAscension": "287.59320",
+    "declination": "44.17943",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-775-b",
+    "name": "Kepler-775 b",
+    "type": "Exoplanet",
+    "distance": "~1,300.3 ly",
+    "size": "~15,163 km (diameter)",
+    "circumference": "~47,636 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "1.19",
+    "aliases": [
+      "Kepler-775 system"
+    ],
+    "rightAscension": "291.43328",
+    "declination": "41.70332",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-794-b",
+    "name": "Kepler-794 b",
+    "type": "Exoplanet",
+    "distance": "~3,037.1 ly",
+    "size": "~26,886 km (diameter)",
+    "circumference": "~84,464 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "2.11",
+    "aliases": [
+      "Kepler-794 system"
+    ],
+    "rightAscension": "288.13368",
+    "declination": "38.99689",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-865-b",
+    "name": "Kepler-865 b",
+    "type": "Exoplanet",
+    "distance": "~1,911.7 ly",
+    "size": "~31,728 km (diameter)",
+    "circumference": "~99,675 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "2.49",
+    "aliases": [
+      "Kepler-865 system"
+    ],
+    "rightAscension": "297.72423",
+    "declination": "43.52728",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-877-b",
+    "name": "Kepler-877 b",
+    "type": "Exoplanet",
+    "distance": "~1,964.0 ly",
+    "size": "~27,013 km (diameter)",
+    "circumference": "~84,864 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "2.12",
+    "aliases": [
+      "Kepler-877 system"
+    ],
+    "rightAscension": "289.85910",
+    "declination": "46.52274",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "kepler-951-b",
+    "name": "Kepler-951 b",
+    "type": "Exoplanet",
+    "distance": "~1,247.6 ly",
+    "size": "~71,228 km (diameter)",
+    "circumference": "~223,769 km",
+    "measurementLabel": "Radius (Earth radii)",
+    "measurementValue": "5.59",
+    "aliases": [
+      "Kepler-951 system"
+    ],
+    "rightAscension": "287.73758",
+    "declination": "38.11465",
+    "sourceName": "NASA Exoplanet Archive",
+    "sourceUrl": "https://exoplanetarchive.ipac.caltech.edu/",
+    "lastReviewed": "2026-07-26"
+  },
+  {
+    "id": "andromeda",
+    "name": "Andromeda",
+    "type": "Galaxy",
+    "distance": "~2.537 million ly",
+    "size": "~220,000 ly across",
+    "circumference": "~691,000 ly"
+  },
+  {
+    "id": "milky-way",
+    "name": "Milky Way",
+    "type": "Galaxy",
     "distance": "0 ly",
-    "size": "12,742 km",
-    "circumference": "~40,075 km"
+    "size": "~105,700 ly across",
+    "circumference": "~332,000 ly"
   },
   {
-    "id": "mars",
-    "name": "Mars",
-    "type": "Planet",
-    "distance": "~3 light-minutes",
-    "size": "6,779 km",
-    "circumference": "~21,344 km"
+    "id": "sombrero-galaxy",
+    "name": "Sombrero Galaxy",
+    "type": "Galaxy",
+    "distance": "~29.3 million ly",
+    "size": "~50,000 ly across",
+    "circumference": "~157,000 ly"
   },
   {
-    "id": "jupiter",
-    "name": "Jupiter",
-    "type": "Planet",
-    "distance": "~35 light-minutes",
-    "size": "139,820 km",
-    "circumference": "~439,264 km"
-  },
-  {
-    "id": "kepler-452b",
-    "name": "Kepler-452b",
-    "type": "Planet",
-    "distance": "~1,800 ly",
-    "size": "~20,000 km",
-    "circumference": "~62,800 km"
-  },
-  {
-    "id": "orion-nebula",
-    "name": "Orion Nebula",
-    "type": "Nebula",
-    "distance": "~1,344 ly",
-    "size": "~24 ly across",
-    "circumference": "~75 ly"
+    "id": "triangulum",
+    "name": "Triangulum",
+    "type": "Galaxy",
+    "distance": "~2.73 million ly",
+    "size": "~60,000 ly across",
+    "circumference": "~188,000 ly"
   },
   {
     "id": "crab-nebula",
@@ -88,28 +1208,12 @@
     "circumference": "~7.9 ly"
   },
   {
-    "id": "sagittarius-a-star",
-    "name": "Sagittarius A*",
-    "type": "Black Hole",
-    "distance": "~26,000 ly",
-    "size": "~23.5 million km",
-    "circumference": "~74 million km"
-  },
-  {
-    "id": "m87-star",
-    "name": "M87*",
-    "type": "Black Hole",
-    "distance": "~53.5 million ly",
-    "size": "~38 billion km",
-    "circumference": "~120 billion km"
-  },
-  {
-    "id": "cygnus-x-1",
-    "name": "Cygnus X-1",
-    "type": "Black Hole",
-    "distance": "~7,200 ly",
-    "size": "~127 km",
-    "circumference": "~399 km"
+    "id": "orion-nebula",
+    "name": "Orion Nebula",
+    "type": "Nebula",
+    "distance": "~1,344 ly",
+    "size": "~24 ly across",
+    "circumference": "~75 ly"
   },
   {
     "id": "psr-b1919-21",
@@ -128,35 +1232,67 @@
     "circumference": "~75 km"
   },
   {
-    "id": "milky-way",
-    "name": "Milky Way",
-    "type": "Galaxy",
+    "id": "earth",
+    "name": "Earth",
+    "type": "Planet",
     "distance": "0 ly",
-    "size": "~105,700 ly across",
-    "circumference": "~332,000 ly"
+    "size": "12,742 km",
+    "circumference": "~40,075 km"
   },
   {
-    "id": "andromeda",
-    "name": "Andromeda",
-    "type": "Galaxy",
-    "distance": "~2.537 million ly",
-    "size": "~220,000 ly across",
-    "circumference": "~691,000 ly"
+    "id": "jupiter",
+    "name": "Jupiter",
+    "type": "Planet",
+    "distance": "~35 light-minutes",
+    "size": "139,820 km",
+    "circumference": "~439,264 km"
   },
   {
-    "id": "triangulum",
-    "name": "Triangulum",
-    "type": "Galaxy",
-    "distance": "~2.73 million ly",
-    "size": "~60,000 ly across",
-    "circumference": "~188,000 ly"
+    "id": "kepler-452b",
+    "name": "Kepler-452b",
+    "type": "Planet",
+    "distance": "~1,800 ly",
+    "size": "~20,000 km",
+    "circumference": "~62,800 km"
   },
   {
-    "id": "sombrero-galaxy",
-    "name": "Sombrero Galaxy",
-    "type": "Galaxy",
-    "distance": "~29.3 million ly",
-    "size": "~50,000 ly across",
-    "circumference": "~157,000 ly"
+    "id": "mars",
+    "name": "Mars",
+    "type": "Planet",
+    "distance": "~3 light-minutes",
+    "size": "6,779 km",
+    "circumference": "~21,344 km"
+  },
+  {
+    "id": "betelgeuse",
+    "name": "Betelgeuse",
+    "type": "Star",
+    "distance": "~548 ly",
+    "size": "445 million km",
+    "circumference": "~2.8 billion km"
+  },
+  {
+    "id": "proxima-centauri",
+    "name": "Proxima Centauri",
+    "type": "Star",
+    "distance": "~4.24 ly",
+    "size": "214,000 km",
+    "circumference": "~672,000 km"
+  },
+  {
+    "id": "sirius-a",
+    "name": "Sirius A",
+    "type": "Star",
+    "distance": "~8.6 ly",
+    "size": "2.38 million km",
+    "circumference": "~7.5 million km"
+  },
+  {
+    "id": "sol",
+    "name": "Sol",
+    "type": "Star",
+    "distance": "~8 light-minutes",
+    "size": "1.39 million km",
+    "circumference": "~4.37 million km"
   }
 ]
