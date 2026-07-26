@@ -1,0 +1,162 @@
+[
+  {
+    "id": "sol",
+    "name": "Sol",
+    "type": "Star",
+    "distance": "~8 light-minutes",
+    "size": "1.39 million km",
+    "circumference": "~4.37 million km"
+  },
+  {
+    "id": "betelgeuse",
+    "name": "Betelgeuse",
+    "type": "Star",
+    "distance": "~548 ly",
+    "size": "445 million km",
+    "circumference": "~2.8 billion km"
+  },
+  {
+    "id": "sirius-a",
+    "name": "Sirius A",
+    "type": "Star",
+    "distance": "~8.6 ly",
+    "size": "2.38 million km",
+    "circumference": "~7.5 million km"
+  },
+  {
+    "id": "proxima-centauri",
+    "name": "Proxima Centauri",
+    "type": "Star",
+    "distance": "~4.24 ly",
+    "size": "214,000 km",
+    "circumference": "~672,000 km"
+  },
+  {
+    "id": "earth",
+    "name": "Earth",
+    "type": "Planet",
+    "distance": "0 ly",
+    "size": "12,742 km",
+    "circumference": "~40,075 km"
+  },
+  {
+    "id": "mars",
+    "name": "Mars",
+    "type": "Planet",
+    "distance": "~3 light-minutes",
+    "size": "6,779 km",
+    "circumference": "~21,344 km"
+  },
+  {
+    "id": "jupiter",
+    "name": "Jupiter",
+    "type": "Planet",
+    "distance": "~35 light-minutes",
+    "size": "139,820 km",
+    "circumference": "~439,264 km"
+  },
+  {
+    "id": "kepler-452b",
+    "name": "Kepler-452b",
+    "type": "Planet",
+    "distance": "~1,800 ly",
+    "size": "~20,000 km",
+    "circumference": "~62,800 km"
+  },
+  {
+    "id": "orion-nebula",
+    "name": "Orion Nebula",
+    "type": "Nebula",
+    "distance": "~1,344 ly",
+    "size": "~24 ly across",
+    "circumference": "~75 ly"
+  },
+  {
+    "id": "crab-nebula",
+    "name": "Crab Nebula",
+    "type": "Nebula",
+    "distance": "~6,500 ly",
+    "size": "~11 ly across",
+    "circumference": "~35 ly"
+  },
+  {
+    "id": "helix-nebula",
+    "name": "Helix Nebula",
+    "type": "Nebula",
+    "distance": "~655 ly",
+    "size": "~2.5 ly across",
+    "circumference": "~7.9 ly"
+  },
+  {
+    "id": "sagittarius-a-star",
+    "name": "Sagittarius A*",
+    "type": "Black Hole",
+    "distance": "~26,000 ly",
+    "size": "~23.5 million km",
+    "circumference": "~74 million km"
+  },
+  {
+    "id": "m87-star",
+    "name": "M87*",
+    "type": "Black Hole",
+    "distance": "~53.5 million ly",
+    "size": "~38 billion km",
+    "circumference": "~120 billion km"
+  },
+  {
+    "id": "cygnus-x-1",
+    "name": "Cygnus X-1",
+    "type": "Black Hole",
+    "distance": "~7,200 ly",
+    "size": "~127 km",
+    "circumference": "~399 km"
+  },
+  {
+    "id": "psr-b1919-21",
+    "name": "PSR B1919+21",
+    "type": "Neutron Star",
+    "distance": "~2,283 ly",
+    "size": "~20 km",
+    "circumference": "~63 km"
+  },
+  {
+    "id": "psr-j0348-0432",
+    "name": "PSR J0348+0432",
+    "type": "Neutron Star",
+    "distance": "~2,100 ly",
+    "size": "~24 km",
+    "circumference": "~75 km"
+  },
+  {
+    "id": "milky-way",
+    "name": "Milky Way",
+    "type": "Galaxy",
+    "distance": "0 ly",
+    "size": "~105,700 ly across",
+    "circumference": "~332,000 ly"
+  },
+  {
+    "id": "andromeda",
+    "name": "Andromeda",
+    "type": "Galaxy",
+    "distance": "~2.537 million ly",
+    "size": "~220,000 ly across",
+    "circumference": "~691,000 ly"
+  },
+  {
+    "id": "triangulum",
+    "name": "Triangulum",
+    "type": "Galaxy",
+    "distance": "~2.73 million ly",
+    "size": "~60,000 ly across",
+    "circumference": "~188,000 ly"
+  },
+  {
+    "id": "sombrero-galaxy",
+    "name": "Sombrero Galaxy",
+    "type": "Galaxy",
+    "distance": "~29.3 million ly",
+    "size": "~50,000 ly across",
+    "circumference": "~157,000 ly"
+  }
+]
