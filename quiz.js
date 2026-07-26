@@ -378,6 +378,13 @@ function renderQuestion() {
     ui.choices.append(item);
   });
 
+  // Paint the full clock before the first animation frame. Without this the
+  // readout keeps the previous question's final "0" and the bar stays collapsed
+  // until tick() first runs, so a new question briefly shows no time left.
+  ui.pointsValue.textContent = String(MAX_POINTS);
+  ui.timerValue.textContent = `${quiz.difficulty.seconds.toFixed(1)}s`;
+  ui.timerBar.style.width = "100%";
+
   quiz.questionStart = performance.now();
   stopTimer();
   quiz.frame = requestAnimationFrame(tick);
