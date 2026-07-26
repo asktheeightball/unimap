@@ -54,9 +54,19 @@ AU_IN_KM = 149_597_870.7
 MANAGED_FIELDS = (
     "name", "type", "distance", "size", "circumference",
     "measurementLabel", "measurementValue",
-    "rightAscension", "declination",
+    "rightAscension", "declination", "sourceSummary",
     "sourceName", "sourceUrl", "lastReviewed",
 )
+
+
+def describe(*parts) -> str:
+    """Join sentence fragments into a description, dropping empty ones.
+
+    Every fragment handed in must be built from a value the source actually
+    returned. This assembles retrieved values into readable prose; it never adds
+    a fact of its own (DECISIONS.md D7, D12).
+    """
+    return " ".join(part.strip() for part in parts if part and part.strip())
 
 
 # --- helpers -------------------------------------------------------------
@@ -156,6 +166,30 @@ def exoplanet_archive(row: dict, source: dict, reviewed: str) -> dict:
         record["declination"] = f"{number(row.get('dec'), 'dec'):.5f}"
     except ValueError:
         pass  # Coordinates are optional; the rest of the record is still good.
+
+    # The archive returns disc_year and discoverymethod on every row, so this is
+    # the one source that can answer "how was it discovered".
+    try:
+        mass_earths = number(row.get("pl_bmasse"), "pl_bmasse")
+        mass = f"Its best mass estimate is {mass_earths:,.2f} times Earth's."
+    except ValueError:
+        mass = ""
+
+    year = str(row.get("disc_year") or "").strip()
+    method = str(row.get("discoverymethod") or "").strip()
+    discovery = ""
+    if year and method:
+        discovery = f"It was discovered in {year} using the {method} method."
+    elif year:
+        discovery = f"It was discovered in {year}."
+
+    record["sourceSummary"] = describe(
+        f"{name} is a confirmed exoplanet" + (f" orbiting {host}." if host else "."),
+        f"The system lies about {light_years:,.1f} light years from Earth.",
+        f"The planet's radius is {radius_earths:,.2f} times Earth's.",
+        mass,
+        discovery,
+    )
 
     return record
 
@@ -299,6 +333,14 @@ def simbad_identity(row: dict, source: dict, expected: str | None) -> tuple[dict
     return record, gloss
 
 
+def position_note(record: dict) -> str:
+    """State where an object sits, using only coordinates the source returned."""
+    if "rightAscension" not in record or "declination" not in record:
+        return ""
+    return (f"It lies at right ascension {record['rightAscension']}°, "
+            f"declination {record['declination']}° (J2000).")
+
+
 def simbad_star(row: dict, source: dict, reviewed: str) -> dict:
     record, gloss = simbad_identity(row, source, expected="Star")
 
@@ -320,9 +362,19 @@ def simbad_star(row: dict, source: dict, reviewed: str) -> dict:
         record["distance"] = f"~{light_years:,.1f} ly"
         record["measurementLabel"] = "Parallax (mas)"
         record["measurementValue"] = f"{parallax_mas:.4f}"
+        distance_note = (f"Its measured parallax of {parallax_mas:,.4f} mas puts it "
+                         f"about {light_years:,.1f} light years from Earth.")
     else:
         record["measurementLabel"] = "SIMBAD classification"
         record["measurementValue"] = gloss
+        distance_note = "SIMBAD publishes no parallax for it, so it carries no distance."
+
+    record["sourceSummary"] = describe(
+        f"{record['name']} is classified by SIMBAD as a {gloss}"
+        + (f" of spectral type {spectral}." if spectral else "."),
+        distance_note,
+        position_note(record),
+    )
 
     # SIMBAD's basic table carries no radius, so no size/circumference is set.
     return record
@@ -346,6 +398,13 @@ def simbad_deep_sky(row: dict, source: dict, reviewed: str) -> dict:
     record, gloss = simbad_identity(row, source, expected=expected)
     record["measurementLabel"] = "SIMBAD classification"
     record["measurementValue"] = gloss
+
+    record["sourceSummary"] = describe(
+        f"{record['name']} is classified by SIMBAD as a {gloss}.",
+        position_note(record),
+        "SIMBAD's basic table publishes no distance for this object, so none is "
+        "recorded here.",
+    )
     return record
 
 
@@ -405,6 +464,7 @@ def jpl_sbdb_object(row: dict, source: dict, reviewed: str) -> dict:
 
     physical = {p.get("name"): p for p in row.get("phys_par") or []}
     diameter = physical.get("diameter") or {}
+    diameter_km = None
     if str(diameter.get("units") or "").strip() == "km":
         try:
             diameter_km = number(diameter.get("value"), "phys_par.diameter")
@@ -413,6 +473,19 @@ def jpl_sbdb_object(row: dict, source: dict, reviewed: str) -> dict:
         if diameter_km is not None:
             record["size"] = f"~{diameter_km:,.0f} km (diameter)"
             record["circumference"] = f"~{math.pi * diameter_km:,.0f} km"
+
+    # The single-object endpoint returns a discovery block the bulk query does
+    # not, so these records can state how and by whom the object was found. The
+    # sentence is used verbatim as the source wrote it.
+    discovery = str((row.get("discovery") or {}).get("discovery") or "").strip()
+
+    record["sourceSummary"] = describe(
+        f"{name} orbits the Sun at a mean distance of {semi_major_au:,.2f} AU.",
+        f"Its measured diameter is {diameter_km:,.0f} km." if diameter_km is not None else "",
+        f"NASA/JPL's Small-Body Database records its orbit class as {orbit_class}."
+        if orbit_class else "",
+        f"{discovery.rstrip('.')}." if discovery else "",
+    )
 
     return record
 
@@ -453,6 +526,16 @@ def jpl_sbdb(row: dict, source: dict, reviewed: str) -> dict:
     if diameter_km is not None:
         record["size"] = f"~{diameter_km:,.0f} km (diameter)"
         record["circumference"] = f"~{math.pi * diameter_km:,.0f} km"
+
+    orbit_class = str(row.get("class") or "").strip()
+    record["sourceSummary"] = describe(
+        f"{name} orbits the Sun at a mean distance of {semi_major_au:,.2f} AU.",
+        f"NASA/JPL's Small-Body Database records its orbit class as {orbit_class}."
+        if orbit_class else "",
+        f"Its measured diameter is {diameter_km:,.0f} km."
+        if diameter_km is not None else
+        "The Small-Body Database lists no measured diameter for it.",
+    )
 
     return record
 

@@ -52,7 +52,11 @@ OPTIONAL_FIELDS = {
     "size": str,
     "circumference": str,
     "aliases": list,
+    # Two distinct kinds of prose. `summary` is hand-written editorial text and
+    # is never touched by an importer; `sourceSummary` is assembled by an
+    # importer from values the source actually returned, and is importer-owned.
     "summary": str,
+    "sourceSummary": str,
     "measurementLabel": str,
     "measurementValue": str,
     "sourceName": str,
