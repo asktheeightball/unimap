@@ -59,6 +59,20 @@ MANAGED_FIELDS = (
 )
 
 
+def article(phrase: str) -> str:
+    """Pick "a" or "an" for a classification gloss.
+
+    Only the glosses in OTYPE_TO_TYPE are ever passed here, so this handles the
+    cases that actually occur rather than trying to be a general rule: the
+    vowel-initial ones ("active galaxy nucleus", "open cluster", "eruptive
+    variable") and "HII region", which is read aloud as "an aitch-two region".
+    """
+    word = str(phrase).strip()
+    if word.upper().startswith("HII"):
+        return "an"
+    return "an" if word[:1].lower() in "aeiou" else "a"
+
+
 def describe(*parts) -> str:
     """Join sentence fragments into a description, dropping empty ones.
 
@@ -370,7 +384,7 @@ def simbad_star(row: dict, source: dict, reviewed: str) -> dict:
         distance_note = "SIMBAD publishes no parallax for it, so it carries no distance."
 
     record["sourceSummary"] = describe(
-        f"{record['name']} is classified by SIMBAD as a {gloss}"
+        f"{record['name']} is classified by SIMBAD as {article(gloss)} {gloss}"
         + (f" of spectral type {spectral}." if spectral else "."),
         distance_note,
         position_note(record),
@@ -400,7 +414,7 @@ def simbad_deep_sky(row: dict, source: dict, reviewed: str) -> dict:
     record["measurementValue"] = gloss
 
     record["sourceSummary"] = describe(
-        f"{record['name']} is classified by SIMBAD as a {gloss}.",
+        f"{record['name']} is classified by SIMBAD as {article(gloss)} {gloss}.",
         position_note(record),
         "SIMBAD's basic table publishes no distance for this object, so none is "
         "recorded here.",
