@@ -32,7 +32,13 @@ async function loadPlaywright() {
   }
   let globalRoot;
   try {
-    globalRoot = execFileSync("npm", ["root", "-g"], { encoding: "utf8" }).trim();
+    // On Windows npm is a .cmd shim. Recent Node refuses to launch one without a
+    // shell (EINVAL), so the global lookup would always fail here. The command
+    // and its arguments are fixed, so enabling the shell introduces no injection.
+    globalRoot = execFileSync("npm", ["root", "-g"], {
+      encoding: "utf8",
+      shell: process.platform === "win32",
+    }).trim();
   } catch {
     globalRoot = "";
   }

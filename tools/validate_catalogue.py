@@ -78,6 +78,32 @@ OPTIONAL_FIELDS = {
     "discoveryMethod": str,
     "spectralType": str,
     "wellKnown": bool,
+    # Enrichment fields (P5). Every one is a value a source actually returned;
+    # `tools/enrich_catalogue.py` documents the recovery route for each.
+    #
+    # `commonName` is the recognisable name SIMBAD publishes as a NAME
+    # identifier ("Helvetios" for `* 51 Peg`). `name` stays the formal
+    # designation the import produced, so nothing is renamed.
+    "commonName": str,
+    # Further names the same source lists for the object. Not a second alias
+    # list: these are specifically alternate common names, kept so search can
+    # match every name the source publishes.
+    "catalogueIdentifiers": list,
+    # SIMBAD's own object-type gloss ("supernova remnant"). Distinct from
+    # UniMap's `type`, which is the category the interface filters by.
+    "classification": str,
+    # Exoplanet best mass estimate in Earth masses, from the archive's
+    # `pl_bmasse`. Named for its unit so it is never compared with a radius.
+    "massEarth": str,
+    # JPL's ORBITAL class ("Main-belt Asteroid", "TNO") — where a body orbits,
+    # not what kind of body it is. Never use it as a type claim.
+    "orbitClass": str,
+    # Discovery attribution, kept in separate fields so a date is never parsed
+    # back out of a name. `discoveryDate` is the source's own precision, which
+    # may be a year or a full date; `discoveryYear` stays a plain year.
+    "discoverer": str,
+    "discoveryDate": str,
+    "discoverySite": str,
 }
 
 ID_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
@@ -173,6 +199,55 @@ def check_record(index: int, record) -> None:
     if isinstance(host, str) and host.strip() == str(record.get("name") or "").strip():
         error(f"{label}: hostName is the record's own name")
 
+    # `discoveryDate` carries the source's own precision, so it is either a
+    # four-digit year or a full ISO date — never free text, which the detail
+    # view would render verbatim.
+    discovered = record.get("discoveryDate")
+    if isinstance(discovered, str) and not (
+            DATE_PATTERN.match(discovered) or YEAR_PATTERN.match(discovered)):
+        error(f"{label}: discoveryDate must be YYYY or YYYY-MM-DD, found {discovered!r}")
+
+    # Two fields stating the same fact must not disagree.
+    if isinstance(discovered, str) and isinstance(year, str) and discovered[:4] != year:
+        error(f"{label}: discoveryDate {discovered!r} and discoveryYear {year!r} disagree")
+
+    # A common name equal to the formal name is a duplicate, not a common name,
+    # and would render the same string twice.
+    common = record.get("commonName")
+    if isinstance(common, str):
+        if not common.strip():
+            error(f"{label}: commonName is empty")
+        elif common.strip().casefold() == str(record.get("name") or "").strip().casefold():
+            error(f"{label}: commonName duplicates name {common!r}")
+
+    # An alternate name that repeats the primary or common name adds nothing.
+    for identifier_name in record.get("catalogueIdentifiers") or []:
+        if not isinstance(identifier_name, str) or not identifier_name.strip():
+            error(f"{label}: catalogueIdentifiers contains an empty entry")
+            continue
+        folded = identifier_name.strip().casefold()
+        if folded == str(record.get("name") or "").strip().casefold():
+            error(f"{label}: catalogueIdentifiers repeats name {identifier_name!r}")
+        elif isinstance(common, str) and folded == common.strip().casefold():
+            error(f"{label}: catalogueIdentifiers repeats commonName {identifier_name!r}")
+
+    # `classification` is SIMBAD's gloss and `type` is UniMap's category. They
+    # are allowed to differ, but a classification must not be empty.
+    classification = record.get("classification")
+    if isinstance(classification, str) and not classification.strip():
+        error(f"{label}: classification is empty")
+
+    # Measurements are compared numerically by the quiz, so a non-numeric value
+    # would silently drop out of, or corrupt, a comparison.
+    for numeric_field in ("massEarth",):
+        value = record.get(numeric_field)
+        if isinstance(value, str):
+            try:
+                if float(value) <= 0:
+                    error(f"{label}: {numeric_field} must be positive, found {value!r}")
+            except ValueError:
+                error(f"{label}: {numeric_field} must be numeric, found {value!r}")
+
     # Provenance is paired: a URL without a name (or vice versa) is incomplete.
     has_name, has_url = "sourceName" in record, "sourceUrl" in record
     if has_name != has_url:
@@ -204,6 +279,24 @@ def check_collisions(records) -> None:
     for name, positions in sorted(names.items()):
         if len(positions) > 1:
             error(f"duplicate name {name!r} at records {positions}")
+
+    # Two records sharing a common name would make search and quiz answers
+    # ambiguous: a question whose answer is "Sirius" must have one right object.
+    common_names = defaultdict(list)
+    for index, record in enumerate(records):
+        if not isinstance(record, dict):
+            continue
+        common = record.get("commonName")
+        if isinstance(common, str) and common.strip():
+            common_names[common.strip().lower()].append(index)
+
+    for common, positions in sorted(common_names.items()):
+        if len(positions) > 1:
+            error(f"duplicate commonName {common!r} at records {positions}")
+        owner = names.get(common)
+        if owner and owner != positions:
+            error(f"commonName {common!r} at records {positions} collides with the "
+                  f"name of record(s) {owner}")
 
     # An alias that collides with a real object's name would make future alias
     # search ambiguous, so flag it now rather than after alias search ships.
