@@ -93,33 +93,40 @@
         <button type="button" class="btn" id="back-button">&larr; Back to results</button>
         <article class="detail">
           <h2 id="detail-name"></h2>
+          <p class="detail-formal" id="detail-formal" hidden></p>
           <p class="detail-summary" id="detail-summary" hidden></p>
-          <dl class="detail-list">
-            <div class="detail-row">
-              <dt>Type</dt>
-              <dd id="detail-type-value"></dd>
-            </div>
-            <div class="detail-row" id="detail-row-distance">
-              <dt>Distance</dt>
-              <dd id="detail-distance"></dd>
-            </div>
-            <div class="detail-row" id="detail-row-size">
-              <dt>Size</dt>
-              <dd id="detail-size"></dd>
-            </div>
-            <div class="detail-row" id="detail-row-circumference">
-              <dt>Circumference</dt>
-              <dd id="detail-circumference"></dd>
-            </div>
-            <div class="detail-row" id="detail-row-measurement">
-              <dt id="detail-measurement-label"></dt>
-              <dd id="detail-measurement-value"></dd>
-            </div>
-            <div class="detail-row" id="detail-row-source">
-              <dt>Source</dt>
-              <dd id="detail-source"></dd>
-            </div>
-          </dl>
+
+          <!-- Each section is filled by app.js and hidden when it has no rows,
+               so a record never shows an empty heading. -->
+          <section class="detail-section" id="detail-section-overview" hidden>
+            <h3>Overview</h3>
+            <dl class="detail-list" id="detail-list-overview"></dl>
+          </section>
+
+          <section class="detail-section" id="detail-section-location" hidden>
+            <h3>Location</h3>
+            <dl class="detail-list" id="detail-list-location"></dl>
+          </section>
+
+          <section class="detail-section" id="detail-section-discovery" hidden>
+            <h3>Discovery</h3>
+            <dl class="detail-list" id="detail-list-discovery"></dl>
+          </section>
+
+          <section class="detail-section" id="detail-section-physical" hidden>
+            <h3>Physical and orbital</h3>
+            <dl class="detail-list" id="detail-list-physical"></dl>
+          </section>
+
+          <section class="detail-section" id="detail-section-names" hidden>
+            <h3>Names and identifiers</h3>
+            <dl class="detail-list" id="detail-list-names"></dl>
+          </section>
+
+          <section class="detail-section" id="detail-section-source" hidden>
+            <h3>Source</h3>
+            <dl class="detail-list" id="detail-list-source"></dl>
+          </section>
         </article>
       </section>
 

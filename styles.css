@@ -367,8 +367,28 @@ input[type="search"]::placeholder {
 }
 
 .detail h2 {
-  margin: 0 0 1.25rem;
+  margin: 0 0 0.25rem;
   font-size: clamp(1.5rem, 4vw, 2rem);
+}
+
+/* The catalogue designation, shown under a common-name heading. */
+.detail-formal {
+  margin: 0 0 1rem;
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+}
+
+.detail-section {
+  margin-top: 1.75rem;
+}
+
+.detail-section h3 {
+  margin: 0 0 0.75rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
 }
 
 .detail-summary {

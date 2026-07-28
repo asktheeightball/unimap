@@ -46,19 +46,8 @@ const el = {
   modeNav: document.getElementById("mode-nav"),
   backButton: document.getElementById("back-button"),
   detailName: document.getElementById("detail-name"),
+  detailFormal: document.getElementById("detail-formal"),
   detailSummary: document.getElementById("detail-summary"),
-  detailTypeValue: document.getElementById("detail-type-value"),
-  detailDistance: document.getElementById("detail-distance"),
-  detailSize: document.getElementById("detail-size"),
-  detailCircumference: document.getElementById("detail-circumference"),
-  detailMeasurementLabel: document.getElementById("detail-measurement-label"),
-  detailMeasurementValue: document.getElementById("detail-measurement-value"),
-  detailSource: document.getElementById("detail-source"),
-  rowDistance: document.getElementById("detail-row-distance"),
-  rowSize: document.getElementById("detail-row-size"),
-  rowCircumference: document.getElementById("detail-row-circumference"),
-  rowMeasurement: document.getElementById("detail-row-measurement"),
-  rowSource: document.getElementById("detail-row-source"),
   searchField: document.getElementById("search-combobox"),
   suggestions: document.getElementById("search-suggestions"),
   suggestionStatus: document.getElementById("search-suggestion-status"),
@@ -141,11 +130,31 @@ function createTerm(label, kind) {
   return { label, kind, normalized, compact: compactSearchText(normalized) };
 }
 
-/* Identifiers indexed per record: the stable `id` slug and every entry in
-   `aliases`. This catalogue has no separate `sourceRecordId` field — `id` and
-   `aliases` are the documented identifier fields (README "Record schema"). */
+/* The name to show a reader. `name` holds the formal designation the import
+   produced ("* 51 Peg"); `commonName` holds the recognisable name the source
+   publishes for the same object ("Helvetios"). Preferring the common name is a
+   display decision only — nothing in the data is renamed, and the designation
+   is still shown beside it and still searchable. */
+function displayName(body) {
+  const common = typeof body?.commonName === "string" ? body.commonName.trim() : "";
+  return common || String(body?.name ?? "");
+}
+
+/* The formal designation, returned only when it differs from what is displayed,
+   so callers can show it as secondary text without repeating the heading. */
+function formalName(body) {
+  const formal = String(body?.name ?? "").trim();
+  return formal && formal !== displayName(body) ? formal : "";
+}
+
+/* Identifiers indexed per record: the stable `id` slug, every entry in
+   `aliases`, and every alternate name in `catalogueIdentifiers`. A record's
+   `commonName` is indexed as a *name*, not an identifier: someone typing
+   "Sirius" means the object, and demoting that to the alias tier would rank an
+   exact common-name match below a prefix match on a designation. */
 function buildIndexEntry(body, position) {
   const nameTerm = createTerm(String(body.name ?? ""), "name");
+  const commonTerm = createTerm(displayName(body), "name");
   const terms = [];
   const seen = new Set();
 
@@ -163,9 +172,17 @@ function buildIndexEntry(body, position) {
   if (nameTerm) {
     seen.add(nameTerm.normalized);
   }
+  if (commonTerm) {
+    seen.add(commonTerm.normalized);
+  }
   for (const alias of Array.isArray(body.aliases) ? body.aliases : []) {
     if (typeof alias === "string") {
       addTerm(alias, "alias");
+    }
+  }
+  for (const identifier of Array.isArray(body.catalogueIdentifiers) ? body.catalogueIdentifiers : []) {
+    if (typeof identifier === "string") {
+      addTerm(identifier, "alias");
     }
   }
   addTerm(String(body.id ?? ""), "identifier");
@@ -175,6 +192,11 @@ function buildIndexEntry(body, position) {
     position, // catalogue order, used as the final deterministic tiebreak
     name: nameTerm ? nameTerm.normalized : "",
     nameCompact: nameTerm ? nameTerm.compact : "",
+    // The displayed name, compared in the same tiers as the formal one so
+    // either route reaches an exact match.
+    common: commonTerm ? commonTerm.normalized : "",
+    commonCompact: commonTerm ? commonTerm.compact : "",
+    commonLabel: commonTerm ? commonTerm.label : "",
     terms,
   };
 }
@@ -264,8 +286,17 @@ function scoreDirect(entry, normalized, compact) {
   if (entry.name === normalized || entry.nameCompact === compact) {
     return { tier: TIER.exactName, label: entry.body.name };
   }
+  // A common name is a name, so it shares the name tiers. Checked after the
+  // formal name only to decide which label to report, never to change the tier.
+  if (entry.common && (entry.common === normalized || entry.commonCompact === compact)) {
+    return { tier: TIER.exactName, label: entry.commonLabel };
+  }
   if (entry.name.startsWith(normalized) || entry.nameCompact.startsWith(compact)) {
     return { tier: TIER.prefixName, label: entry.body.name };
+  }
+  if (entry.common
+      && (entry.common.startsWith(normalized) || entry.commonCompact.startsWith(compact))) {
+    return { tier: TIER.prefixName, label: entry.commonLabel };
   }
 
   let best = null;
@@ -288,6 +319,9 @@ function scoreDirect(entry, normalized, compact) {
 
   if (entry.name.includes(normalized) || entry.nameCompact.includes(compact)) {
     return { tier: TIER.substringName, label: entry.body.name };
+  }
+  if (entry.common && (entry.common.includes(normalized) || entry.commonCompact.includes(compact))) {
+    return { tier: TIER.substringName, label: entry.commonLabel };
   }
   for (const term of entry.terms) {
     if (term.normalized.includes(normalized) || term.compact.includes(compact)) {
@@ -319,6 +353,16 @@ function scoreFuzzy(entry, normalized, budget) {
   for (const word of entry.name.split(" ")) {
     if (word.length > 2) {
       consider(word, entry.body.name);
+    }
+  }
+  // A misspelled common name should be correctable too: "Betelguese" already
+  // worked, "Arcturis" only works if the common name is compared as well.
+  if (entry.common) {
+    consider(entry.common, entry.commonLabel);
+    for (const word of entry.common.split(" ")) {
+      if (word.length > 2) {
+        consider(word, entry.commonLabel);
+      }
     }
   }
   for (const term of entry.terms) {
@@ -499,9 +543,9 @@ function createCorrectionButton(body) {
   button.type = "button";
   button.className = "link-button";
   button.dataset.id = body.id;
-  button.textContent = body.name;
+  button.textContent = displayName(body);
   button.addEventListener("click", () => {
-    el.input.value = body.name;
+    el.input.value = displayName(body);
     submitSearch();
     el.input.focus();
   });
@@ -518,15 +562,18 @@ function createResultItem(body) {
 
   const name = document.createElement("span");
   name.className = "result-name";
-  name.textContent = body.name;
+  name.textContent = displayName(body);
 
   // Distance is optional: SIMBAD's basic table has no distance column, so its
   // galaxies, nebulae, clusters and pulsars carry coordinates and a
   // classification but no distance. Show the type alone rather than "undefined".
+  // The formal designation joins the subtitle when a common name took the
+  // heading, so a reader can still see which catalogue object this is.
   const meta = document.createElement("span");
   meta.className = "result-meta";
   const distance = typeof body.distance === "string" ? body.distance.trim() : "";
-  meta.textContent = distance ? `${body.type} · ${distance}` : body.type;
+  const formal = formalName(body);
+  meta.textContent = [formal, body.type, distance].filter(Boolean).join(" · ");
 
   button.append(name, meta);
   button.addEventListener("click", () => renderDetails(body));
@@ -534,13 +581,110 @@ function createResultItem(body) {
   return item;
 }
 
-/* Fill a detail row, hiding it when the record has no value for that field.
-   Not every object has a published diameter, and a blank row reads as missing
-   data rather than as data that was never measured. */
-function setDetailRow(row, valueElement, value) {
-  const text = typeof value === "string" ? value.trim() : "";
-  valueElement.textContent = text;
-  row.hidden = text === "";
+/* --- Detail sections -----------------------------------------------------
+
+   The detail view groups fields under headings rather than listing every field
+   it knows about. A row appears only when the record carries a value, and a
+   section appears only when it ended up with at least one row, so a sparse
+   record shows a short page instead of a page of blanks. Labels are written for
+   a reader; no internal field name is ever displayed. */
+
+/* One row's worth of text, or "" when the record has nothing to show. Arrays are
+   joined so a list of names reads as a sentence rather than as JSON. */
+function detailValue(value) {
+  if (Array.isArray(value)) {
+    return value.filter((item) => typeof item === "string" && item.trim()).join(" · ");
+  }
+  if (typeof value === "number") {
+    return String(value);
+  }
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function appendDetailRow(list, label, value) {
+  const text = detailValue(value);
+  if (!text) {
+    return false;
+  }
+  const row = document.createElement("div");
+  row.className = "detail-row";
+  const term = document.createElement("dt");
+  term.textContent = label;
+  const definition = document.createElement("dd");
+  definition.textContent = text;
+  row.append(term, definition);
+  list.append(row);
+  return true;
+}
+
+/* Which rows belong to which section. Each entry is [label, value], resolved
+   against the record at render time. */
+function detailSections(body) {
+  const coordinates = body.rightAscension && body.declination
+    ? `RA ${body.rightAscension}°, Dec ${body.declination}° (J2000)`
+    : "";
+
+  // A measurement's label is stored with it, because the quantity differs by
+  // object type — a parallax and an Earth-radius ratio are not the same kind of
+  // number and must never be shown under one heading.
+  const measurement = body.measurementLabel && body.measurementValue
+    ? [String(body.measurementLabel), body.measurementValue]
+    : null;
+
+  return [
+    ["overview", [
+      ["Type", body.type],
+      // SIMBAD's own words for what the object is, which is finer-grained than
+      // the category UniMap files it under.
+      ["Source classification", body.classification],
+      ["Spectral type", body.spectralType],
+    ]],
+    ["location", [
+      ["Distance", body.distance],
+      ["Orbits", body.hostName],
+      ["Orbit class", body.orbitClass],
+      ["Coordinates", coordinates],
+    ]],
+    ["discovery", [
+      ["Discovered by", body.discoverer],
+      ["Discovery date", body.discoveryDate || body.discoveryYear],
+      ["Discovery method", body.discoveryMethod],
+      ["Discovery site", body.discoverySite],
+    ]],
+    ["physical", [
+      ["Size", body.size],
+      ["Circumference", body.circumference],
+      ["Mass", body.massEarth ? `${body.massEarth} × Earth` : ""],
+      measurement ? measurement : ["", ""],
+    ]],
+    ["names", [
+      ["Catalogue designation", formalName(body)],
+      ["Also known as", body.catalogueIdentifiers],
+      ["Other identifiers", body.aliases],
+    ]],
+    ["source", [
+      ["Source", body.sourceName],
+      ["Reviewed", body.lastReviewed],
+    ]],
+  ];
+}
+
+function renderDetailSections(body) {
+  for (const [key, rows] of detailSections(body)) {
+    const section = document.getElementById(`detail-section-${key}`);
+    const list = document.getElementById(`detail-list-${key}`);
+    if (!section || !list) {
+      continue;
+    }
+    list.replaceChildren();
+    let filled = 0;
+    for (const [label, value] of rows) {
+      if (label && appendDetailRow(list, label, value)) {
+        filled += 1;
+      }
+    }
+    section.hidden = filled === 0;
+  }
 }
 
 /* A hand-written `summary` always wins over the importer-generated
@@ -556,22 +700,19 @@ function describeBody(body) {
 }
 
 function renderDetails(body) {
-  el.detailName.textContent = body.name;
-  el.detailTypeValue.textContent = body.type;
+  el.detailName.textContent = displayName(body);
+
+  // The formal designation sits under the heading when a common name took it,
+  // so the recognisable name leads and the catalogue identity is still visible.
+  const formal = formalName(body);
+  el.detailFormal.textContent = formal;
+  el.detailFormal.hidden = formal === "";
 
   const description = describeBody(body);
   el.detailSummary.textContent = description;
   el.detailSummary.hidden = description === "";
 
-  setDetailRow(el.rowDistance, el.detailDistance, body.distance);
-  setDetailRow(el.rowSize, el.detailSize, body.size);
-  setDetailRow(el.rowCircumference, el.detailCircumference, body.circumference);
-  setDetailRow(el.rowSource, el.detailSource, body.sourceName);
-
-  const hasMeasurement = Boolean(body.measurementLabel && body.measurementValue);
-  el.detailMeasurementLabel.textContent = hasMeasurement ? body.measurementLabel : "";
-  setDetailRow(el.rowMeasurement, el.detailMeasurementValue,
-    hasMeasurement ? body.measurementValue : "");
+  renderDetailSections(body);
 
   el.browseView.hidden = true;
   el.detailView.hidden = false;
@@ -655,18 +796,22 @@ function createSuggestionItem(match, position) {
   item.setAttribute("aria-selected", "false");
   item.dataset.position = String(position);
 
+  const body = match.entry.body;
+  const shown = displayName(body);
+
   const name = document.createElement("span");
   name.className = "suggestion-name";
-  name.textContent = match.entry.body.name;
+  name.textContent = shown;
 
   const meta = document.createElement("span");
   meta.className = "suggestion-meta";
-  // Show which alias or identifier matched, but only when it is not simply the
-  // name again — repeating the name as its own subtitle reads as a bug.
-  const matchedLabel = match.label && match.label !== match.entry.body.name
-    ? `${match.entry.body.type} · ${match.label}`
-    : match.entry.body.type;
-  meta.textContent = matchedLabel;
+  // Show the formal designation and whichever alias matched, skipping anything
+  // that merely repeats the heading — a name echoed as its own subtitle reads
+  // as a bug.
+  const matched = match.label && match.label !== shown && match.label !== body.name
+    ? match.label
+    : "";
+  meta.textContent = [formalName(body), body.type, matched].filter(Boolean).join(" · ");
 
   item.append(name, meta);
   return item;
@@ -706,7 +851,9 @@ function selectSuggestion(position) {
     return;
   }
   const body = match.entry.body;
-  el.input.value = body.name;
+  // The displayed name is what the reader just chose, and it is indexed in the
+  // same tiers as the formal one, so the re-run search still contains it.
+  el.input.value = displayName(body);
   closeSuggestions();
   submitSearch();
   renderDetails(body);
