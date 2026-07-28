@@ -51,7 +51,7 @@ main.wrap {
   padding-block: 1.5rem 3rem;
 }
 
-/* Header / footer */
+/* Header */
 
 .site-header {
   border-bottom: 1px solid var(--border);
@@ -67,17 +67,6 @@ main.wrap {
 .tagline {
   margin: 0.25rem 0 0;
   color: var(--text-muted);
-}
-
-.site-footer {
-  border-top: 1px solid var(--border);
-  padding-block: 1rem;
-  color: var(--text-muted);
-  font-size: 0.875rem;
-}
-
-.site-footer p {
-  margin: 0;
 }
 
 /* Panels */
@@ -128,6 +117,112 @@ input[type="search"]::placeholder {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+}
+
+/* Autocomplete suggestions.
+
+   The list is positioned rather than laid out in flow so opening it does not
+   push the filters and results down the page on every keystroke. It is
+   anchored to the search field's own box, so it can never be wider than the
+   field and cannot cause horizontal overflow at any width. */
+
+#search-combobox {
+  position: relative;
+}
+
+.suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  margin: 0.25rem 0 0;
+  padding: 0.25rem;
+  list-style: none;
+  background-color: var(--bg-raised);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  box-shadow: 0 10px 24px rgb(0 0 0 / 45%);
+  /* Cap the drop-down so a phone keyboard cannot leave it unreachable; the
+     remaining suggestions stay reachable by scrolling inside the list. */
+  max-height: min(19rem, 45vh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.suggestion {
+  /* Comfortably past the 44px touch-target guidance at the default font size. */
+  padding: 0.55rem 0.65rem;
+  border-radius: calc(var(--radius) - 2px);
+  cursor: pointer;
+}
+
+.suggestion.is-active {
+  background-color: var(--accent-strong);
+}
+
+.suggestion-name {
+  display: block;
+  font-weight: 600;
+}
+
+.suggestion-meta {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  /* Aliases such as "136199 Eris (2003 UB313)" are long; clip rather than
+     widen the list. */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.suggestion.is-active .suggestion-meta {
+  color: var(--text);
+}
+
+/* No-results guidance */
+
+.search-help {
+  margin-top: 1rem;
+  padding: 0.9rem 1.1rem;
+  background-color: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.search-help-intro {
+  margin: 0 0 0.5rem;
+  color: var(--text-muted);
+}
+
+.search-help-correction {
+  margin: 0 0 0.75rem;
+  font-size: 1.0625rem;
+}
+
+.search-help-list {
+  list-style: none;
+  margin: 0 0 0.9rem;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+}
+
+.link-button {
+  font: inherit;
+  padding: 0.15rem 0;
+  color: var(--accent);
+  background: none;
+  border: 0;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.link-button:hover {
+  color: var(--text);
 }
 
 /* Buttons */
@@ -539,6 +634,7 @@ input[type="search"]::placeholder {
 @media (prefers-reduced-motion: no-preference) {
   .btn,
   .chip,
+  .suggestion,
   .result-button,
   .quiz-choice {
     transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
@@ -549,6 +645,12 @@ input[type="search"]::placeholder {
 @media (max-width: 30rem) {
   .search-actions {
     width: 100%;
+  }
+
+  /* On a phone the on-screen keyboard takes the lower half of the viewport, so
+     the drop-down is kept short enough to stay above it. */
+  .suggestions {
+    max-height: min(15rem, 38vh);
   }
 
   .search-actions .btn {
