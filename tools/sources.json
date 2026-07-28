@@ -9,7 +9,18 @@
     "page. Confirm them before publishing a catalogue built from these sources.",
     "",
     "The '{limit}' placeholder in a query is replaced with the --limit value, or",
-    "removed entirely when no limit is given."
+    "removed entirely when no limit is given.",
+    "",
+    "The '{identifiers}' placeholder is replaced with the source's",
+    "'select_identifiers' list, quoted and comma-joined, so a curated query asks",
+    "the service only for the objects UniMap actually wants. This keeps curated",
+    "imports small and polite instead of downloading a whole catalogue and",
+    "discarding most of it.",
+    "",
+    "A source marked '\"unprobed\": true' has never had its real response",
+    "inspected. The importer refuses to import from it and allows only --probe.",
+    "Probe it, read the actual columns, write or correct its normalizer, then",
+    "remove the flag. Do not guess column names."
   ],
   "sources": [
     {
@@ -19,8 +30,11 @@
       "endpoint": "https://exoplanetarchive.ipac.caltech.edu/TAP/sync",
       "docs": "https://exoplanetarchive.ipac.caltech.edu/docs/TAP/usingTAP.html",
       "normalizer": "exoplanet_archive",
-      "produces": ["Exoplanet"],
+      "produces": [
+        "Exoplanet"
+      ],
       "requires_key": false,
+      "probe_confirmed": "2026-07-26",
       "attribution": "This research has made use of the NASA Exoplanet Archive, which is operated by the California Institute of Technology, under contract with the National Aeronautics and Space Administration under the Exoplanet Exploration Program.",
       "terms": "Public domain / open access. CONFIRM before publishing.",
       "params": {
@@ -35,11 +49,15 @@
       "endpoint": "https://simbad.cds.unistra.fr/simbad/sim-tap/sync",
       "docs": "https://simbad.cds.unistra.fr/simbad/sim-tap",
       "normalizer": "simbad_star",
-      "produces": ["Star"],
+      "produces": [
+        "Star"
+      ],
       "requires_key": false,
+      "unprobed": true,
       "attribution": "This research has made use of the SIMBAD database, operated at CDS, Strasbourg, France.",
       "terms": "Attribution required; bulk querying discouraged. Use modest limits. CONFIRM before publishing.",
       "note": "Restricted to objects with a measured parallax so distance is derived from a published value rather than estimated. SIMBAD's basic table carries no radius, so these records have no size/circumference.",
+      "note_unprobed": "SIMBAD has never returned a response to this project. The 2026-07-26 attempt failed on a local trust store (CERTIFICATE_VERIFY_FAILED) and the 2026-07-26 retry failed at the network policy (403 CONNECT). The column names below are assumptions taken from SIMBAD's documented 'basic' table and are NOT confirmed. Probe before importing.",
       "params": {
         "request": "doQuery",
         "lang": "ADQL",
@@ -48,24 +66,429 @@
       "query": "select {limit} main_id, ra, dec, plx_value, otype_txt, sp_type from basic where otype_txt = 'Star' and plx_value > 20 and ra is not null and dec is not null order by plx_value desc, main_id asc"
     },
     {
+      "id": "simbad-notable-stars",
+      "name": "SIMBAD (CDS, Strasbourg)",
+      "url": "https://simbad.cds.unistra.fr/",
+      "endpoint": "https://simbad.cds.unistra.fr/simbad/sim-tap/sync",
+      "docs": "https://simbad.cds.unistra.fr/simbad/sim-tap",
+      "normalizer": "simbad_star",
+      "produces": [
+        "Star"
+      ],
+      "requires_key": false,
+      "attribution": "This research has made use of the SIMBAD database, operated at CDS, Strasbourg, France.",
+      "terms": "Attribution required; bulk querying discouraged. Use modest limits. CONFIRM before publishing.",
+      "note": "Curated named stars rather than a parallax-ordered sweep: the brightest naked-eye stars, the nearest stars, famous variables and supergiants, and well-known exoplanet host stars. Selecting WHICH stars to carry is an editorial decision recorded here; every value in the resulting record still comes from SIMBAD. A name that SIMBAD does not resolve simply produces no record - it is never filled in from memory.",
+      "note_distance": "Distance is derived from the published parallax as 1000/plx parsecs. Stars without a parallax in SIMBAD yield no distance and are skipped, which is correct: an invented distance is worse than an absent star.",
+      "target_count": "40-60 stars in the final catalogue, including the 4 already present.",
+      "params": {
+        "request": "doQuery",
+        "lang": "ADQL",
+        "format": "json"
+      },
+      "select_identifiers": [
+        "Sirius",
+        "Canopus",
+        "Arcturus",
+        "Vega",
+        "Capella",
+        "Rigel",
+        "Procyon",
+        "Achernar",
+        "Betelgeuse",
+        "Hadar",
+        "Altair",
+        "Acrux",
+        "Aldebaran",
+        "Antares",
+        "Spica",
+        "Pollux",
+        "Fomalhaut",
+        "Deneb",
+        "Mimosa",
+        "Regulus",
+        "Adhara",
+        "Castor",
+        "Gacrux",
+        "Shaula",
+        "Bellatrix",
+        "Elnath",
+        "Miaplacidus",
+        "Alnilam",
+        "Alnair",
+        "Alnitak",
+        "Alioth",
+        "Dubhe",
+        "Mirfak",
+        "Wezen",
+        "Kaus Australis",
+        "Alkaid",
+        "Alhena",
+        "Peacock",
+        "Mirzam",
+        "Alphard",
+        "Polaris",
+        "Hamal",
+        "Mizar",
+        "Nunki",
+        "Alpheratz",
+        "Rasalhague",
+        "Kochab",
+        "Saiph",
+        "Denebola",
+        "Algol",
+        "Mira",
+        "Proxima Centauri",
+        "* alf Cen A",
+        "* alf Cen B",
+        "Barnard's star",
+        "Wolf 359",
+        "Lalande 21185",
+        "Ross 154",
+        "Tau Cet",
+        "eps Eri",
+        "51 Peg",
+        "TRAPPIST-1",
+        "Kepler-186",
+        "eta Car",
+        "VY CMa",
+        "UY Sct",
+        "del Cep",
+        "Rigel Kentaurus"
+      ],
+      "query": "select {limit} b.main_id, b.ra, b.dec, b.plx_value, b.otype_txt, b.sp_type from basic as b join ident as i on b.oid = i.oidref where i.id in ({identifiers})",
+      "probe_confirmed": "2026-07-26",
+      "note_probe": "Confirmed 2026-07-26. Columns: main_id (CHAR), ra (DOUBLE, deg), dec (DOUBLE, deg), plx_value (DOUBLE, mas), otype_txt (CHAR), sp_type (CHAR). 68 rows returned for 68 requested identifiers; 'alf Cen A' resolved twice (once via 'Rigel Kentaurus') and is de-duplicated on id. plx_value is null for eta Car, which therefore carries no distance rather than an invented one.",
+      "id_overrides": {
+        "* alf CMa": {
+          "id": "sirius-a",
+          "name": "Sirius A"
+        },
+        "* alf Ori": {
+          "id": "betelgeuse",
+          "name": "Betelgeuse"
+        }
+      }
+    },
+    {
+      "id": "simbad-galaxies",
+      "name": "SIMBAD (CDS, Strasbourg)",
+      "url": "https://simbad.cds.unistra.fr/",
+      "endpoint": "https://simbad.cds.unistra.fr/simbad/sim-tap/sync",
+      "docs": "https://simbad.cds.unistra.fr/simbad/sim-tap",
+      "normalizer": "simbad_deep_sky",
+      "produces": [
+        "Galaxy"
+      ],
+      "requires_key": false,
+      "attribution": "This research has made use of the SIMBAD database, operated at CDS, Strasbourg, France.",
+      "terms": "Attribution required; bulk querying discouraged. Use modest limits. CONFIRM before publishing.",
+      "note": "Curated Messier/NGC/IC galaxies plus the Magellanic Clouds. Editorial selection only; all values come from SIMBAD.",
+      "target_count": "20-30 galaxies in the final catalogue, including the 4 already present.",
+      "params": {
+        "request": "doQuery",
+        "lang": "ADQL",
+        "format": "json"
+      },
+      "select_identifiers": [
+        "M 31",
+        "M 33",
+        "M 51",
+        "M 81",
+        "M 82",
+        "M 87",
+        "M 104",
+        "M 64",
+        "M 63",
+        "M 94",
+        "M 101",
+        "M 74",
+        "M 77",
+        "M 49",
+        "M 60",
+        "NGC 253",
+        "NGC 300",
+        "NGC 1300",
+        "NGC 1365",
+        "NGC 2403",
+        "NGC 4565",
+        "NGC 5128",
+        "NGC 6822",
+        "NGC 1316",
+        "LMC",
+        "SMC",
+        "IC 1101",
+        "Maffei 1"
+      ],
+      "query": "select {limit} b.main_id, b.ra, b.dec, b.otype_txt from basic as b join ident as i on b.oid = i.oidref where i.id in ({identifiers})",
+      "probe_confirmed": "2026-07-26",
+      "note_probe": "Confirmed 2026-07-26. Columns: main_id, ra (deg), dec (deg), otype_txt. 28 rows. THERE IS NO DISTANCE COLUMN - SIMBAD's basic table has none, and galaxies have no useful parallax, so these records carry no distance at all. Observed otypes: G, GiG, GiP, GiC, rG, AGN, LIN, Sy1, Sy2, SyG (all mapped to Galaxy) and BLL (Centaurus A), which is refused as a jet-dominated blazar.",
+      "id_overrides": {
+        "M 31": {
+          "id": "andromeda",
+          "name": "Andromeda"
+        },
+        "M 33": {
+          "id": "triangulum",
+          "name": "Triangulum"
+        },
+        "M 104": {
+          "id": "sombrero-galaxy",
+          "name": "Sombrero Galaxy"
+        }
+      }
+    },
+    {
+      "id": "simbad-nebulae",
+      "name": "SIMBAD (CDS, Strasbourg)",
+      "url": "https://simbad.cds.unistra.fr/",
+      "endpoint": "https://simbad.cds.unistra.fr/simbad/sim-tap/sync",
+      "docs": "https://simbad.cds.unistra.fr/simbad/sim-tap",
+      "normalizer": "simbad_deep_sky",
+      "produces": [
+        "Nebula",
+        "Star Cluster"
+      ],
+      "requires_key": false,
+      "attribution": "This research has made use of the SIMBAD database, operated at CDS, Strasbourg, France.",
+      "terms": "Attribution required; bulk querying discouraged. Use modest limits. CONFIRM before publishing.",
+      "note": "Curated emission, reflection, planetary and supernova-remnant nebulae.",
+      "note_classification": "The curated list says which objects to ask for; only SIMBAD says what they are. This source produces two types because the real response contains two.",
+      "target_count": "20-30 nebulae in the final catalogue, including the 3 already present.",
+      "params": {
+        "request": "doQuery",
+        "lang": "ADQL",
+        "format": "json"
+      },
+      "select_identifiers": [
+        "M 42",
+        "M 43",
+        "M 78",
+        "M 1",
+        "M 8",
+        "M 16",
+        "M 17",
+        "M 20",
+        "M 27",
+        "M 57",
+        "M 76",
+        "M 97",
+        "NGC 7293",
+        "NGC 6543",
+        "NGC 3372",
+        "NGC 7000",
+        "NGC 2237",
+        "NGC 2264",
+        "NGC 6960",
+        "NGC 6992",
+        "IC 434",
+        "NGC 2024",
+        "NGC 3132",
+        "NGC 2392",
+        "NGC 6302",
+        "NGC 7635",
+        "NGC 281",
+        "IC 1396"
+      ],
+      "query": "select {limit} b.main_id, b.ra, b.dec, b.otype_txt from basic as b join ident as i on b.oid = i.oidref where i.id in ({identifiers})",
+      "probe_confirmed": "2026-07-26",
+      "note_probe": "Confirmed 2026-07-26. Columns: main_id, ra (deg), dec (deg), otype_txt. 28 rows, NO DISTANCE COLUMN. The curated list asked for 28 famous 'nebulae' and SIMBAD typed only 17 of them as nebulae (PN 9, HII 6, RNe 1, SNR 1). Six are open clusters (OpC) and three are clusters of stars (Cl*) - including M 8, M 16, M 20 and NGC 7000 - so they are imported as Star Cluster, not forced into Nebula. NGC 6960 (ISM) and NGC 6992 (sh) are refused as too generic to classify.",
+      "id_overrides": {
+        "M 1": {
+          "id": "crab-nebula",
+          "name": "Crab Nebula"
+        },
+        "M 42": {
+          "id": "orion-nebula",
+          "name": "Orion Nebula"
+        },
+        "NGC 7293": {
+          "id": "helix-nebula",
+          "name": "Helix Nebula"
+        }
+      }
+    },
+    {
+      "id": "simbad-pulsars",
+      "name": "SIMBAD (CDS, Strasbourg)",
+      "url": "https://simbad.cds.unistra.fr/",
+      "endpoint": "https://simbad.cds.unistra.fr/simbad/sim-tap/sync",
+      "docs": "https://simbad.cds.unistra.fr/simbad/sim-tap",
+      "normalizer": "simbad_deep_sky",
+      "produces": [
+        "Pulsar"
+      ],
+      "requires_key": false,
+      "attribution": "This research has made use of the SIMBAD database, operated at CDS, Strasbourg, France.",
+      "terms": "Attribution required; bulk querying discouraged. Use modest limits. CONFIRM before publishing.",
+      "note": "Curated pulsars and isolated neutron stars of historical or educational importance: the first pulsar discovered, the first binary pulsar, the first pulsar planets, the Crab and Vela pulsars, a magnetar and a fast millisecond pulsar.",
+      "note_classification": "SIMBAD distinguishes pulsars from neutron stars. UniMap now accepts both 'Neutron Star' and 'Pulsar' types and reaches them through one 'Neutron Stars' filter. The normalizer must take the type from the source's otype, not from this list's intent.",
+      "target_count": "10-15 neutron stars and pulsars in the final catalogue, including the 2 already present.",
+      "params": {
+        "request": "doQuery",
+        "lang": "ADQL",
+        "format": "json"
+      },
+      "select_identifiers": [
+        "PSR B0531+21",
+        "PSR B0833-45",
+        "PSR B1919+21",
+        "PSR J0437-4715",
+        "PSR B1257+12",
+        "PSR J0348+0432",
+        "PSR B1913+16",
+        "PSR J0740+6620",
+        "PSR B0329+54",
+        "PSR J1748-2446ad",
+        "SGR 1806-20",
+        "RX J1856.5-3754",
+        "PSR J1614-2230",
+        "Geminga",
+        "PSR B1509-58"
+      ],
+      "query": "select {limit} b.main_id, b.ra, b.dec, b.otype_txt from basic as b join ident as i on b.oid = i.oidref where i.id in ({identifiers})",
+      "probe_confirmed": "2026-07-26",
+      "note_probe": "Confirmed 2026-07-26. Columns: main_id, ra (deg), dec (deg), otype_txt. 14 rows, every one typed 'Psr', NO DISTANCE COLUMN. PSR B1919+21 and PSR J0348+0432 already exist as hand-curated 'Neutron Star' records; promotion refuses to retype a curated record, so those two are reported as refused and keep their existing type. Both types are reached by the Neutron Stars filter."
+    },
+    {
+      "id": "simbad-black-holes",
+      "name": "SIMBAD (CDS, Strasbourg)",
+      "url": "https://simbad.cds.unistra.fr/",
+      "endpoint": "https://simbad.cds.unistra.fr/simbad/sim-tap/sync",
+      "docs": "https://simbad.cds.unistra.fr/simbad/sim-tap",
+      "normalizer": null,
+      "produces": [
+        "Black Hole"
+      ],
+      "requires_key": false,
+      "unprobed": true,
+      "attribution": "This research has made use of the SIMBAD database, operated at CDS, Strasbourg, France.",
+      "terms": "Attribution required; bulk querying discouraged. Use modest limits. CONFIRM before publishing.",
+      "note": "Curated stellar-mass X-ray binaries and supermassive black holes.",
+      "note_classification": "This is the least certain of the curated sets and may not be importable as-is. SIMBAD generally types these objects by what is observed - 'HighMassXBin', 'LowMassXBin', 'AGN', 'Seyfert' - rather than as black holes, because the black hole is an inference from the system's dynamics. Stamping every row 'Black Hole' would assert a classification the source does not make. If the probe confirms that, the honest options are to carry them under their observed type or to leave black holes out of the automated import and curate them by hand against a named published measurement. Decide after the probe; do not force the category.",
+      "target_count": "10-15 black holes in the final catalogue, including the 3 already present.",
+      "params": {
+        "request": "doQuery",
+        "lang": "ADQL",
+        "format": "json"
+      },
+      "select_identifiers": [
+        "Cygnus X-1",
+        "NAME Sgr A*",
+        "M 87",
+        "V404 Cyg",
+        "GRO J1655-40",
+        "LMC X-1",
+        "LMC X-3",
+        "A0620-00",
+        "XTE J1118+480",
+        "GRS 1915+105",
+        "GS 2000+25",
+        "4U 1543-47",
+        "NGC 4258",
+        "3C 273"
+      ],
+      "query": "select {limit} b.main_id, b.ra, b.dec, b.otype_txt from basic as b join ident as i on b.oid = i.oidref where i.id in ({identifiers})",
+      "blocked": true,
+      "note_unprobed": "PROBED 2026-07-26 AND REJECTED. The response proves this query is not a black-hole classification source. Of 13 rows: 9 are HXB (high-mass X-ray binary), and the rest are BLL (3C 273), AGN (M 87), Sy2 (M 106) and X (Sgr A*). Not one row is typed as a black hole, because SIMBAD types these objects by what is OBSERVED - the black hole is an inference from the system's dynamics. Importing them as 'Black Hole' would assert a classification the source does not make. This source stays blocked until an authoritative catalogue of dynamically confirmed black-hole masses is used instead, or a curated allow-list carries its own documented per-object evidence. Do not remove this flag by widening the otype map."
+    },
+    {
       "id": "jpl-sbdb-dwarf-planets",
       "name": "NASA/JPL Small-Body Database",
       "url": "https://ssd.jpl.nasa.gov/tools/sbdb_query.html",
       "endpoint": "https://ssd-api.jpl.nasa.gov/sbdb_query.api",
       "docs": "https://ssd-api.jpl.nasa.gov/doc/sbdb_query.html",
       "normalizer": "jpl_sbdb",
-      "produces": ["Dwarf Planet"],
+      "produces": [
+        "Dwarf Planet"
+      ],
       "requires_key": false,
+      "probe_confirmed": "2026-07-26",
       "attribution": "Data courtesy of NASA/JPL Solar System Dynamics, Small-Body Database.",
       "terms": "Public domain, attribution appreciated. CONFIRM before publishing.",
       "note": "sb-class=TNO returns every trans-Neptunian object, most of which are small bodies and NOT dwarf planets. select_names therefore restricts the import to the IAU-recognised trans-Neptunian dwarf planets. Widening this list is an editorial decision, not a query change. Ceres is a main-belt object and is not covered by this source entry.",
       "note_distance": "Solar-system 'distance' is a mean orbital distance in AU, a different quantity from the light-year distances used for deep-sky objects. The record labels it explicitly.",
-      "select_names": ["Pluto", "Eris", "Haumea", "Makemake"],
+      "select_names": [
+        "Pluto",
+        "Eris",
+        "Haumea",
+        "Makemake"
+      ],
       "params": {
         "fields": "full_name,diameter,class,H,a",
         "sb-class": "TNO"
       },
       "query": null
+    },
+    {
+      "id": "jpl-sbdb-ceres",
+      "name": "NASA/JPL Small-Body Database",
+      "url": "https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html",
+      "endpoint": "https://ssd-api.jpl.nasa.gov/sbdb.api",
+      "docs": "https://ssd-api.jpl.nasa.gov/doc/sbdb.html",
+      "normalizer": "jpl_sbdb_object",
+      "produces": [
+        "Dwarf Planet"
+      ],
+      "requires_key": false,
+      "attribution": "Data courtesy of NASA/JPL Solar System Dynamics, Small-Body Database.",
+      "terms": "Public domain, attribution appreciated. CONFIRM before publishing.",
+      "note": "Ceres alone, by design. Ceres is a main-belt object, so the sb-class=TNO query that supplies the other four dwarf planets cannot reach it. This is a single-object lookup rather than a widened class query: broadening it to 'sb-class=AST' would return hundreds of thousands of asteroids that are not dwarf planets, which is exactly the mistake the TNO curation filter exists to prevent.",
+      "params": {
+        "sstr": "Ceres",
+        "phys-par": "true",
+        "discovery": "true"
+      },
+      "query": null,
+      "probe_confirmed": "2026-07-26",
+      "response": "object",
+      "note_probe": "Confirmed 2026-07-26. Top-level keys: discovery, object, orbit, phys_par, signature - a nested document, not a row table, so the source is marked \"response\": \"object\" and handed to the normalizer whole. Values used: object.fullname '1 Ceres (A801 AA)'; orbit.elements entry name='a' value=2.77 units='au' (semi-major axis, the same mean-orbital-distance semantic as the TNO dwarf planets); phys_par entry name='diameter' value=939.4 units='km'. Units are read from the response and a value in an unexpected unit is skipped, not reinterpreted. No ra/dec is present, correctly - Ceres is a moving body with no fixed catalogue coordinates.",
+      "note_classification": "SBDB reports object.orbit_class = 'Main-belt Asteroid'. That is an ORBITAL class - where the body orbits - not a body-type claim, exactly as sb-class=TNO is not one for Pluto. The 'Dwarf Planet' type comes from the same documented editorial rule used for the other four (IAU recognition), and the JPL orbit class is preserved verbatim as an alias so the source's own words are not hidden."
+    },
+    {
+      "id": "jpl-satellites",
+      "name": "NASA/JPL Solar System Dynamics — Planetary Satellite Physical Parameters",
+      "url": "https://ssd.jpl.nasa.gov/sats/phys_par/",
+      "endpoint": "https://ssd-api.jpl.nasa.gov/sat_phys_par.api",
+      "docs": "https://ssd-api.jpl.nasa.gov/doc/sat_phys_par.html",
+      "normalizer": null,
+      "produces": [
+        "Moon"
+      ],
+      "requires_key": false,
+      "unprobed": true,
+      "attribution": "Data courtesy of NASA/JPL Solar System Dynamics.",
+      "terms": "Public domain, attribution appreciated. CONFIRM before publishing.",
+      "note": "Curated major planetary satellites: the Galilean moons, the large Saturnian moons, Triton, Charon, the Martian moons, and the five major Uranian moons.",
+      "note_distance": "Moon 'distance' is a different quantity again - an orbital distance from its PARENT PLANET, not from the Sun and not from Earth. It must be labelled with the parent body or it is actively misleading next to a galaxy's light-year distance. Confirm on the probe whether this endpoint carries orbital radius at all; the physical-parameters table may supply only radius, mass and density, in which case the orbital distance has to come from a second endpoint or moons wait for the next slice.",
+      "note_unprobed": "PROBED 2026-07-26 AND FAILED: the endpoint https://ssd-api.jpl.nasa.gov/sat_phys_par.api returned HTTP 404. It is not a current JPL API and must not be used. Moons are deferred to the next catalogue slice rather than sourced from anywhere unverified. A replacement must be probed before use, and must answer the distance question first: a moon's orbital distance is measured from its PARENT PLANET, a third distance semantic alongside light years and AU, and it must be labelled with the parent body or it is misleading.",
+      "target_count": "15-25 moons, only if the probe shows a usable distance semantic.",
+      "select_names": [
+        "Moon",
+        "Io",
+        "Europa",
+        "Ganymede",
+        "Callisto",
+        "Titan",
+        "Enceladus",
+        "Mimas",
+        "Rhea",
+        "Iapetus",
+        "Dione",
+        "Tethys",
+        "Triton",
+        "Charon",
+        "Phobos",
+        "Deimos",
+        "Miranda",
+        "Ariel",
+        "Umbriel",
+        "Titania",
+        "Oberon"
+      ],
+      "params": {},
+      "query": null,
+      "blocked": true
     }
   ]
 }

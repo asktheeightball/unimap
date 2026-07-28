@@ -40,7 +40,7 @@ STAGING_DIR = TOOLS / "staging"
 MANAGED_FIELDS = (
     "name", "type", "distance", "size", "circumference",
     "measurementLabel", "measurementValue",
-    "rightAscension", "declination",
+    "rightAscension", "declination", "sourceSummary",
     "sourceName", "sourceUrl", "lastReviewed",
 )
 

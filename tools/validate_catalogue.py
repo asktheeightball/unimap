@@ -21,11 +21,13 @@ from pathlib import Path
 
 CATALOGUE = Path(__file__).resolve().parent.parent / "celestial-bodies.json"
 
-# Every record must carry these. `size` and `circumference` are deliberately NOT
-# required: many real objects (a SIMBAD star with only a parallax, an unresolved
-# exoplanet host) have no published diameter, and inventing one is worse than
-# omitting it. The detail view hides rows whose value is absent.
-REQUIRED_FIELDS = ("id", "name", "type", "distance")
+# Every record must carry these. `size`, `circumference` and `distance` are
+# deliberately NOT required: many real objects have no published diameter, and
+# SIMBAD's basic table has no distance column at all, so its galaxies, nebulae,
+# clusters and pulsars arrive with coordinates and a classification but no
+# distance. Inventing one is worse than omitting it (D7), and the detail view
+# hides rows whose value is absent.
+REQUIRED_FIELDS = ("id", "name", "type")
 
 # Types the application's category filters can currently reach. Keep this in
 # sync with CATEGORY_TYPES in app.js — a type absent here is unreachable in the
@@ -35,18 +37,26 @@ KNOWN_TYPES = {
     "Planet",
     "Exoplanet",
     "Dwarf Planet",
+    "Moon",
     "Nebula",
     "Black Hole",
     "Neutron Star",
+    "Pulsar",
     "Galaxy",
+    "Star Cluster",
 }
 
 # Optional fields and the type each must have when present.
 OPTIONAL_FIELDS = {
+    "distance": str,
     "size": str,
     "circumference": str,
     "aliases": list,
+    # Two distinct kinds of prose. `summary` is hand-written editorial text and
+    # is never touched by an importer; `sourceSummary` is assembled by an
+    # importer from values the source actually returned, and is importer-owned.
     "summary": str,
+    "sourceSummary": str,
     "measurementLabel": str,
     "measurementValue": str,
     "sourceName": str,

@@ -166,6 +166,196 @@ Consequences:
 - A field with no supporting source is left absent rather than estimated.
 - Where a source is missing, the record carries no provenance and the validator warns.
 
+## D8 — A source must be probed before it may be imported
+
+Status: **Accepted** (refines D6 and D7)
+
+Decision:
+
+Every entry in `tools/sources.json` carries either `"probe_confirmed": "<date>"`
+or `"unprobed": true`. The importer refuses to import from an unprobed source
+and permits only `--probe`. A source may carry `"normalizer": null` until it has
+been probed, and `--probe` runs before the normalizer is resolved.
+
+Rationale:
+
+A normalizer written from assumed column names does not fail loudly. Missing
+columns normalize into records that look finished and carry a real service's
+`sourceName` and `sourceUrl` — fabricated provenance, which D7 forbids and which
+is unfixable later because it looks verified. The 2026-07-26 JPL probe already
+proved the risk is real: `sb-class=TNO` would have labelled hundreds of small
+bodies "Dwarf Planet".
+
+The gate converts that risk into a refusal at the one point where a human is
+present.
+
+Consequences:
+
+- Adding a source is a two-step job: define and probe, then normalize and
+  import. The definition can be written and reviewed before network access
+  exists.
+- `--all` reports unprobed sources as failures. That is intended.
+- Removing `"unprobed"` is the reviewable moment where someone asserts they read
+  the real response.
+
+## D9 — Category filters may ship ahead of their data
+
+Status: **Accepted**
+
+Decision:
+
+`app.js` may map a category filter to record types the catalogue does not yet
+contain. `hideEmptyCategories()` hides any chip no record can match, so an
+unpopulated category is invisible rather than a dead control. `Moon`, `Pulsar`
+and `Star Cluster` are registered in `CATEGORY_TYPES` and in the validator's
+`KNOWN_TYPES` ahead of the data.
+
+A pulsar is a neutron star, so both types are reached through the single
+`Neutron Stars` filter rather than splitting the interface. Records keep
+whichever of the two types their source reports; the filter does not rewrite a
+classification.
+
+Rationale:
+
+- The validator rejects a type no filter can reach, so an import would otherwise
+  fail at promotion time on a category the interface simply had not been told
+  about yet.
+- Registering the categories first lets a catalogue slice be imported and
+  promoted without an interface change in the same step.
+- The type still comes from the source. The filter is a view over types, not an
+  assertion about an object.
+
+Consequences:
+
+- A category with no records shows no chip; the filter appears when data does.
+- Adding a type means updating `CATEGORY_TYPES` and `KNOWN_TYPES` together.
+
+## D10 — `distance` is optional, and classification comes only from the source
+
+Status: **Accepted** (refines D5, D6a and D7)
+
+Decision:
+
+`distance` is no longer a required field. A record requires only `id`, `name` and
+`type`.
+
+An imported record's `type` is derived from the source's own classification, never
+from the curated list that selected it. For SIMBAD that means `otype_txt` mapped
+through an explicit allow-list of codes observed in a real response
+(`OTYPE_TO_TYPE` in `tools/import_catalogue.py`); an unmapped or refused code
+skips the row.
+
+Rationale:
+
+The 2026-07-26 probes settled both questions with evidence:
+
+- The SIMBAD deep-sky queries return `main_id`, `ra`, `dec` and `otype_txt` and
+  **no distance column at all**. SIMBAD's `basic` table has none, and galaxies
+  and nebulae have no useful parallax. Requiring `distance` would have forced
+  either an invented value (forbidden by D7) or the loss of every deep-sky
+  record. 60 of 208 records now legitimately have no distance.
+- The curated nebula list asked for 28 famous objects and SIMBAD typed nine of
+  them as clusters (`OpC`, `Cl*`) — M 8, M 16, M 20, NGC 7000 among them. Had
+  the source's `produces` field decided the type, the catalogue would assert
+  that four open clusters are nebulae.
+
+Consequences:
+
+- The detail view hides an absent distance row; a result row shows the type
+  alone rather than `undefined`.
+- A source may produce more than one type, and `simbad-nebulae` does.
+- Quiz mode compares a field only within one type, because `distance` is light
+  years for deep-sky objects and mean orbital distance in AU for dwarf planets.
+- Adding an otype code is a reviewable edit backed by a cached response, not a
+  convenience. In particular, `simbad-black-holes` must not be unblocked by
+  widening the map: its rows are typed `HXB`, `AGN`, `Sy2`, `BLL` and `X`, and
+  none of those is a black-hole classification.
+
+## D11 — Quiz mode lives in `quiz.js` and generates questions from validated fields
+
+Status: **Accepted**
+
+Decision:
+
+Quiz behaviour lives in `quiz.js`, a second plain script beside `app.js`. It
+receives the catalogue from `app.js` through a `unimap:data` DOM event and makes
+no request of its own. `app.js` owns which top-level section is visible and
+announces changes with `unimap:mode`; `quiz.js` owns everything inside the quiz
+panel.
+
+Questions are generated only from fields a record actually carries, and a
+question is discarded unless exactly one option can be correct:
+
+- Value questions (`distance`, `size`) compare within a single type only.
+- Overlapping types are never used as distractors for each other, because a
+  pulsar *is* a neutron star and an exoplanet *is* a planet.
+- One question per object per game.
+
+Rationale:
+
+- A separate file keeps browse logic readable; it is still vanilla JavaScript
+  with no build step, framework or package manager, so D1 holds.
+- Handing the already-loaded catalogue over keeps gameplay free of network
+  dependency (D6) and avoids fetching the JSON twice.
+- Generated questions multiply any data defect, so the generator refuses
+  anything ambiguous rather than producing a question with two right answers.
+
+Consequences:
+
+- Classic scripts share one global scope, so `quiz.js` must not redeclare
+  `app.js` top-level names. It uses `ui` and `attachQuizHandlers` for that
+  reason.
+- Leaving the quiz cancels the running timer, or it would keep counting down and
+  auto-reveal an answer while the browse view is on screen.
+- Leaderboards are per-difficulty `localStorage` keys
+  (`unimap.leaderboard.<difficulty>`), top 10 each. Storage failure degrades to
+  "no scores" rather than breaking the game.
+- A shared global leaderboard is still out of scope: it needs hosted writes,
+  anti-cheat and privacy decisions.
+
+## D12 — Descriptions are assembled from source values; "why it is notable" is not
+
+Status: **Accepted** (refines D7)
+
+Decision:
+
+Records carry two separate description fields, and an importer owns only one of
+them:
+
+- **`summary`** — editorial prose a person wrote. An importer never reads,
+  writes, merges or overwrites it. It is absent from `MANAGED_FIELDS`.
+- **`sourceSummary`** — assembled by an importer from values the source actually
+  returned, via `describe()`, which joins sentence fragments and drops any whose
+  value is missing. It is importer-owned, so a rerun refreshes it.
+
+The detail view prefers `summary` and falls back to `sourceSummary`. A record
+with neither renders no paragraph at all.
+
+**"Why an object is notable" is deliberately not generated.** No cached response
+carries anything supporting it.
+
+Rationale:
+
+- The roadmap's four questions are not equally answerable. "What is it", "where
+  is it" and "how was it discovered" are all in the retrieved data; "why is it
+  notable" is a judgement no field encodes.
+- Assembling retrieved values into prose is rendering, the same as formatting a
+  parallax into a distance string. Writing that an object is *famous* or
+  *important* would be authoring a claim, which D7 forbids.
+- Two fields rather than one because the promoter's guarantee that hand-written
+  text survives a rerun is worth keeping. Putting generated prose in `summary`
+  would have silently broken it the first time someone wrote a real description.
+
+Consequences:
+
+- 197 of 208 records carry a `sourceSummary`. The 11 without are hand-authored
+  originals with no provenance to generate one from.
+- Filling the notability gap needs either a new authoritative source or
+  hand-written `summary` text. The schema and the rendering are already ready for
+  it; nothing further has to change to start writing them.
+- A source that begins returning a new field can extend its description by adding
+  one fragment, because `describe()` drops fragments whose value is absent.
+
 ## Decision template
 
 ### D# — Title

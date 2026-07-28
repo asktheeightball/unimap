@@ -11,7 +11,8 @@ UniMap should remain lightweight even as its catalogue and game modes grow:
 - Prefer local curated data over live API calls at page-view time
 - External astronomy APIs may be used for research or controlled data-import workflows
 - New fields must be optional and must not break older records
-- Keep each feature independently testable and mobile-friendly
+- Keep each feature independently testable, accessible, and mobile-friendly
+- Do not fabricate scientific facts, names, classifications, measurements, or provenance
 
 ## Completed foundation
 
@@ -19,276 +20,219 @@ UniMap should remain lightweight even as its catalogue and game modes grow:
 
 Status: **Complete**
 
-- Static HTML, CSS, vanilla JavaScript, and JSON
-- Responsive layout
+- Responsive static catalogue
 - Accessible search and category controls
 - Result count and no-results state
 - Detail view with preserved browse state
 - Clear load-error handling
-- Basic local-run and deployment instructions
-
-## Active roadmap
+- Static-host deployment instructions
 
 ### R1 — Major catalogue expansion
 
-Status: **In progress — blocked on source access**
+Status: **Complete** (2026-07-26)
 
-Goal: expand UniMap from a small demonstration catalogue into a much broader curated collection of celestial bodies.
+The catalogue expanded from 20 to **208 records** through reviewed local imports. Final counts at completion: Star 68, Exoplanet 60, Galaxy 28, Nebula 17, Pulsar 12, Star Cluster 9, Dwarf Planet 5, Planet 4, Black Hole 3, Neutron Star 2. Imported records preserve provenance and most carry coordinates.
 
-This is the highest product priority.
+### R2 — Core quiz mode
 
-Progress as of 2026-07-26: the import and validation pipeline exists and is tested (`tools/`), the app renders imported records including a new `Exoplanet` category, and the "restore the original prototype dataset" line item is closed — no prototype ever existed in this repository. The catalogue itself is still at its 20-record baseline because every astronomy host is blocked by the sandbox network policy. See the P0 blocker in `PRIORITY.md` and decisions D6 and D7.
+Status: **Complete** (2026-07-26)
 
-#### Source strategy
+Implemented:
 
-Research and test authoritative sources for controlled import into local JSON:
-
-- **SIMBAD and VizieR** for stars, galaxies, nebulae, clusters, and other non-solar-system objects
-- **NASA Exoplanet Archive TAP** for confirmed exoplanets and host-system data
-- **NASA/JPL Small-Body Database and Horizons** for asteroids, comets, planets, moons, and solar-system data where appropriate
-- **NASA Image and Video Library** for candidate imagery and attribution metadata
-- **NASA APOD** only as a supplementary image and explanation source, not as the primary object catalogue
-
-SIMBAD must not be treated as a bulk catalogue by itself. Use SIMBAD and VizieR as complementary research sources and preserve source attribution.
-
-Do not make the user-facing static application depend on these services being online. Prefer an import or curation process that writes reviewed records into `celestial-bodies.json`.
-
-#### Required work
-
-- ~~Reconcile and restore the complete original prototype dataset~~ — closed 2026-07-26: no prototype dataset exists in this repository
-- Define the target catalogue scope and practical record-count goal
-- Add many more objects across all supported categories
-- Expand or add categories where useful, including moons, dwarf planets, asteroids, comets, star clusters, and exoplanets
-- Define a stable normalized record format
-- Preserve source identifiers and aliases
-- Validate unique IDs, required fields, categories, and duplicate objects
-- Document import provenance and the date each record was reviewed
-- Keep the shipped catalogue small enough to load quickly on mobile
-
-#### Exit criteria
-
-- The original dataset migration is reconciled and documented
-- A substantially larger reviewed catalogue is available locally
-- Every record has a unique stable ID and source metadata
-- No live third-party API is required to browse or play the app
-- Search and category filtering remain responsive on a mobile device
-- The import/update approach is documented and repeatable
-
-### R2 — Quiz mode
-
-Goal: turn the catalogue into a fast, replayable educational game.
-
-#### Core game rules
-
-- Each quiz contains questions about celestial bodies in the local catalogue
-- Each question has exactly four multiple-choice answers
-- One answer is correct
-- Each correct answer starts at **100 points**
-- Available points decrease continuously or in clear intervals until reaching **0** when time expires
-- An unanswered question scores 0
-- Incorrect answers score 0
-- The scoring implementation must be deterministic and documented
-
-Recommended scoring formula:
-
-```text
-score = round(100 × remaining milliseconds ÷ total milliseconds)
-```
-
-Clamp the result between 0 and 100.
-
-#### Difficulty modes
-
-| Mode | Time per question | Intended difficulty |
-|---|---:|---|
-| Easy | 15 seconds | Common objects and direct facts |
-| Medium | 10 seconds | Broader catalogue and less obvious facts |
-| Hard | 7 seconds | Detailed facts, aliases, locations, and comparisons |
-| Impossible | 5 seconds | Full catalogue, obscure facts, and difficult distractors |
-
-#### Question types
-
-Initial question templates should be generated from validated structured data, including:
-
-- Identify an object from its description
-- Identify an object type
-- Identify which object is at a stated location or distance
-- Identify why an object is notable
-- Identify an alternate name
-- Identify the correct discovery or observation fact
-- Identify a pictured object only when image rights and answer quality are reliable
-
-Questions must not be generated from missing, ambiguous, or unverified fields.
-
-#### Answer quality
-
-- Distractors must be plausible but unambiguously wrong
-- Do not place duplicate aliases for the same object among the four choices
-- Avoid questions whose answer depends on inconsistent units or uncertain measurements
-- Prevent immediate repetition within a game where practical
-- Display the correct answer and a short explanation after each question
-
-#### Leaderboards
-
-Provide a separate leaderboard for each difficulty mode.
-
-Lightweight first implementation:
-
-- Store leaderboard entries in `localStorage`
-- Keep separate rankings for Easy, Medium, Hard, and Impossible
-- Record player name, score, date, and question count
-- Limit each mode to a sensible number of top entries
-- Allow the local leaderboard to be cleared deliberately
-
-A shared online/global leaderboard would require a hosted write service, anti-cheat controls, and privacy decisions. Treat that as a later infrastructure decision rather than silently adding a backend.
-
-#### Exit criteria
-
-- All four modes work with the required timers
-- Every question shows four choices and exactly one valid answer
-- Scoring begins at 100 and reaches 0 at expiration
-- Mode-specific local leaderboards persist across browser sessions
-- Keyboard and touch input both work
-- Quiz questions are generated only from validated catalogue fields
-- A full quiz can be completed without console errors or blocked navigation
+- Easy 15s, Medium 10s, Hard 7s, Impossible 5s
+- 10 questions per game
+- Four choices and exactly one correct answer
+- Continuous scoring from 100 to 0
+- Zero for incorrect or expired answers
+- Five validated question families
+- Separate top-10 `localStorage` leaderboard per difficulty
+- Desktop, keyboard, touch, and mobile support
 
 ### R3 — Educational object profiles
 
-Goal: make every celestial-object page useful for learning, not merely a list of measurements.
+Status: **Partially complete**
 
-Each object should include a concise summary explaining:
+Sourced descriptions exist on 197 of 208 records and answer what an object is, where it is, and in some cases how it was discovered. Remaining work is folded into R6 below.
 
-- What it is
-- Why it is notable
-- Where it is located
-- How it was discovered or observed
+## Active roadmap
 
-#### Required and optional profile fields
+### R4 — Search intelligence and autocomplete
 
-- Concise two-to-four-sentence description
-- Object type and category
-- Location information such as constellation, host system, galaxy, or solar-system region where applicable
-- Discovery or observation method and date where known
-- Why the object is notable
-- Alternate names and catalogue identifiers
-- Clearly named measurements rather than an ambiguous generic `size`
-- Source name, source URL, and `lastReviewed` date
-- Related-object IDs
+Status: **Not started**
 
-Descriptions must be concise, readable, factually supported, and written for a general audience. Do not invent discovery details where the source does not support them.
+Goal: make catalogue discovery forgiving and fast without a runtime service.
 
-#### Exit criteria
+#### Fuzzy matching and correction
 
-- Every quiz-eligible object has enough validated descriptive data to support questions
-- Summaries answer the four required educational prompts where the information is known
-- Missing optional facts render gracefully
-- Sources and review dates are visible
-- Ambiguous measurements are relabelled or omitted rather than presented misleadingly
+- Search names, aliases, and catalogue identifiers.
+- Tolerate common spelling errors, missing letters, transpositions, and partial names.
+- Offer visible corrections such as `Did you mean Betelgeuse?`.
+- Never silently replace the user query.
+- Use a small native similarity implementation rather than a framework or service.
 
-### R4 — Images for objects
+#### Autocomplete and suggestions
 
-Goal: provide a useful, properly attributed visual for as many catalogue objects as practical.
+- Show 6–8 ranked suggestions after one or two characters.
+- Rank exact prefix, common-name, alias, identifier, then fuzzy matches.
+- Support mouse, touch, Arrow Up, Arrow Down, Enter, Escape, and screen readers.
+- Allow selection to open or filter directly to an object.
+- Remain effectively instant at larger catalogue sizes.
 
-#### Image strategy
+#### Interface cleanup
 
-- Prefer NASA, ESA, observatory, or other clearly reusable authoritative imagery
-- Use the NASA Image and Video Library as a primary discovery source where relevant
-- Store selected images locally rather than relying on third-party URLs during page views
-- Record source, credit, license or usage note, and original URL
-- Use optimized WebP or similarly efficient formats
-- Lazy-load images
-- Provide descriptive alt text
-- Use a consistent fallback visual where no appropriate real image exists
-- Clearly distinguish real observations from artist illustrations or simulations
-
-Not every star or exoplanet has a direct resolved image. In those cases, use an explicitly labelled illustration, host-system image, or fallback rather than implying a direct photograph exists.
+- Remove the footer and any empty spacing it leaves.
 
 #### Exit criteria
 
-- Every object either has a valid local image or a graceful fallback
-- Credits and image type are visible
-- Missing images do not break results or details
-- Initial catalogue loading remains fast on mobile
-- Image use complies with documented source terms
+- Misspelled queries produce useful corrections.
+- Alias and identifier search works.
+- Autocomplete works on desktop and mobile.
+- Touch, keyboard, and screen-reader behavior pass.
+- No network request occurs while typing.
 
-### R5 — Map
+### R5 — Quiz expansion and persistent local scores
 
-Goal: let users understand where catalogue objects are located without turning UniMap into a heavy planetarium application.
+Status: **Not started**
 
-#### Initial lightweight map
+#### Effortless mode
 
-Build a simple interactive two-dimensional celestial map using local catalogue coordinates:
+Add a fifth mode:
 
-- Plot objects using right ascension and declination when available
-- Support pan, zoom, and reset
-- Filter by object category
-- Select a plotted object to open its details
-- Show object name and type on hover or keyboard focus
-- Use SVG or Canvas with plain JavaScript
-- Remain usable without WebGL or a mapping framework
-- Include a clear statement that the map is a simplified celestial projection
+| Mode | Time per question | Intended content |
+|---|---:|---|
+| Effortless | 20 seconds | Famous objects, basic types, clearly different choices |
+| Easy | 15 seconds | Common objects and direct facts |
+| Medium | 10 seconds | Broader catalogue and less obvious facts |
+| Hard | 7 seconds | Discovery, relationships, classifications, close distractors |
+| Impossible | 5 seconds | Obscure but fair facts and highly plausible distractors |
 
-Solar-system bodies whose apparent positions change over time should not be shown as fixed sky coordinates unless the map clearly labels the date and data source. A first version may limit the map to objects with stable catalogue coordinates.
+#### More question families
 
-#### Later map extensions
+Add questions from verified fields only:
 
-Only after the simple map is useful and fast:
+- discoverer;
+- discovery year;
+- exoplanet discovery method;
+- host-star relationship;
+- spectral type;
+- constellation or sky region;
+- alias or catalogue identifier;
+- source classification;
+- compatible measurements and coordinates.
 
-- Constellation outlines
-- Search-to-map highlighting
-- Related-object paths or systems
-- Optional current-date positions for solar-system objects
-- Location-aware “Visible Tonight” features
+Hard and Impossible must differ through question content, not only timers. Do not create questions from missing, ambiguous, unsupported, or incompatible data.
 
-#### Exit criteria
+#### Persistent leaderboard
 
-- Objects with valid coordinates appear in the correct relative map region
-- Filters and object selection work with mouse, touch, and keyboard where practical
-- The map does not require a framework or live astronomy API
-- Objects lacking coordinates are handled explicitly
-- Performance remains acceptable on a mobile device
+Improve local persistence:
 
-### R6 — Search and discovery refinements
+- separate leaderboard for all five modes;
+- version and validate saved data;
+- recover from corrupt storage;
+- preserve scores across reloads and app updates;
+- label scores as stored on this device;
+- export/import leaderboard backup as JSON.
 
-Goal: improve discovery using the existing dependency-free search model.
+A shared cross-device leaderboard remains a future backend decision requiring identity, privacy, server-side validation, and anti-cheat controls.
 
-Recommended value order:
+### R6 — Catalogue information enrichment
 
-1. Search alternate names and catalogue identifiers
-2. Add a lightweight random-object action
-3. Preserve focus on the previously selected result when returning from details
-4. Add simple alphabetical sorting
-5. Improve empty-query guidance as the catalogue grows
-6. Highlight matched name or alias text only if it remains accessible and simple
+Status: **Partially complete**
 
-Do not add a fuzzy-search dependency until normal name, alias, and identifier search proves inadequate.
+Goal: make each detail page useful for learning and support richer quiz questions.
 
-### R7 — Lightweight quality automation
+Add verified fields where available:
 
-Goal: protect the larger catalogue and quiz system without creating a heavy toolchain.
+- why the object is notable;
+- discovery date and discoverer;
+- discovery or observation method;
+- constellation, host, parent, or region;
+- spectral type or source classification;
+- mass, radius, orbital, or type-appropriate measurements;
+- aliases and catalogue identifiers;
+- visible source attribution and review date.
 
-Potential work:
+Hand-written `summary` remains separate from importer-generated `sourceSummary`, takes precedence, and must never be overwritten by imports. Missing facts must render gracefully rather than be invented.
 
-- Validate JSON structure, unique IDs, aliases, categories, related IDs, coordinates, sources, quiz fields, and local image paths
-- Detect duplicate questions and invalid answer sets
-- Verify leaderboard storage migration and corruption handling
-- Add a static-host smoke check
-- Add broken-link and missing-asset checks
-- Add GitHub Pages deployment after branch strategy is confirmed
+### R7 — Planet category hierarchy
 
-No application runtime dependencies should be introduced merely for validation.
+Status: **Not started**
+
+Group planet-related categories into one navigable hierarchy:
+
+- Planets
+  - All Planets
+  - Solar System Planets
+  - Exoplanets
+  - Dwarf Planets
+  - Candidate Dwarf Planets
+
+`All Planets` includes Planet, Exoplanet, Dwarf Planet, and Candidate Dwarf Planet. Moons and brown dwarfs remain separate. The pattern must work on desktop, mobile, keyboard, and screen readers.
+
+### R8 — Catalogue expansion and new object classes
+
+Status: **Not started**
+
+Add more curated, sourced records and introduce:
+
+- Candidate Dwarf Planet;
+- Brown Dwarf in a separate category/tab;
+- Galaxy Cluster, distinct from Star Cluster;
+- additional well-supported bodies across existing categories.
+
+Potential later classes include Comet, Asteroid, Quasar, Supernova Remnant, Globular Cluster, and Open Cluster.
+
+Every new class requires an authoritative source, confirmed response shape, explicit classification rules, provenance, coordinates where available, validator support, interface support, and quiz-eligibility rules. Do not pad counts with weak records.
+
+### R9 — Object location map
+
+Status: **Not started**
+
+#### Per-object location
+
+Add `View on map` for every object with reliable coordinates. Show:
+
+- right ascension and declination;
+- selected object marker;
+- object category;
+- nearby catalogue objects;
+- return navigation to details.
+
+#### Catalogue-wide map
+
+Build a lightweight SVG or Canvas map using local coordinates:
+
+- pan, zoom, and reset;
+- category and hierarchy filters;
+- search integration;
+- selectable objects and detail navigation;
+- mouse, touch, and practical keyboard support;
+- no framework or required live API.
+
+Do not show changing solar-system positions as fixed coordinates unless the date, epoch, source, and meaning are explicit.
+
+### R10 — Images for objects
+
+Status: **Not started**
+
+Add a local optimized image or intentional fallback for every object. Record alt text, credit, source URL, usage note, and whether the visual is a direct observation, illustration, or simulation. Lazy-load images and preserve mobile performance.
+
+### R11 — Lightweight quality automation
+
+Status: **Not started**
+
+Add focused validation for IDs, fields, aliases, sources, coordinates, images, related IDs, quiz eligibility, answer-set integrity, leaderboard migrations, static-host smoke checks, and broken assets without adding application runtime dependencies.
 
 ## Recommended implementation order
 
-1. **R1 — Major catalogue expansion**
-2. **R2 — Quiz mode**
-3. **R3 — Educational object profiles**
-4. **R4 — Images for objects**
-5. **R5 — Map**
-6. **R6 — Search and discovery refinements**
-7. **R7 — Lightweight quality automation**
-
-Catalogue expansion must establish enough structured, trustworthy data for quiz questions, descriptions, images, and map coordinates. Quiz mode follows immediately because it is the main interactive product feature.
+1. **R4 — Search intelligence and autocomplete**
+2. **R5 — Quiz expansion and persistent local scores**
+3. **R6 — Catalogue information enrichment**
+4. **R7 — Planet category hierarchy**
+5. **R8 — Catalogue expansion and new object classes**
+6. **R9 — Object location map**
+7. **R10 — Images for objects**
+8. **R11 — Lightweight quality automation**
 
 ## Later ideas requiring explicit approval
 
@@ -321,10 +265,9 @@ A future roadmap decision may change these constraints, especially for a shared 
 
 ## Roadmap rules
 
-- Finish or explicitly pause the current priority before starting another
-- `PRIORITY.md` remains authoritative for the next unit of work
-- Update this file when a roadmap item changes state or scope
-- Update `PRIORITY.md` whenever the next task changes
-- Record durable architectural choices in `DECISIONS.md`
-- Do not mark work complete until validation and documentation are complete
-- Do not bundle unrelated roadmap items merely because they touch the same file
+- Finish or explicitly pause the current priority before starting another.
+- `PRIORITY.md` remains authoritative for the next unit of work.
+- Update this file when a roadmap item changes state or scope.
+- Record durable architectural choices in `DECISIONS.md`.
+- Do not mark work complete until validation and documentation are complete.
+- Do not bundle unrelated roadmap items merely because they touch the same file.

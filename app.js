@@ -10,10 +10,14 @@ const CATEGORY_TYPES = {
   planets: ["planet"],
   exoplanets: ["exoplanet"],
   "dwarf planets": ["dwarf planet"],
+  moons: ["moon"],
   nebulae: ["nebula", "nebulae"],
   "black holes": ["black hole"],
-  "neutron stars": ["neutron star"],
+  // A pulsar is a neutron star, so one filter reaches both. Catalogue sources
+  // distinguish them, and the record keeps whichever type its source reports.
+  "neutron stars": ["neutron star", "pulsar"],
   galaxies: ["galaxy", "galaxies"],
+  "star clusters": ["star cluster"],
 };
 
 const state = {
@@ -33,8 +37,11 @@ const el = {
   error: document.getElementById("error"),
   browseView: document.getElementById("browse-view"),
   detailView: document.getElementById("detail-view"),
+  quizView: document.getElementById("quiz-view"),
+  modeNav: document.getElementById("mode-nav"),
   backButton: document.getElementById("back-button"),
   detailName: document.getElementById("detail-name"),
+  detailSummary: document.getElementById("detail-summary"),
   detailTypeValue: document.getElementById("detail-type-value"),
   detailDistance: document.getElementById("detail-distance"),
   detailSize: document.getElementById("detail-size"),
@@ -42,6 +49,7 @@ const el = {
   detailMeasurementLabel: document.getElementById("detail-measurement-label"),
   detailMeasurementValue: document.getElementById("detail-measurement-value"),
   detailSource: document.getElementById("detail-source"),
+  rowDistance: document.getElementById("detail-row-distance"),
   rowSize: document.getElementById("detail-row-size"),
   rowCircumference: document.getElementById("detail-row-circumference"),
   rowMeasurement: document.getElementById("detail-row-measurement"),
@@ -139,9 +147,13 @@ function createResultItem(body) {
   name.className = "result-name";
   name.textContent = body.name;
 
+  // Distance is optional: SIMBAD's basic table has no distance column, so its
+  // galaxies, nebulae, clusters and pulsars carry coordinates and a
+  // classification but no distance. Show the type alone rather than "undefined".
   const meta = document.createElement("span");
   meta.className = "result-meta";
-  meta.textContent = `${body.type} · ${body.distance}`;
+  const distance = typeof body.distance === "string" ? body.distance.trim() : "";
+  meta.textContent = distance ? `${body.type} · ${distance}` : body.type;
 
   button.append(name, meta);
   button.addEventListener("click", () => renderDetails(body));
@@ -158,11 +170,27 @@ function setDetailRow(row, valueElement, value) {
   row.hidden = text === "";
 }
 
+/* A hand-written `summary` always wins over the importer-generated
+   `sourceSummary`, and the two are never merged: one is editorial prose a person
+   wrote, the other is assembled from the values a source returned. A record with
+   neither shows no paragraph at all rather than an empty block. */
+function describeBody(body) {
+  const written = typeof body.summary === "string" ? body.summary.trim() : "";
+  if (written) {
+    return written;
+  }
+  return typeof body.sourceSummary === "string" ? body.sourceSummary.trim() : "";
+}
+
 function renderDetails(body) {
   el.detailName.textContent = body.name;
   el.detailTypeValue.textContent = body.type;
-  el.detailDistance.textContent = body.distance;
 
+  const description = describeBody(body);
+  el.detailSummary.textContent = description;
+  el.detailSummary.hidden = description === "";
+
+  setDetailRow(el.rowDistance, el.detailDistance, body.distance);
   setDetailRow(el.rowSize, el.detailSize, body.size);
   setDetailRow(el.rowCircumference, el.detailCircumference, body.circumference);
   setDetailRow(el.rowSource, el.detailSource, body.sourceName);
@@ -219,7 +247,34 @@ function resetSearch() {
   el.input.focus();
 }
 
+/* Browse and quiz are the two top-level sections. app.js owns which one is on
+   screen; quiz.js owns everything inside the quiz panel and listens for the
+   mode event so it can stop its timer when the player leaves. */
+function setMode(mode) {
+  const quizzing = mode === "quiz";
+  el.quizView.hidden = !quizzing;
+  // Switching mode always returns Browse to the results list rather than a
+  // stale detail view.
+  el.detailView.hidden = true;
+  el.browseView.hidden = quizzing;
+
+  for (const button of el.modeNav.querySelectorAll(".chip")) {
+    const isActive = button.dataset.mode === mode;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  }
+
+  document.dispatchEvent(new CustomEvent("unimap:mode", { detail: mode }));
+}
+
 function attachHandlers() {
+  el.modeNav.addEventListener("click", (event) => {
+    const button = event.target.closest(".chip");
+    if (button) {
+      setMode(button.dataset.mode);
+    }
+  });
+
   // Submitting the form covers both the Search button and the Enter key.
   el.form.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -253,6 +308,10 @@ async function init() {
   }
   hideEmptyCategories();
   renderResults();
+
+  // Hand the loaded catalogue to quiz mode. Gameplay makes no request of its
+  // own, so a quiz never depends on the network (DECISIONS.md D6).
+  document.dispatchEvent(new CustomEvent("unimap:data", { detail: state.bodies }));
 }
 
 init();
