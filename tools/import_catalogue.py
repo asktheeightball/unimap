@@ -197,6 +197,17 @@ def exoplanet_archive(row: dict, source: dict, reviewed: str) -> dict:
     elif year:
         discovery = f"It was discovered in {year}."
 
+    # Keep the retrieved values as fields as well as prose. Quiz mode generates
+    # questions only from structured fields, and an earlier revision of this
+    # function wrote these three into the summary sentence alone, which put them
+    # out of reach (see tools/derive_quiz_fields.py).
+    if host and host != name:
+        record["hostName"] = host
+    if year:
+        record["discoveryYear"] = year
+    if method:
+        record["discoveryMethod"] = method
+
     record["sourceSummary"] = describe(
         f"{name} is a confirmed exoplanet" + (f" orbiting {host}." if host else "."),
         f"The system lies about {light_years:,.1f} light years from Earth.",
@@ -361,6 +372,9 @@ def simbad_star(row: dict, source: dict, reviewed: str) -> dict:
     spectral = str(row.get("sp_type") or "").strip()
     if spectral:
         record.setdefault("aliases", []).append(f"Spectral type {spectral}")
+        # Also as a field: the alias makes it searchable, the field makes it
+        # usable as a quiz answer without re-splitting the alias string.
+        record["spectralType"] = spectral
 
     # SIMBAD reports parallax in milliarcseconds; distance(pc) = 1000 / plx.
     # plx_value is null for some real stars (eta Car in the cached response), and

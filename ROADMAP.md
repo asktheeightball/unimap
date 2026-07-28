@@ -85,46 +85,48 @@ Exit criteria met, verified by 121 browser checks (`node tools/search_checks.mjs
 
 ### R5 — Quiz expansion and persistent local scores
 
-Status: **Not started**
+Status: **Complete** (2026-07-28)
 
-#### Effortless mode
+Delivered:
 
-Add a fifth mode:
-
-| Mode | Time per question | Intended content |
+| Mode | Time per question | Content it actually asks |
 |---|---:|---|
-| Effortless | 20 seconds | Famous objects, basic types, clearly different choices |
-| Easy | 15 seconds | Common objects and direct facts |
-| Medium | 10 seconds | Broader catalogue and less obvious facts |
-| Hard | 7 seconds | Discovery, relationships, classifications, close distractors |
-| Impossible | 5 seconds | Obscure but fair facts and highly plausible distractors |
+| Effortless | 20 seconds | identity and type, on well-known common-named records |
+| Easy | 15 seconds | identity, type, catalogued distance and size |
+| Medium | 10 seconds | source classification, distance and size, whole catalogue |
+| Hard | 7 seconds | discovery year, spectral type, source classification |
+| Impossible | 5 seconds | exact spectral type and coordinates, same-category choices |
 
-#### More question families
+Difficulty is a content ladder, not only a clock. Each mode has ordered tiers and
+falls back to simpler content — keeping its own timer — rather than serving a
+short game. Fallback is recorded in diagnostics and asserted in the checks.
 
-Add questions from verified fields only:
+Question families added: discovery year, spectral type in both directions, and
+coordinates in both directions, alongside the existing type, membership,
+distance, size and source-classification families.
 
-- discoverer;
-- discovery year;
-- exoplanet discovery method;
-- host-star relationship;
-- spectral type;
-- constellation or sky region;
-- alias or catalogue identifier;
-- source classification;
-- compatible measurements and coordinates.
+Four candidate families were **rejected on evidence** rather than implemented:
+discovery method (one distinct value across all 60 exoplanets), discoverer and
+constellation (no record carries either), host-star relationships (the archive
+names a planet after its host, so the prompt gives the answer away), and aliases
+(the five informative ones all embed the object's name). Reverse source
+classification is rejected permanently — nine objects share a gloss. See
+`DECISIONS.md` D14a.
 
-Hard and Impossible must differ through question content, not only timers. Do not create questions from missing, ambiguous, unsupported, or incompatible data.
+Leaderboards: five modes, a versioned `{version, entries}` envelope, in-place
+migration from the old unversioned array, per-entry validation, quarantine of
+unreadable data instead of deletion, a visible device-only note, and JSON
+export/import that merges rather than replaces.
 
-#### Persistent leaderboard
+Supporting work: `tools/derive_quiz_fields.py` recovered `hostName`,
+`discoveryYear`, `discoveryMethod` and `spectralType` — values earlier imports
+fetched but wrote only into generated prose — by reversing the importer's own
+template and requiring the reversal to re-render the stored sentence exactly. It
+also sets the editorial `wellKnown` flag from the curated identifier lists in
+`tools/sources.json`. `tools/import_catalogue.py` now writes all four fields
+directly, so no future import needs the recovery step.
 
-Improve local persistence:
-
-- separate leaderboard for all five modes;
-- version and validate saved data;
-- recover from corrupt storage;
-- preserve scores across reloads and app updates;
-- label scores as stored on this device;
-- export/import leaderboard backup as JSON.
+Validation: 105 quiz checks, 121 search checks, catalogue validator clean.
 
 A shared cross-device leaderboard remains a future backend decision requiring identity, privacy, server-side validation, and anti-cheat controls.
 
@@ -218,15 +220,20 @@ Add focused validation for IDs, fields, aliases, sources, coordinates, images, r
 
 ## Recommended implementation order
 
-1. **R5 — Quiz expansion and persistent local scores**
-2. **R6 — Catalogue information enrichment**
-3. **R7 — Planet category hierarchy**
-4. **R8 — Catalogue expansion and new object classes**
-5. **R9 — Object location map**
-6. **R10 — Images for objects**
-7. **R11 — Lightweight quality automation**
+1. **R6 — Catalogue information enrichment**
+2. **R7 — Planet category hierarchy**
+3. **R8 — Catalogue expansion and new object classes**
+4. **R9 — Object location map**
+5. **R10 — Images for objects**
+6. **R11 — Lightweight quality automation**
 
-R4 — Search intelligence and autocomplete is complete.
+R4 — Search intelligence and autocomplete and R5 — Quiz expansion and persistent
+local scores are complete.
+
+R6 now carries a debt from R5: four quiz question families are implemented in
+spirit but unsupportable on the current data. A discoverer field, a non-transit
+discovery method, a constellation, or object names independent of their host
+would each bring one back.
 
 ## Later ideas requiring explicit approval
 

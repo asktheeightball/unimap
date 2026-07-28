@@ -18,8 +18,8 @@ There is no framework, package manager, build command, backend, database, or aut
 ## Repository
 
 - GitHub: `asktheeightball/unimap`
-- Current working branch: `claude/search-intelligence-autocomplete-tzkv43`
-- Previous working branch: `claude/catalogue-expansion-200-250-ygs28r` (this branch continues it)
+- Current working branch: `claude/quiz-expansion-persistence-olq1ow`
+- Previous working branch: `claude/search-intelligence-autocomplete-tzkv43` (this branch continues it)
 - Repository default branch remains `claude/unimap-static-app-uj0ql5`
 - Do not change branch strategy or deployment automation without first reconciling the default branch with the active branch
 
@@ -28,10 +28,11 @@ There is no framework, package manager, build command, backend, database, or aut
 - `index.html` contains the semantic page structure and Browse/Quiz navigation.
 - `styles.css` contains responsive presentation.
 - `app.js` loads the catalogue, builds the search index, ranks and filters results, renders details, drives the autocomplete combobox, and switches modes.
-- `quiz.js` implements question generation, timing, scoring, and local leaderboards.
+- `quiz.js` implements question generation, difficulty tiers, timing, scoring, and versioned local leaderboards.
 - `celestial-bodies.json` contains **208 records**.
 - The detail view prefers hand-written `summary` over importer-generated `sourceSummary`.
 - 197 records carry source metadata and generated descriptions; 192 carry coordinates.
+- Structured quiz fields: `hostName`, `discoveryYear` and `discoveryMethod` on the 60 exoplanets, `spectralType` on 63 stars, and the editorial `wellKnown` flag on 85 records.
 - Project-control documents define product scope, priorities, roadmap, decisions, deployment, and contributor instructions.
 
 ## Current functional behavior
@@ -49,11 +50,13 @@ The application currently provides:
 - preserved query/category/results when returning;
 - responsive phone, tablet, and desktop layout;
 - visible data-load errors;
-- quiz mode with Easy, Medium, Hard, and Impossible;
+- quiz mode with Effortless, Easy, Medium, Hard, and Impossible;
 - 10 questions per game;
 - four choices and exactly one correct answer;
 - time-based scoring from 100 to 0;
-- separate top-10 `localStorage` leaderboards;
+- difficulty that changes the question content, not only the timer, with a fallback ladder that keeps each mode's own clock;
+- eight question families, and a giveaway rule that discards any question whose answer is visible in its own prompt;
+- separate top-10 `localStorage` leaderboards for all five modes, versioned, migrating, corruption-recovering, and exportable/importable as JSON;
 - verified desktop and mobile Quiz navigation.
 
 ## Newly approved feature priorities
@@ -65,22 +68,26 @@ The user approved and requested these features be written into GitHub.
 Delivered 2026-07-28. See `DECISIONS.md` D13 and the "Searching" section of
 `README.md`.
 
-### Current: P4 — Quiz expansion and persistence
+### Complete: P4 — Quiz expansion and persistence
 
-- Add Effortless mode at 20 seconds.
-- Add more question families.
-- Make Hard and Impossible use discovery, discoverer, year, method, host, spectral type, alias, classification, coordinate, and other verified details.
-- Strengthen local leaderboard persistence with schema versioning, corruption recovery, on-device labelling, and JSON export/import.
-- A cross-device/global leaderboard remains a future backend decision.
+Delivered 2026-07-28. See `DECISIONS.md` D14, D14a and D15, and the "Quiz mode"
+section of `README.md`.
+
+Four requested question families could not be built from the real catalogue and
+were rejected with evidence rather than approximated: discovery method (one
+distinct value), discoverer and constellation (no such field on any record), and
+host-star relationships and aliases (both give the answer away through naming
+convention). Each returns automatically when the data supports it.
+
+### Current: P5 — Catalogue information enrichment
 
 ### Then
 
-1. P5 — More verified information on celestial bodies
-2. P6 — Group all planet types under one Planets hierarchy
-3. P7 — Add candidate dwarf planets, brown dwarfs, galaxy clusters, and more sourced objects
-4. P8 — Add per-object and catalogue-wide celestial maps
-5. P9 — Add properly attributed local images
-6. P10 — Expand lightweight validation automation
+1. P6 — Group all planet types under one Planets hierarchy
+2. P7 — Add candidate dwarf planets, brown dwarfs, galaxy clusters, and more sourced objects
+3. P8 — Add per-object and catalogue-wide celestial maps
+4. P9 — Add properly attributed local images
+5. P10 — Expand lightweight validation automation
 
 See `PRIORITY.md` for acceptance criteria and `ROADMAP.md` for full outcomes.
 
@@ -97,9 +104,11 @@ See `PRIORITY.md` for acceptance criteria and `ROADMAP.md` for full outcomes.
 
 ## Known limitations
 
-- The quiz has four modes; Effortless is not implemented.
-- Existing leaderboards persist only in `localStorage` on the same browser/device.
-- Discovery data is not available for every object.
+- Leaderboards persist only in `localStorage` on the same browser and device. Export/import is the supported way to move them; there is no cross-device sync.
+- Discovery data exists only for the 60 exoplanets, and its `discoveryMethod` is `Transit` for every one of them, so no discovery-method question can be asked.
+- No record carries a discoverer or a constellation, so those question families cannot be built at all.
+- Exoplanets are named after their host stars and the five informative aliases embed their object's name, so host and alias question families are withdrawn (`DECISIONS.md` D14a).
+- `distance` and `size` are absent from most imported deep-sky records — 24 of 28 galaxies and 14 of 17 nebulae have neither — so measurement questions come mostly from stars and exoplanets.
 - Why an object is notable is not available from current imported source responses for most records.
 - Black-hole expansion remains blocked on a defensible authoritative classification source.
 - The previously configured moon endpoint returned HTTP 404 and must not be reused without correction.
@@ -111,8 +120,13 @@ See `PRIORITY.md` for acceptance criteria and `ROADMAP.md` for full outcomes.
   are not names.
 - Suggestions are capped at eight and the fuzzy pass contributes at most twelve
   records to any result list.
-- `tools/search_checks.mjs` needs a Playwright install; it is optional maintainer
-  tooling and the site itself still has no dependencies.
+- `tools/search_checks.mjs` and `tools/quiz_checks.mjs` need a Playwright
+  install; they are optional maintainer tooling and the site itself still has no
+  dependencies.
+- The astronomy hosts remain blocked by the sandbox network policy (HTTP 403 at
+  CONNECT), so no import can be re-run from this environment. This is why
+  `tools/derive_quiz_fields.py` recovers fields from the committed catalogue
+  instead of refetching them.
 
 ## Local start
 
@@ -144,41 +158,68 @@ Do not test by double-clicking `index.html`; browser `file://` security prevents
 ## Last session
 
 - Date: 2026-07-28
-- Branch: `claude/search-intelligence-autocomplete-tzkv43`
-- Starting commit: `8e8556a` (the branch was 12 commits behind and was
-  fast-forwarded onto it; nothing was reset or discarded)
-- Task selected: **P3 — Search intelligence and autocomplete**
+- Branch: `claude/quiz-expansion-persistence-olq1ow`
+- Starting commit: `7361ca6` (the branch was 12 commits behind, sitting on the
+  old `unimap-static-app` tip; it was **fast-forwarded** onto
+  `origin/claude/search-intelligence-autocomplete-tzkv43`, of which it was a
+  strict ancestor. Nothing was reset, discarded or force-pushed.)
+- Task selected: **P4 — Quiz expansion and persistence**
 - Status: **Complete**
-- Files changed: `app.js`, `index.html`, `styles.css`, `tools/search_checks.mjs`
-  (new), `PRIORITY.md`, `ROADMAP.md`, `DECISIONS.md`, `README.md`, `HANDOFF.md`
-- Catalogue changed: none; remains 208 records and validates with 0 warnings
+- Files changed: `quiz.js`, `index.html`, `styles.css`, `celestial-bodies.json`,
+  `tools/derive_quiz_fields.py` (new), `tools/quiz_checks.mjs` (new),
+  `tools/import_catalogue.py`, `tools/validate_catalogue.py`, `tools/README.md`,
+  `PRIORITY.md`, `ROADMAP.md`, `DECISIONS.md`, `README.md`, `HANDOFF.md`
+- Catalogue changed: still 208 records, no value altered. Four structured fields
+  were added from values already published in the same records, plus the
+  editorial `wellKnown` flag.
+
+What changed in the data:
+
+- `hostName`, `discoveryYear`, `discoveryMethod` recovered onto the 60 exoplanets
+  and `spectralType` onto 63 stars. Earlier imports fetched these columns and
+  wrote them only into the generated `sourceSummary` sentence;
+  `tools/derive_quiz_fields.py` reverses that exact template and requires the
+  captured values to re-render the stored sentence byte for byte, refusing any
+  record that does not. `hostName` is additionally corroborated against the
+  `"<host> system"` alias. No new fact was created.
+- `wellKnown` set on 85 records from the curated `select_identifiers` /
+  `select_names` lists and `id_overrides` already in `tools/sources.json`.
+- `tools/import_catalogue.py` now writes all four fields directly, so no future
+  import needs the recovery step.
 
 What changed in the application:
 
-- a normalized search index is built once after load over `name`, `aliases` and
-  the `id` slug — no record is mutated;
-- matches rank in seven tiers, exact name through fuzzy;
-- fuzzy matching is bounded Damerau-Levenshtein, budget scaled by query length,
-  off below four characters, gated behind the literal passes;
-- an ARIA 1.2 combobox shows up to eight suggestions;
-- `Did you mean …?` appears when only a fuzzy match was found, and a fuller
-  panel when nothing matched at all;
-- the footer and its CSS were removed.
+- Effortless mode at 20 seconds, selected by default, drawing only on the 34
+  well-known records whose name is a common name rather than a catalogue
+  designation, and asking only identity and type questions;
+- difficulty became an ordered ladder of tiers per mode, falling back to simpler
+  content while keeping its own timer, so a mode never serves a short game;
+- three new question families (discovery year; spectral type in both directions;
+  coordinates in both directions) and a structural giveaway rule that discards
+  any question whose answer is visible in its prompt;
+- explanations are led by the fact the question turned on, with host and method
+  context on discovery answers, instead of a generic field dump;
+- leaderboard storage became a versioned `{version, entries}` envelope with
+  in-place migration, per-entry validation, quarantine of unreadable data under a
+  `.corrupt` key, a visible device-only note, and JSON export/import that merges.
 
 Validation performed:
 
-- `python3 tools/validate_catalogue.py` — 208 records, 0 warnings
-- `node tools/search_checks.mjs` — **121/121 checks passed**, covering matching
-  and ranking, alias and identifier lookup, one-character and transposed typos,
-  the short-query threshold, unrelated queries, category filtering under fuzzy
-  search, suggestion count and de-duplication, mouse click, real touchscreen
-  tap, Arrow Up/Down, Enter, Escape, the combobox ARIA attributes, list closure
-  on clear, both correction states, desktop and 320/375/390-wide mobile layout,
-  horizontal overflow, browse/detail/Back, quiz navigation and question
-  generation, console errors, and footer removal
-- Search performance: 1.66 ms per query worst case on the 208-record catalogue,
-  2.60 ms on a synthetic 1,000-record fixture. No debounce was needed.
+- `python3 tools/validate_catalogue.py` — 208 records, **0 errors, 0 warnings**
+- `python3 tools/derive_quiz_fields.py --dry-run` — idempotent on the committed
+  catalogue, 0 refusals
+- `node tools/quiz_checks.mjs` — **105/105 checks passed**, covering the five
+  timers, ten-question games in 40 sampled games per mode, answer-set integrity
+  across 2,000 generated questions, zero prompts containing their own answer,
+  the Effortless content and pool rules, Hard/Impossible family separation at
+  ≥80% preferred content, same-category distractors, fallback against a
+  deliberately bare fixture catalogue, explanations, the storage schema,
+  migration from the unversioned array, corruption quarantine, export/import
+  round-trips, a full game played by mouse and keyboard, persistence across a
+  reload, phone layout and touch, and console errors
+- `node tools/search_checks.mjs` — **121/121 checks passed**, no regression from
+  the catalogue's new fields
 
 - Deployment performed: none
-- Next priority: **P4 — Quiz expansion and persistence**
+- Next priority: **P5 — Catalogue information enrichment**
 - Uncommitted work: none

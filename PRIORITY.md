@@ -4,63 +4,18 @@ This is the authoritative source for selecting the next unit of work.
 
 ## Current priority
 
-### P4 — Quiz expansion and persistence
+### P5 — Catalogue information enrichment
 
-Status: **Not started**
+Status: **Partially complete** — see "Next priorities" below for the full scope.
 
-#### P4.1 Effortless mode
-
-Add a new lowest difficulty:
-
-| Mode | Time per question |
-|---|---:|
-| Effortless | 20 seconds |
-| Easy | 15 seconds |
-| Medium | 10 seconds |
-| Hard | 7 seconds |
-| Impossible | 5 seconds |
-
-Effortless should use famous objects, basic type questions, clearly different answers, and common names where available.
-
-#### P4.2 More question families
-
-Add validated question types such as:
-
-- who discovered an object;
-- discovery year;
-- exoplanet discovery method;
-- host-star relationships;
-- spectral type;
-- constellation or sky region;
-- alias or catalogue identifier;
-- source classification;
-- compatible measurements and coordinates.
-
-Do not generate questions from missing, ambiguous, or unsupported fields.
-
-#### P4.3 Hard and Impossible differentiation
-
-Hard and Impossible must become more difficult through question content, not only shorter timers.
-
-- Hard: discovery person/year, discovery method, host relationships, spectral type, close same-category distractors.
-- Impossible: obscure aliases, precise discovery details, catalogue classifications, coordinates, and difficult but fair distractors.
-
-#### P4.4 Persistent leaderboard
-
-Current `localStorage` persistence is device- and browser-specific. Improve local persistence now:
-
-- keep a separate leaderboard for all five modes;
-- validate and version stored data;
-- recover from corrupt storage;
-- preserve scores across reloads and app updates;
-- label scores as stored on this device;
-- add export/import backup as JSON.
-
-A shared cross-device leaderboard remains a later backend decision because it requires server-side storage, identity, privacy, and anti-cheat controls.
+P4 raised its own reason to continue P5: four candidate quiz families were
+rejected for want of data, not for want of code (`DECISIONS.md` D14a). A
+discoverer field, a non-transit discovery method, a constellation, or object
+names that are independent of their host would each bring one back.
 
 ## Next priorities
 
-### P5 — Catalogue information enrichment
+### P5 — Catalogue information enrichment (continued)
 
 Status: **Partially complete**
 
@@ -142,6 +97,69 @@ Status: **Not started**
 Add focused validation for IDs, fields, aliases, sources, coordinates, images, related IDs, quiz eligibility, answer-set integrity, leaderboard migrations, static-host smoke checks, and broken assets without adding runtime dependencies.
 
 ## Completed
+
+### P4 — Quiz expansion and persistence
+
+Status: **Complete** (2026-07-28)
+
+#### P4.1 Effortless mode — done
+
+Added at 20 seconds, ahead of Easy and selected by default. It draws only on
+records flagged `wellKnown` whose name is a common name rather than a bare
+catalogue designation (34 of 208), and asks only identity and type questions —
+no discovery facts, no coordinates, no aliases, no close measurements. Game
+length is unchanged at 10 questions.
+
+The eligibility rule is not a hard-coded list of famous objects. `wellKnown` is
+derived by `tools/derive_quiz_fields.py` from the curated `select_identifiers`
+and `select_names` lists already in `tools/sources.json`, plus the solar-system
+planets and the Sun. 85 of 208 records qualify.
+
+#### P4.2 More question families — done, with four rejections
+
+Added: discovery year, spectral type (both directions), and coordinates (both
+directions). Retained: object type, membership, distance, size, source
+classification.
+
+**Rejected, with evidence** (`DECISIONS.md` D14a):
+
+| Family | Why |
+|---|---|
+| Discovery method | Structured on all 60 exoplanets, but every value is `Transit`. One distinct value cannot make four choices. |
+| Who discovered this object | No record carries a discoverer. Inventing one violates D7. |
+| Constellation or sky region | No record carries it. |
+| Host-star relationships (both directions) | The archive names a planet after its host, so the prompt spells out its answer. 52 of 52 instances were rejected by the giveaway rule. |
+| Alias or catalogue identifier (both directions) | Only five informative aliases exist and every one embeds the object's name. |
+| Reverse source classification | Nine catalogued objects are planetary nebulae; the question has nine correct answers. Permanently rejected. |
+
+The structured fields the new families need did not exist: earlier imports
+fetched `hostname`, `disc_year`, `discoverymethod` and `sp_type` but wrote them
+only into generated prose. `tools/derive_quiz_fields.py` recovered them by
+reversing the importer's own template and proving the reversal round-trips
+exactly, and `tools/import_catalogue.py` now writes all four as fields.
+
+#### P4.3 Hard and Impossible differentiation — done
+
+Hard asks discovery year, spectral type and source classification. Impossible
+asks exact spectral type and exact coordinates with all four object choices
+drawn from one category. Neither relies on the timer alone, and both are
+measured: over 40 sampled games each, at least 80% of questions come from the
+mode's own preferred families.
+
+#### P4.4 Persistent leaderboard — done
+
+Five separate leaderboards, a versioned envelope (`{version, entries}`), in-place
+migration from the previous unversioned array, per-entry validation that drops
+bad rows without discarding good ones, quarantine of unparseable data under a
+`.corrupt` key instead of deletion, a visible "stored on this device only" note,
+and JSON export/import where import merges rather than replaces.
+
+#### Validation
+
+- `python3 tools/validate_catalogue.py` — 208 records, 0 errors, 0 warnings.
+- `node tools/quiz_checks.mjs` — 105/105.
+- `node tools/search_checks.mjs` — 121/121, no regression.
+- `python3 tools/derive_quiz_fields.py --dry-run` — idempotent, 0 refusals.
 
 ### P0 — Expand the celestial-body catalogue substantially
 

@@ -67,10 +67,22 @@ OPTIONAL_FIELDS = {
     "image": str,
     "imageAlt": str,
     "imageCredit": str,
+    # Structured quiz fields. Each is a value the source actually returned;
+    # `tools/derive_quiz_fields.py` explains how the committed ones were
+    # recovered from importer-generated prose, and the importer now writes them
+    # directly. `wellKnown` is the only editorial flag: it marks a record a
+    # maintainer already selected by name in `tools/sources.json`, and the quiz
+    # uses it to choose Effortless questions.
+    "hostName": str,
+    "discoveryYear": str,
+    "discoveryMethod": str,
+    "spectralType": str,
+    "wellKnown": bool,
 }
 
 ID_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 DATE_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+YEAR_PATTERN = re.compile(r"^\d{4}$")
 
 errors: list[str] = []
 warnings: list[str] = []
@@ -147,6 +159,19 @@ def check_record(index: int, record) -> None:
     reviewed = record.get("lastReviewed")
     if isinstance(reviewed, str) and not DATE_PATTERN.match(reviewed):
         error(f"{label}: lastReviewed must be YYYY-MM-DD, found {reviewed!r}")
+
+    # The quiz asks "in what year was this discovered?" and shows the stored
+    # string verbatim, so anything that is not a plain four-digit year would be
+    # displayed as an answer option exactly as written.
+    year = record.get("discoveryYear")
+    if isinstance(year, str) and not YEAR_PATTERN.match(year):
+        error(f"{label}: discoveryYear must be a four-digit year, found {year!r}")
+
+    # A host that names the planet itself would generate "which star does X
+    # orbit?" with X as its own answer.
+    host = record.get("hostName")
+    if isinstance(host, str) and host.strip() == str(record.get("name") or "").strip():
+        error(f"{label}: hostName is the record's own name")
 
     # Provenance is paired: a URL without a name (or vice versa) is incomplete.
     has_name, has_url = "sourceName" in record, "sourceUrl" in record

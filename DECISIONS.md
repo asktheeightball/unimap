@@ -452,6 +452,152 @@ Consequences:
   closed. That is deliberate; the app only intercepts Escape to dismiss its own
   list.
 
+## D14 — Quiz difficulty is a content ladder with a fallback, not just a timer
+
+Status: **Accepted** (refines D11)
+
+Decision:
+
+Each of the five difficulties owns an ordered list of tiers. A tier names a
+subject pool and a set of question families. Tiers are consumed in order until a
+game is full, so a difficulty that cannot fill ten questions from its preferred
+content degrades into simpler content rather than into a shorter game — and it
+keeps its own timer while doing so.
+
+| Mode | Seconds | Preferred content |
+|---|---:|---|
+| Effortless | 20 | identity and type, on well-known records with a common name |
+| Easy | 15 | identity, type, catalogued distance and size, on well-known records |
+| Medium | 10 | source classification, distance and size, whole catalogue |
+| Hard | 7 | discovery year, spectral type, source classification |
+| Impossible | 5 | exact spectral type and exact coordinates, same-category choices |
+
+Effortless eligibility is the record's `wellKnown` flag, narrowed to names that
+are not bare catalogue designations. `wellKnown` is editorial and is derived, by
+`tools/derive_quiz_fields.py`, from the curated `select_identifiers` and
+`select_names` lists in `tools/sources.json`. Those lists are the notability
+judgement a maintainer already made and reviewed when choosing what to import;
+reusing them avoids inventing a second, unreviewed "famous objects" list in
+application code.
+
+A question is discarded when the player could answer it without knowing
+anything — when the prompt contains the answer, or when the answer contains the
+subject the prompt named while the distractors do not.
+
+Rationale:
+
+- Shortening the clock alone makes a mode faster, not harder. Impossible should
+  ask something a knowledgeable player finds hard, not the same question in five
+  seconds.
+- A silent short game is a defect the player cannot diagnose; falling back is
+  visible in diagnostics and keeps the scoring denominator at 1000.
+- Astronomical naming leaks answers constantly ("Sombrero Galaxy" is a Galaxy),
+  so the giveaway rule has to be structural rather than a per-family patch.
+
+Consequences:
+
+- `quiz.js` exposes `window.unimapQuiz` with the generator and a `diagnostics`
+  object. It is read only by `tools/quiz_checks.mjs`; no gameplay depends on it.
+- Fallback usage is asserted in the checks against a deliberately bare fixture
+  catalogue, so a future data change cannot silently make a mode fall back.
+- Adding a question family means adding an eligibility predicate and placing it
+  in a tier, not editing the game loop.
+
+## D14a — Two question families were rejected as unsupportable
+
+Status: **Accepted** (refines D14)
+
+Decision:
+
+Host-star questions and alias questions were implemented, measured against the
+real 208-record catalogue, and withdrawn. They are not in the shipped tiers.
+
+Evidence:
+
+- **Host star.** The NASA Exoplanet Archive names a planet after its host —
+  KOI-1599.02 orbits KOI-1599, Kepler-1176 b orbits Kepler-1176. All 60
+  catalogued exoplanets follow it, in both directions, so the prompt always
+  spells out its own answer. 52 of 52 generated instances were rejected by the
+  giveaway rule.
+- **Aliases.** After discarding decorated spellings of an object's own name
+  ("* 51 Peg" for 51 Peg), the spectral-type and host-system values the importer
+  parks in `aliases`, and one classification annotation, exactly **five**
+  informative aliases remain — all minor-planet designations, all embedding the
+  object's name ("136472 Makemake (2005 FY9)"). Five records could not carry a
+  difficulty tier even if the naming were independent.
+
+Two further families were rejected before implementation:
+
+- **Discovery method.** Present and structured on all 60 exoplanets, but every
+  value is `Transit`. One distinct value cannot make four choices.
+- **Discoverer, and constellation or sky region.** No catalogue record carries
+  either field. Deriving them would mean inventing provenance, which D7 forbids.
+
+Reverse-classification ("which object is a planetary nebula?") is rejected
+permanently rather than pending data: nine catalogued objects share that gloss,
+so the question has nine correct answers. Only the forward direction is asked.
+
+Rationale:
+
+An educational quiz that rewards pattern-matching on a naming convention teaches
+the convention, not the astronomy. Refusing a family is cheaper to reverse than
+shipping questions that look right and are not.
+
+Consequences:
+
+- All four return automatically when the catalogue supports them: the rejection
+  is data-driven, and P7's new object classes may supply independent names,
+  non-transit discovery methods, or discoverer fields.
+- `hostName`, `discoveryMethod` and `aliases` remain stored and validated. They
+  are not dead data — `hostName` and `discoveryMethod` give discovery answers
+  their context in the explanation, and aliases still drive search.
+
+## D15 — Leaderboard storage is versioned, recoverable and exportable; it stays local
+
+Status: **Accepted** (refines D11)
+
+Decision:
+
+Each difficulty's `localStorage` value is an envelope, not a bare array:
+
+```json
+{ "version": 1, "entries": [ { "name": "Player", "score": 850,
+  "difficulty": "hard", "questions": 10, "maximumScore": 1000,
+  "date": "2026-07-27", "completedAt": "2026-07-27T20:15:00.000Z",
+  "durationMs": 54213 } ] }
+```
+
+Reading migrates the previous unversioned array in place and rewrites it.
+Individual malformed entries are dropped while valid ones survive. A value that
+cannot be parsed at all is moved to `unimap.leaderboard.<difficulty>.corrupt`
+rather than deleted, and the interface says some scores were set aside.
+
+The quiz exports every mode's scores as one JSON file and imports one back.
+Import **merges**: it adds entries that are not already present, identified by
+name, score and completion time, so re-importing the same file is a no-op and a
+backup from another device never deletes what is on this one.
+
+A shared cross-device leaderboard remains out of scope. It needs hosted writes,
+identity, privacy decisions and anti-cheat, none of which a static site has.
+
+Rationale:
+
+- Without a version field there is no safe way to change the shape later, and no
+  way to tell corrupt data from an empty leaderboard.
+- Destroying a player's scores because one byte was bad is the worst available
+  outcome; quarantining costs one key and keeps the data recoverable.
+- Export/import is the honest answer to "my scores are only on this device": it
+  gives the player the portability a backend would, without a backend.
+- Merge-not-replace is what makes import safe to try.
+
+Consequences:
+
+- The interface states plainly that scores are stored on this device only.
+- `maximumScore` is stored rather than assumed, so changing the question count
+  later cannot silently rescale historical scores.
+- Migration and corruption paths are covered by `tools/quiz_checks.mjs`, since
+  they are exactly the code that is otherwise never exercised until it matters.
+
 ## Decision template
 
 ### D# — Title

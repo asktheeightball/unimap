@@ -3,7 +3,7 @@
 UniMap is a small static web app for browsing a catalogue of 208 celestial bodies —
 stars, planets, exoplanets, dwarf planets, nebulae, galaxies, star clusters, black
 holes, neutron stars and pulsars. Search by name, filter by category, and open any
-result to see its type, distance, size and circumference. A timed quiz mode builds
+result to see its type, distance, size and circumference. A timed quiz mode with five difficulties builds
 questions from the same catalogue.
 
 ## Technology stack
@@ -62,7 +62,9 @@ See `DEPLOYMENT.md` for the complete pre-deployment, verification, and rollback 
 │   ├── import_catalogue.py   # fetch -> cache -> normalize -> stage
 │   ├── promote_staging.py    # validate, then update the catalogue
 │   ├── validate_catalogue.py # standalone catalogue validation
+│   ├── derive_quiz_fields.py # recover structured quiz fields; set wellKnown
 │   ├── search_checks.mjs     # browser checks for search, autocomplete, layout
+│   ├── quiz_checks.mjs       # browser checks for quiz content and leaderboards
 │   ├── cache/                # raw API responses (git-ignored)
 │   └── staging/              # generated staging JSON (git-ignored)
 ├── README.md              # project overview and local setup
@@ -155,11 +157,12 @@ search button.
 
 ## Quiz mode
 
-Switch to **Quiz** in the header. Four difficulties set the time allowed per
+Switch to **Quiz** in the header. Five difficulties set the time allowed per
 question:
 
 | Mode | Seconds per question |
 |---|---:|
+| Effortless | 20 |
 | Easy | 15 |
 | Medium | 10 |
 | Hard | 7 |
@@ -175,23 +178,92 @@ points = round(100 × remaining milliseconds ÷ total milliseconds)
 
 Incorrect and expired answers score zero, so a game is out of 1000. After each
 question the correct answer is shown with a short explanation assembled from the
-record's own fields.
+record's own fields, led by the fact the question actually turned on.
 
-Questions are generated only from validated fields that a record actually
-carries, and the generator discards anything ambiguous:
+### Difficulty changes the questions, not only the clock
+
+| Mode | What it asks | Drawn from |
+|---|---|---|
+| Effortless | what an object is, and which object is of a given kind | well-known records with a common name (34) |
+| Easy | the same, plus catalogued distance and size | well-known records (85) |
+| Medium | how the source classifies an object, plus distance and size | the whole catalogue |
+| Hard | discovery year, spectral type, source classification | the whole catalogue |
+| Impossible | exact spectral type, exact coordinates — with all four choices from one category | the whole catalogue |
+
+"Well-known" is not a judgement made in `quiz.js`. It is the `wellKnown` flag on
+the record, set by `tools/derive_quiz_fields.py` from the curated identifier
+lists a maintainer already wrote in `tools/sources.json` — the brightest
+naked-eye stars, the Messier and NGC selections, the IAU dwarf planets. Effortless
+narrows that further to records whose name is a common name rather than a bare
+catalogue designation, so it asks about Betelgeuse rather than NGC 1300.
+
+If a difficulty cannot fill a game from its preferred questions it falls back to
+simpler ones **and keeps its own timer** — you never get a short game, and
+Impossible never becomes slower. Fallback is recorded in the diagnostics that
+`tools/quiz_checks.mjs` asserts against.
+
+### What the generator refuses to ask
+
+Questions come only from structured fields a record actually carries, never from
+prose, and anything ambiguous is discarded:
 
 - value questions (distance, size) compare only within one type, because
   `distance` means light years for a galaxy and mean orbital distance in AU for a
   dwarf planet;
 - overlapping types are never used as distractors for each other, since a pulsar
   is a neutron star and an exoplanet is a planet;
-- each object supplies at most one question per game.
+- a question whose answer is visible in its own prompt is thrown away — "What
+  kind of object is the Sombrero Galaxy?" is not a question;
+- reverse-classification questions are not asked at all, because nine catalogued
+  objects are planetary nebulae and the question would have nine right answers;
+- each object supplies at most one question per game, and no prompt repeats.
+
+Two candidate families were implemented, tested and **withdrawn** because this
+catalogue cannot support them fairly. Host-star questions ("which star does
+Kepler-1176 b orbit?") give the answer away, since the archive names a planet
+after its host. Alias questions do the same: the only informative aliases left
+are minor-planet designations like "136472 Makemake (2005 FY9)", which embed the
+name. Both return when the catalogue carries names that are independent of each
+other.
+
+### Leaderboards are stored on your device
 
 Each difficulty keeps its own top-10 leaderboard in `localStorage` under
-`unimap.leaderboard.<difficulty>`, recording player name, score, question count
-and date. Nothing is uploaded and there is no shared leaderboard. Gameplay makes
-no network request at all — `app.js` hands the already-loaded catalogue to
-`quiz.js`. Answer with a click, a tap, the keyboard, or the number keys 1–4.
+`unimap.leaderboard.<difficulty>`:
+
+```json
+{
+  "version": 1,
+  "entries": [
+    {
+      "name": "Player",
+      "score": 850,
+      "difficulty": "hard",
+      "questions": 10,
+      "maximumScore": 1000,
+      "date": "2026-07-27",
+      "completedAt": "2026-07-27T20:15:00.000Z",
+      "durationMs": 54213
+    }
+  ]
+}
+```
+
+Nothing is uploaded and there is no shared leaderboard. Scores live in one
+browser on one device, and clearing browser data removes them — so the quiz
+offers **Export backup** and **Import backup**. Export writes every mode's
+scores to a single JSON file; import *merges* it into what is already stored
+rather than replacing it, and importing the same file twice adds nothing.
+
+Scores written by an earlier version of UniMap were a bare array with no version
+and no timestamps. They are migrated in place on first read and are not lost. If
+stored data is unreadable, it is moved aside under
+`unimap.leaderboard.<difficulty>.corrupt` rather than deleted, the leaderboard
+says so, and the game stays playable.
+
+Gameplay makes no network request at all — `app.js` hands the already-loaded
+catalogue to `quiz.js`. Answer with a click, a tap, the keyboard, or the number
+keys 1–4.
 
 ## Maintaining the catalogue
 
@@ -235,6 +307,19 @@ suggestion behaviour, keyboard, mouse and touchscreen interaction, the combobox
 ARIA attributes, three phone widths, horizontal overflow, the browse, detail and
 quiz regressions, and search performance on both the shipped catalogue and a
 synthetic 1,000-record fixture. Exits non-zero on any failure.
+
+```bash
+node tools/quiz_checks.mjs
+```
+
+105 further checks covering quiz mode: the five timers, that every difficulty
+fills a ten-question game, answer-set integrity over 2,000 generated questions,
+that no prompt gives away its own answer, the Effortless content rules, that Hard
+and Impossible really do draw on different families, same-category distractors,
+fallback on a deliberately bare catalogue, explanations, the versioned
+leaderboard schema, migration from the old unversioned shape, corruption
+recovery, export/import round-trips, a full game played by mouse and keyboard,
+persistence across a reload, and the phone layout.
 
 This is optional maintainer tooling. It needs Node and a Playwright install
 (`npm install -g playwright`), found wherever it happens to live — the

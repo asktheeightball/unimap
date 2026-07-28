@@ -131,7 +131,8 @@
           <fieldset class="filters">
             <legend>Choose a difficulty</legend>
             <div class="filter-buttons" id="quiz-difficulty">
-              <button type="button" class="chip is-active" data-difficulty="easy" aria-pressed="true">Easy — 15s</button>
+              <button type="button" class="chip is-active" data-difficulty="effortless" aria-pressed="true">Effortless — 20s</button>
+              <button type="button" class="chip" data-difficulty="easy" aria-pressed="false">Easy — 15s</button>
               <button type="button" class="chip" data-difficulty="medium" aria-pressed="false">Medium — 10s</button>
               <button type="button" class="chip" data-difficulty="hard" aria-pressed="false">Hard — 7s</button>
               <button type="button" class="chip" data-difficulty="impossible" aria-pressed="false">Impossible — 5s</button>
@@ -146,7 +147,10 @@
           <p class="quiz-rules">
             10 questions per game. Each correct answer is worth up to 100 points,
             counting down to zero as the timer runs. Incorrect and expired
-            answers score nothing.
+            answers score nothing. Harder modes ask harder questions, not just
+            faster ones: Effortless and Easy ask what an object is, while Hard
+            and Impossible ask about discovery years, host stars, spectral types,
+            catalogue designations and coordinates.
           </p>
 
           <button type="button" class="btn btn-primary" id="quiz-start">Start quiz</button>
@@ -181,13 +185,29 @@
 
         <section class="quiz-leaderboard" id="quiz-leaderboard" aria-labelledby="quiz-leaderboard-title">
           <h3 id="quiz-leaderboard-title">Leaderboard</h3>
+          <p class="quiz-storage-note">
+            Scores are stored on this device only, in this browser. They are not
+            shared, uploaded, or visible to anyone else. Clearing your browser
+            data removes them — export a backup first to keep them.
+          </p>
           <p class="status" id="quiz-leaderboard-empty" hidden>No scores recorded yet for this difficulty.</p>
+          <p class="status quiz-recovered" id="quiz-leaderboard-recovered" role="status" hidden>
+            Some stored scores could not be read and were set aside. The rest are shown below.
+          </p>
           <table class="quiz-table" id="quiz-leaderboard-table" hidden>
             <thead>
               <tr><th scope="col">#</th><th scope="col">Player</th><th scope="col">Score</th><th scope="col">Date</th></tr>
             </thead>
             <tbody id="quiz-leaderboard-body"></tbody>
           </table>
+
+          <div class="quiz-backup">
+            <button type="button" class="btn" id="quiz-export">Export backup</button>
+            <button type="button" class="btn" id="quiz-import">Import backup</button>
+            <button type="button" class="btn" id="quiz-clear">Clear this leaderboard</button>
+            <input type="file" id="quiz-import-file" accept="application/json,.json" hidden />
+          </div>
+          <p class="status" id="quiz-backup-status" role="status" hidden></p>
         </section>
       </section>
 

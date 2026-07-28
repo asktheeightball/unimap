@@ -27,6 +27,50 @@ previous catalogue.
 | `import_catalogue.py` | fetch → cache → probe/normalize → stage |
 | `promote_staging.py` | validate merged result, then write the catalogue |
 | `validate_catalogue.py` | standalone catalogue validation |
+| `derive_quiz_fields.py` | recover structured quiz fields from importer prose; set `wellKnown` |
+| `search_checks.mjs` | browser checks for search, autocomplete and layout (Node + Playwright) |
+| `quiz_checks.mjs` | browser checks for quiz content and leaderboards (Node + Playwright) |
+
+## Structured quiz fields
+
+`derive_quiz_fields.py` exists because an earlier revision of `import_catalogue.py`
+fetched `hostname`, `disc_year`, `discoverymethod` and `sp_type` and then wrote
+them only into the generated `sourceSummary` sentence. The values were real —
+retrieved from a real source, so D7 is satisfied — but they were serialised into
+prose instead of into fields, and quiz mode generates questions only from fields.
+
+Re-running the import would have been the natural fix; every astronomy host is
+refused by the sandbox network policy, so the values were recovered from what was
+already committed. This is **not** prose parsing:
+
+- `sourceSummary` is emitted by our own importer from a fixed template in this
+  repository, not written by a human;
+- the tool reverses that exact template and then re-renders the whole sentence
+  from the captured values, requiring it to equal the stored string byte for
+  byte;
+- a record that does not reproduce exactly is reported and left untouched —
+  nothing is guessed, inferred or rounded;
+- `hostName` is additionally corroborated against the `"<host> system"` alias the
+  importer stored separately;
+- `spectralType` needs no reversal at all: the importer already stored it as a
+  structured `"Spectral type G2IV"` alias.
+
+`import_catalogue.py` now writes all four fields directly, so a future import
+does not need this tool. It stays because it documents how the committed values
+were recovered, and re-running it verifies them.
+
+The same tool sets `wellKnown`, the only editorial flag in the catalogue. It is
+not a fact about the sky — it marks a record a maintainer already chose by name
+in a `select_identifiers` or `select_names` list here, or through that list's
+`id_overrides`, plus the solar-system planets and the Sun. Quiz mode's Effortless
+difficulty draws from it. 85 of 208 records qualify.
+
+```bash
+python3 tools/derive_quiz_fields.py --dry-run   # report, write nothing
+python3 tools/derive_quiz_fields.py             # write the catalogue
+```
+
+Both are idempotent and exit non-zero if any record is refused.
 
 ## Probe before you import
 
