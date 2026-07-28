@@ -390,6 +390,58 @@ async function run() {
       `${enriched.produced} asked of ${enriched.withCommonName} named`);
     check("19. questions ask about the displayed name", enriched.asksDisplayedName);
 
+    /* 20 — the category hierarchy must not change quiz fairness ------------- */
+    section("hierarchy");
+
+    const typeSafety = await page.evaluate(() => {
+      const api = window.unimapQuiz;
+      const bodies = quiz.bodies;
+      const context = api.buildContext(bodies);
+      const byName = Object.fromEntries(bodies.map((b) => [b.name, b.type]));
+      // Grouping Planet and Exoplanet under one filter must not make them
+      // acceptable distractors for each other: an exoplanet IS a planet, so a
+      // "what kind of object" question offering both has two defensible answers.
+      let planetClash = 0;
+      let dwarfClash = 0;
+      let questions = 0;
+      for (let i = 0; i < 60; i += 1) {
+        for (const difficulty of api.DIFFICULTIES) {
+          for (const question of api.buildQuestions(bodies, difficulty.id)) {
+            questions += 1;
+            const types = question.options.map((o) => byName[o]).filter(Boolean);
+            if (types.length !== 4) continue;
+            const set = new Set(types);
+            if (set.has("Planet") && set.has("Exoplanet")) planetClash += 1;
+            if (set.has("Dwarf Planet") && set.has("Candidate Dwarf Planet")) dwarfClash += 1;
+          }
+        }
+      }
+      const kepler = bodies.find((b) => b.id === "kepler-452b");
+      return {
+        questions,
+        planetClash,
+        dwarfClash,
+        keplerType: kepler ? kepler.type : null,
+        keplerCopies: bodies.filter((b) => b.id === "kepler-452b").length,
+        planetCount: bodies.filter((b) => b.type === "Planet").length,
+        exoplanetCount: bodies.filter((b) => b.type === "Exoplanet").length,
+        candidateCount: bodies.filter((b) => b.type === "Candidate Dwarf Planet").length,
+      };
+    });
+
+    check("20. a large sample of questions was generated",
+      typeSafety.questions > 2000, String(typeSafety.questions));
+    check("20. Planet and Exoplanet never share an option set",
+      typeSafety.planetClash === 0, String(typeSafety.planetClash));
+    check("20. Dwarf Planet and Candidate Dwarf Planet never share an option set",
+      typeSafety.dwarfClash === 0, String(typeSafety.dwarfClash));
+    equal("20. kepler-452b is an Exoplanet to the quiz too",
+      typeSafety.keplerType, "Exoplanet");
+    equal("20. it is still a single record", typeSafety.keplerCopies, 1);
+    equal("20. Planet is now the three solar-system planets", typeSafety.planetCount, 3);
+    equal("20. Exoplanet gained it", typeSafety.exoplanetCount, 61);
+    equal("20. no Candidate Dwarf Planet record exists yet", typeSafety.candidateCount, 0);
+
     /* 7 — same-category distractors on the hardest modes ------------------- */
     section("distractors");
 

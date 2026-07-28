@@ -144,7 +144,7 @@ const resultNames = (page) =>
   page.$$eval("#results .result-name", (nodes) => nodes.map((n) => n.textContent));
 
 /* Rank the catalogue through the page's own search engine. */
-const ranked = (page, query, category = "All", target = 8) =>
+const ranked = (page, query, category = "all", target = 8) =>
   page.evaluate(([q, c, t]) =>
     searchIndex(q, c, t).map((match) => ({
       name: match.entry.body.name,
@@ -209,7 +209,7 @@ async function run() {
     check("5. substring match", substring.some((m) => m.name === "Andromeda"),
       JSON.stringify(substring.slice(0, 3)));
 
-    const mixed = await ranked(page, "Andromeda", "All", 8);
+    const mixed = await ranked(page, "Andromeda", "all", 8);
     equal("11. exact name outranks every other tier", mixed[0].name, "Andromeda");
     check("11. tiers are non-decreasing down the ranking",
       mixed.every((m, i) => i === 0 || m.tier >= mixed[i - 1].tier),
@@ -245,11 +245,11 @@ async function run() {
     /* 10 — category filtering with fuzzy search ---------------------------- */
     section("category");
 
-    const inGalaxies = await ranked(page, "Andromida", "Galaxies");
+    const inGalaxies = await ranked(page, "Andromida", "galaxies");
     equal("10. fuzzy search inside a category still finds it", inGalaxies[0].name, "Andromeda");
-    const inNebulae = await ranked(page, "Andromida", "Nebulae");
+    const inNebulae = await ranked(page, "Andromida", "nebulae");
     equal("10. fuzzy search respects a non-matching category", inNebulae.length, 0);
-    const starsOnly = await ranked(page, "Kepler", "Stars", 200);
+    const starsOnly = await ranked(page, "Kepler", "stars", 200);
     check("10b. every filtered result is in the category",
       starsOnly.every((m) => m.type === "Star"), JSON.stringify(starsOnly.slice(0, 3)));
 
@@ -387,7 +387,7 @@ async function run() {
 
     // A misspelling filtered into a category that cannot contain it: no results,
     // but the correction still reaches the object.
-    await page.click('.chip[data-category="Nebulae"]');
+    await page.click('.chip[data-category="nebulae"]');
     await submit("Andromida");
     equal("21b. no results in the filtered category", (await resultNames(page)).length, 0);
     equal("21b. the no-results panel appears", await page.isHidden("#search-help"), false);
@@ -397,7 +397,7 @@ async function run() {
       await page.textContent(".search-help-correction .link-button"), "Andromeda");
     check("21b. it offers a few close matches, not a flood",
       (await page.$$("#search-help .link-button")).length <= 4);
-    await page.click('.chip[data-category="All"]');
+    await page.click('.chip[data-category="all"]');
 
     await submit("zzzzzzzzzz");
     equal("21c. a hopeless query returns nothing", (await resultNames(page)).length, 0);
@@ -417,10 +417,10 @@ async function run() {
     equal("25. catalogue order is preserved with no query",
       (await resultNames(page))[0],
       await page.evaluate(() => state.bodies[0].name));
-    await page.click('.chip[data-category="Galaxies"]');
+    await page.click('.chip[data-category="galaxies"]');
     await page.waitForTimeout(50);
     equal("25. a category filter still works", (await resultNames(page)).length, 28);
-    await page.click('.chip[data-category="All"]');
+    await page.click('.chip[data-category="all"]');
     await page.click("#results .result-button");
     await page.waitForTimeout(50);
     check("25. the detail view still opens", !(await page.isHidden("#detail-view")));
@@ -470,6 +470,229 @@ async function run() {
     check("22. the suggestion list renders on desktop", desktopBox.visible);
     check("22. it stays inside the search field", desktopBox.withinField);
     check("24. no horizontal overflow on desktop", desktopBox.overflow <= 0, `${desktopBox.overflow}px`);
+
+    /* 30 — category hierarchy ------------------------------------------------ */
+    section("hierarchy");
+
+    const model = await page.evaluate(() => ({
+      ids: [...CATEGORIES.keys()],
+      allPlanets: categoryById("all-planets").types,
+      solar: categoryById("solar-system-planets").types,
+      exo: categoryById("exoplanets").types,
+      dwarf: categoryById("dwarf-planets").types,
+      candidate: categoryById("candidate-dwarf-planets").types,
+      counts: Object.fromEntries(countCategories(state.bodies)),
+      groupIds: [...CATEGORY_GROUP_IDS],
+    }));
+
+    check("30. every category id is unique",
+      new Set(model.ids).size === model.ids.length, JSON.stringify(model.ids));
+    equal("30. All Planets covers all four planet types",
+      JSON.stringify(model.allPlanets),
+      JSON.stringify(["Planet", "Exoplanet", "Dwarf Planet", "Candidate Dwarf Planet"]));
+    equal("30. Solar System Planets matches only Planet",
+      JSON.stringify(model.solar), JSON.stringify(["Planet"]));
+    equal("30. Exoplanets matches only Exoplanet",
+      JSON.stringify(model.exo), JSON.stringify(["Exoplanet"]));
+    equal("30. Dwarf Planets matches only Dwarf Planet",
+      JSON.stringify(model.dwarf), JSON.stringify(["Dwarf Planet"]));
+    equal("30. Candidate Dwarf Planets matches only Candidate Dwarf Planet",
+      JSON.stringify(model.candidate), JSON.stringify(["Candidate Dwarf Planet"]));
+    check("30. Moon is excluded from All Planets", !model.allPlanets.includes("Moon"));
+    check("30. Brown Dwarf is excluded from All Planets",
+      !model.allPlanets.includes("Brown Dwarf"));
+    check("30. All Planets is the sum of its siblings",
+      model.counts["all-planets"]
+        === model.counts["solar-system-planets"] + model.counts.exoplanets
+          + model.counts["dwarf-planets"] + model.counts["candidate-dwarf-planets"],
+      JSON.stringify(model.counts));
+
+    const hierarchy = await page.evaluate(() => {
+      const $ = (id) => document.getElementById(id);
+      const chip = (id) => document.querySelector(`[data-category="${id}"]`);
+      const toggle = $("planets-toggle");
+      const kids = $("planet-filters");
+      const shown = (element) => Boolean(element) && !element.hidden
+        && getComputedStyle(element).display !== "none";
+      const results = () => document.querySelectorAll("#results li").length;
+      const snapshot = () => ({
+        category: state.category,
+        results: results(),
+        open: shown(kids),
+        expanded: toggle.getAttribute("aria-expanded"),
+        pressed: document.querySelectorAll('[data-category][aria-pressed="true"]').length,
+      });
+
+      const initial = snapshot();
+      toggle.click();
+      const opened = snapshot();
+      const perChild = {};
+      for (const id of ["solar-system-planets", "exoplanets", "dwarf-planets", "all-planets"]) {
+        chip(id).click();
+        perChild[id] = { results: results(), category: state.category, pressed: snapshot().pressed };
+      }
+      chip("galaxies").click();
+      const left = snapshot();
+      toggle.click();
+      const reopened = snapshot();
+      toggle.click();
+      const closed = snapshot();
+
+      return {
+        initial,
+        opened,
+        perChild,
+        left,
+        reopened,
+        closed,
+        candidateHidden: chip("candidate-dwarf-planets").hidden,
+        moonsHidden: chip("moons").hidden,
+        brownDwarfsHidden: chip("brown-dwarfs").hidden,
+        groupVisible: !toggle.hidden,
+        togglePressed: toggle.hasAttribute("aria-pressed"),
+        controls: toggle.getAttribute("aria-controls"),
+        role: kids.getAttribute("role"),
+        labelledBy: kids.getAttribute("aria-labelledby"),
+        childLabels: [...kids.querySelectorAll(".chip-child")].map((b) => b.textContent.trim()),
+      };
+    });
+
+    equal("30. the filter starts on All", hierarchy.initial.category, "all");
+    equal("30. the group starts collapsed", hierarchy.initial.expanded, "false");
+    check("30. an empty child is hidden, not shown dead", hierarchy.candidateHidden);
+    check("30. other empty categories are hidden too",
+      hierarchy.moonsHidden && hierarchy.brownDwarfsHidden);
+    check("30. a group with records stays visible", hierarchy.groupVisible);
+    equal("30. activating the group expands it", hierarchy.opened.expanded, "true");
+    equal("30. activating the group selects All Planets",
+      hierarchy.opened.category, "all-planets");
+    check("30. All Planets shows every planet type",
+      hierarchy.opened.results === model.counts["all-planets"],
+      `${hierarchy.opened.results} vs ${model.counts["all-planets"]}`);
+    check("30. Solar System Planets filters to its own type",
+      hierarchy.perChild["solar-system-planets"].results === model.counts["solar-system-planets"]);
+    check("30. Exoplanets filters to its own type",
+      hierarchy.perChild.exoplanets.results === model.counts.exoplanets);
+    check("30. Dwarf Planets filters to its own type",
+      hierarchy.perChild["dwarf-planets"].results === model.counts["dwarf-planets"]);
+    check("30. exactly one control is ever pressed",
+      Object.values(hierarchy.perChild).every((entry) => entry.pressed === 1)
+        && hierarchy.opened.pressed === 1,
+      JSON.stringify(hierarchy.perChild));
+    check("30. the group control is not itself a pressed filter", !hierarchy.togglePressed);
+    equal("30. leaving the group collapses it", hierarchy.left.expanded, "false");
+    equal("30. leaving the group changes the filter", hierarchy.left.category, "galaxies");
+    equal("30. reopening selects All Planets again", hierarchy.reopened.category, "all-planets");
+    equal("30. closing the group returns to All", hierarchy.closed.category, "all");
+    equal("30. aria-controls points at the child row", hierarchy.controls, "planet-filters");
+    equal("30. the child row is a group", hierarchy.role, "group");
+    equal("30. the child row is labelled by its toggle", hierarchy.labelledBy, "planets-toggle");
+    check("30. child labels stand alone out of context",
+      hierarchy.childLabels.every((label) => /planet/i.test(label)),
+      JSON.stringify(hierarchy.childLabels));
+    check("30. child labels carry their count",
+      hierarchy.childLabels.every((label) => /\d/.test(label)),
+      JSON.stringify(hierarchy.childLabels));
+
+    // Keyboard: the controls are native buttons, so Enter and Space must work
+    // without the page handling keys at all.
+    await page.focus("#planets-toggle");
+    await page.keyboard.press("Enter");
+    equal("30. Enter opens the group from the keyboard",
+      await page.evaluate(() => state.category), "all-planets");
+    await page.focus('[data-category="dwarf-planets"]');
+    await page.keyboard.press(" ");
+    equal("30. Space activates a child from the keyboard",
+      await page.evaluate(() => state.category), "dwarf-planets");
+    check("30. collapsed children leave the tab order", await page.evaluate(() => {
+      document.querySelector('[data-category="galaxies"]').click();
+      const kids = document.getElementById("planet-filters");
+      return kids.hidden
+        && [...kids.querySelectorAll("button")].every((b) => b.offsetParent === null);
+    }));
+
+    /* 31 — the hierarchy under search --------------------------------------- */
+    const underChild = await page.evaluate(() => {
+      const chip = (id) => document.querySelector(`[data-category="${id}"]`);
+      const input = document.getElementById("search-input");
+      const run = (text) => {
+        input.value = text;
+        document.getElementById("search-form")
+          .dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
+      };
+      chip("exoplanets").click();
+      run("Kepler");
+      const searched = { types: [...new Set(state.results.map((r) => r.type))], n: state.results.length };
+
+      chip("dwarf-planets").click();
+      run("Betelguse");
+      const fuzzy = { n: state.results.length, helpShown: !document.getElementById("search-help").hidden };
+
+      chip("solar-system-planets").click();
+      input.value = "ar";
+      updateSuggestions();
+      const suggestionTypes = [...new Set(state.suggestions.map((s) => s.entry.body.type))];
+      const suggestionCount = state.suggestions.length;
+      closeSuggestions();
+
+      chip("all-planets").click();
+      run("");
+      const composite = [...new Set(state.results.map((r) => r.type))].sort();
+
+      chip("exoplanets").click();
+      run("Kepler-4");
+      const before = state.category;
+      renderDetails(state.results[0]);
+      document.getElementById("back-button").click();
+      const afterBack = { category: state.category, results: state.results.length };
+
+      document.querySelector('.chip[data-mode="quiz"]').click();
+      document.querySelector('.chip[data-mode="browse"]').click();
+      const afterQuiz = state.category;
+
+      document.getElementById("clear-button").click();
+      const afterClear = {
+        category: state.category,
+        collapsed: document.getElementById("planet-filters").hidden,
+      };
+      return { searched, fuzzy, suggestionTypes, suggestionCount, composite, before, afterBack,
+        afterQuiz, afterClear };
+    });
+
+    check("31. searching under a child stays inside its type",
+      underChild.searched.n > 0 && JSON.stringify(underChild.searched.types) === '["Exoplanet"]',
+      JSON.stringify(underChild.searched));
+    equal("31. a fuzzy match outside the child returns nothing", underChild.fuzzy.n, 0);
+    check("31. the correction still crosses the filter", underChild.fuzzy.helpShown);
+    check("31. autocomplete produced suggestions to judge",
+      underChild.suggestionCount > 0, String(underChild.suggestionCount));
+    equal("31. autocomplete respects the active child",
+      JSON.stringify(underChild.suggestionTypes), '["Planet"]');
+    equal("31. All Planets spans its member types",
+      JSON.stringify(underChild.composite), '["Dwarf Planet","Exoplanet","Planet"]');
+    equal("31. the category survives detail and Back", underChild.afterBack.category, "exoplanets");
+    check("31. Back restores the filtered results", underChild.afterBack.results > 0);
+    equal("31. the category survives a Quiz round trip", underChild.afterQuiz, "exoplanets");
+    equal("31. Clear search resets to All", underChild.afterClear.category, "all");
+    check("31. Clear search collapses the group", underChild.afterClear.collapsed);
+
+    /* 32 — kepler-452b ------------------------------------------------------- */
+    const kepler = await page.evaluate(() => {
+      const record = state.bodies.filter((b) => b.id === "kepler-452b");
+      const named = state.bodies.filter((b) => b.name === "Kepler-452b");
+      return {
+        copies: record.length,
+        nameCopies: named.length,
+        type: record[0]?.type,
+        distance: record[0]?.distance,
+      };
+    });
+    equal("32. kepler-452b is typed Exoplanet", kepler.type, "Exoplanet");
+    equal("32. exactly one record carries that id", kepler.copies, 1);
+    equal("32. exactly one record carries that name", kepler.nameCopies, 1);
+    equal("32. its catalogued distance is unchanged", kepler.distance, "~1,800 ly");
+
+    await page.click('[data-category="all"]');
 
     /* 29 — enrichment: common names, identifiers and detail sections --------- */
     section("enrichment");
@@ -636,7 +859,61 @@ async function run() {
       // Selecting a suggestion left its name in the search box; clear it so the
       // category filter is measured on its own.
       await mobile.tap("#clear-button");
-      await mobile.tap('.chip[data-category="Galaxies"]');
+
+      // The planet hierarchy by real touch, not element.click().
+      const tapAt = async (selector) => {
+        const point = await mobile.evaluate((target) => {
+          const element = document.querySelector(target);
+          // On a 568px-tall phone the sub-filters sit below the fold once the
+          // group opens, and a tap at an off-screen coordinate hits nothing.
+          element.scrollIntoView({ block: "center" });
+          const rect = element.getBoundingClientRect();
+          return { x: rect.x + rect.width / 2, y: rect.y + rect.height / 2 };
+        }, selector);
+        await mobile.touchscreen.tap(point.x, point.y);
+        await mobile.waitForTimeout(60);
+      };
+
+      await tapAt("#planets-toggle");
+      const planetBox = await mobile.evaluate(() => {
+        const kids = document.getElementById("planet-filters");
+        const chips = [...kids.querySelectorAll(".chip-child")].filter((b) => !b.hidden);
+        return {
+          open: !kids.hidden,
+          category: state.category,
+          within: chips.every((b) => b.getBoundingClientRect().right <= window.innerWidth + 1),
+          minHeight: Math.min(...chips.map((b) => b.getBoundingClientRect().height)),
+          overlaps: chips.some((a, i) => chips.slice(i + 1).some((b) => {
+            const ra = a.getBoundingClientRect();
+            const rb = b.getBoundingClientRect();
+            return ra.right > rb.left && ra.left < rb.right && ra.bottom > rb.top && ra.top < rb.bottom;
+          })),
+          parentVisible: !document.getElementById("planets-toggle").hidden,
+          overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+        };
+      });
+      check(`30. ${label}: touch opens the planet group`,
+        planetBox.open && planetBox.category === "all-planets", JSON.stringify(planetBox));
+      check(`30. ${label}: the Planets parent stays visible`, planetBox.parentVisible);
+      check(`30. ${label}: sub-filters stay inside the viewport`, planetBox.within);
+      check(`30. ${label}: sub-filters are a usable touch target`,
+        planetBox.minHeight >= 32, `${Math.round(planetBox.minHeight)}px`);
+      check(`30. ${label}: sub-filters do not overlap`, !planetBox.overlaps);
+      check(`24. ${label}: no horizontal overflow with the group open`,
+        planetBox.overflow <= 0, `${planetBox.overflow}px`);
+
+      await tapAt('[data-category="dwarf-planets"]');
+      const childTap = await mobile.evaluate(() => ({
+        category: state.category,
+        results: document.querySelectorAll("#results li").length,
+        pressed: document.querySelectorAll('[data-category][aria-pressed="true"]').length,
+      }));
+      check(`30. ${label}: touch selects a child filter`,
+        childTap.category === "dwarf-planets" && childTap.results === 5
+          && childTap.pressed === 1, JSON.stringify(childTap));
+
+      await mobile.tap('[data-category="all"]');
+      await mobile.tap('.chip[data-category="galaxies"]');
       await mobile.waitForTimeout(50);
       check(`23. ${label}: category filters still work by touch`,
         (await resultNames(mobile)).length === 28);
@@ -672,8 +949,8 @@ async function run() {
       // full fuzzy sweep.
       const keystrokes = "betelguese".split("").map((_, i) => "betelguese".slice(0, i + 1));
       const real = [
-        time("208 records, prefix", "All", 8, keystrokes.slice(0, 5)),
-        time("208 records, fuzzy sweep", "All", 8, ["betelguese", "andromida", "proxima centari"]),
+        time("208 records, prefix", "all", 8, keystrokes.slice(0, 5)),
+        time("208 records, fuzzy sweep", "all", 8, ["betelguese", "andromida", "proxima centari"]),
       ];
 
       // A synthetic 1,000-record catalogue built from the real index, so the
@@ -691,18 +968,43 @@ async function run() {
       }
       state.index = grown.slice(0, 1000);
       const synthetic = [
-        time("1000 records, prefix", "All", 8, keystrokes.slice(0, 5)),
-        time("1000 records, fuzzy sweep", "All", 8, ["betelguese", "andromida", "proxima centari"]),
+        time("1000 records, prefix", "all", 8, keystrokes.slice(0, 5)),
+        time("1000 records, fuzzy sweep", "all", 8, ["betelguese", "andromida", "proxima centari"]),
       ];
       const size = state.index.length;
+
+      // Category work, measured on the grown index so the numbers cover the
+      // size the catalogue is heading toward. The model is built once at load,
+      // so what matters per interaction is the filter and the count pass.
+      const grownBodies = state.index.map((entry) => entry.body);
+      const timeOnce = (label, fn, runs) => {
+        const start = performance.now();
+        for (let i = 0; i < runs; i += 1) fn();
+        return { label, ms: (performance.now() - start) / runs };
+      };
+      const categoryTimings = [
+        timeOnce("1000 records, All Planets filter",
+          () => grownBodies.filter((b) => matchesCategory(b, "all-planets")), 200),
+        timeOnce("1000 records, child filter",
+          () => grownBodies.filter((b) => matchesCategory(b, "dwarf-planets")), 200),
+        timeOnce("1000 records, count every category",
+          () => countCategories(grownBodies), 50),
+        timeOnce("1000 records, search under a child",
+          () => searchIndex("kepler", "exoplanets", 8), 100),
+      ];
+
       state.index = original;
-      return { real, synthetic, size };
+      return { real, synthetic, size, categoryTimings };
     });
 
     equal("10. the synthetic fixture reached 1,000 records", timings.size, 1000);
     for (const timing of [...timings.real, ...timings.synthetic]) {
       check(`10. ${timing.label}: ${timing.ms.toFixed(2)}ms per query (budget 50ms)`,
         timing.ms < 50, `${timing.ms.toFixed(2)}ms`);
+    }
+    for (const timing of timings.categoryTimings) {
+      check(`33. ${timing.label}: ${timing.ms.toFixed(3)}ms (budget 10ms)`,
+        timing.ms < 10, `${timing.ms.toFixed(3)}ms`);
     }
     await perfContext.close();
 
