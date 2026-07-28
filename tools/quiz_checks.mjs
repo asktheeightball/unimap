@@ -307,7 +307,12 @@ async function run() {
     const impossibleFamilies = familiesFor("impossible");
     const easyFamilies = familiesFor("easy");
 
-    const hardSignature = ["discoveryYear", "spectralOfStar", "classification"];
+    // Hard's preferred families, as listed in its first tier in quiz.js. Keep
+    // the two in step: a preferred family missing here is counted as fallback
+    // and depresses the share below.
+    const hardSignature = [
+      "discoveryYear", "spectralOfStar", "classification", "designationOfObject",
+    ];
     check("6. Hard draws on discovery, spectral and classification families",
       hardSignature.some((family) => hardFamilies[family] > 0),
       JSON.stringify(hardFamilies));

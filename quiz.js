@@ -53,6 +53,15 @@ const CATALOGUE_DESIGNATION =
    Those are useless as questions — the answer is visible in the prompt — so an
    alias only counts when it is genuinely different from the name. */
 const ALIAS_DECORATION = /^(?:NAME|V\*|Cl\*|\*\*|\*)\s+/;
+
+/* The name a player sees while browsing. A question must ask about the same
+   name the catalogue shows, or a player who just read "Helvetios" is asked
+   about "51 Peg" and cannot connect the two. `name` remains the formal
+   designation in the data; only what is asked and answered changes. */
+function quizName(body) {
+  const common = typeof body?.commonName === "string" ? body.commonName.trim() : "";
+  return common || (typeof body?.name === "string" ? body.name.trim() : "");
+}
 const quiz = {
   bodies: [],
   difficulty: DIFFICULTIES[0],
@@ -145,7 +154,7 @@ function explain(body, leading) {
     }
   }
   if (!parts.length) {
-    parts.push(`${body.name} is catalogued as a ${body.type}.`);
+    parts.push(`${quizName(body)} is catalogued as a ${body.type}.`);
   }
   if (text(body.sourceName)) {
     parts.push(`Source: ${text(body.sourceName)}.`);
@@ -251,13 +260,13 @@ function typeQuestions(records, context) {
   for (const body of records) {
     const others = context.types.filter((type) => !conflicts(body.type, type));
     const question = makeQuestion({
-      prompt: `What kind of object is ${body.name}?`,
+      prompt: `What kind of object is ${quizName(body)}?`,
       correct: body.type,
       distractors: shuffle(others),
       body,
       family: "type",
-      subject: body.name,
-      explanation: explain(body, [`${body.name} is catalogued as a ${body.type}.`]),
+      subject: quizName(body),
+      explanation: explain(body, [`${quizName(body)} is catalogued as a ${body.type}.`]),
     });
     if (question) questions.push(question);
   }
@@ -272,12 +281,12 @@ function membershipQuestions(records, context) {
     const outsiders = context.all.filter((other) => !conflicts(body.type, other.type));
     const question = makeQuestion({
       prompt: `Which of these is a ${body.type}?`,
-      correct: body.name,
-      distractors: shuffle(outsiders).map((other) => other.name),
+      correct: quizName(body),
+      distractors: shuffle(outsiders).map((other) => quizName(other)),
       body,
       family: "membership",
       subject: body.type,
-      explanation: explain(body, [`${body.name} is catalogued as a ${body.type}.`]),
+      explanation: explain(body, [`${quizName(body)} is catalogued as a ${body.type}.`]),
     });
     if (question) questions.push(question);
   }
@@ -305,8 +314,8 @@ function valueQuestions(records, context, field, prompt, label) {
         distractors: shuffle(distinct.filter((candidate) => candidate !== value)),
         body,
         family: field,
-        subject: body.name,
-        explanation: explain(body, [`${label} of ${body.name}: ${value}.`]),
+        subject: quizName(body),
+        explanation: explain(body, [`${label} of ${quizName(body)}: ${value}.`]),
       });
       if (question) questions.push(question);
     }
@@ -314,28 +323,79 @@ function valueQuestions(records, context, field, prompt, label) {
   return questions;
 }
 
+/* SIMBAD's own gloss for what an object is. It lives in `classification` since
+   P5; before that it was only reachable on the 66 records that happened to
+   carry it as their measurement, because a star's measurement slot holds a
+   parallax instead. Reading the field doubles the eligible pool to 132. The
+   measurement is still accepted as a fallback so an older catalogue still
+   works. */
+function classificationOf(body) {
+  const field = text(body.classification);
+  if (field) {
+    return field;
+  }
+  return text(body.measurementLabel) === "SIMBAD classification"
+    ? text(body.measurementValue)
+    : "";
+}
+
 /* "How is X classified in SIMBAD?" — the source's own classification gloss.
    Only this direction is safe. The reverse ("which object is a planetary
    nebula?") has nine correct answers in this catalogue, so it is not
    implemented. */
 function classificationQuestions(records, context) {
-  const distinct = [...new Set(context.classifications.map((body) => text(body.measurementValue)))];
+  const distinct = [...new Set(context.classifications.map(classificationOf))];
   if (distinct.length < CHOICE_COUNT) {
     return [];
   }
   const questions = [];
   for (const body of records) {
-    if (text(body.measurementLabel) !== "SIMBAD classification") continue;
-    const value = text(body.measurementValue);
+    const value = classificationOf(body);
     if (!value) continue;
     const question = makeQuestion({
-      prompt: `How is ${body.name} classified in SIMBAD?`,
+      prompt: `How is ${quizName(body)} classified in SIMBAD?`,
       correct: value,
       distractors: shuffle(distinct.filter((candidate) => candidate !== value)),
       body,
       family: "classification",
-      subject: body.name,
-      explanation: explain(body, [`SIMBAD classifies ${body.name} as ${value}.`]),
+      subject: quizName(body),
+      explanation: explain(body, [`SIMBAD classifies ${quizName(body)} as ${value}.`]),
+    });
+    if (question) questions.push(question);
+  }
+  return questions;
+}
+
+/* "What catalogue designation does X carry?" — pairs the recognisable name a
+   player sees with the formal identifier the source uses.
+
+   This became possible in P5: before `commonName`, a record had one name and
+   there was nothing to pair it with. It is asked in one direction only. The
+   reverse ("which object is 51 Peg?") would put the designation in the prompt
+   and, for the many objects whose common name shares a word with it, hand over
+   the answer.
+
+   Six of the 91 named records pair names that share a word — Sirius/Sirius A,
+   Crab/Crab Nebula — and `isGiveaway` discards each one rather than a rule
+   here needing to enumerate them. */
+function designationOfObjectQuestions(records, context) {
+  const distinct = [...new Set(context.named.map((body) => text(body.name)))];
+  if (distinct.length < CHOICE_COUNT) {
+    return [];
+  }
+  const questions = [];
+  for (const body of records) {
+    const common = text(body.commonName);
+    const formal = text(body.name);
+    if (!common || !formal) continue;
+    const question = makeQuestion({
+      prompt: `Which catalogue designation belongs to ${common}?`,
+      correct: formal,
+      distractors: shuffle(distinct.filter((candidate) => candidate !== formal)),
+      body,
+      family: "designationOfObject",
+      subject: common,
+      explanation: explain(body, [`${common} is catalogued as ${formal}.`]),
     });
     if (question) questions.push(question);
   }
@@ -356,17 +416,17 @@ function discoveryYearQuestions(records, context) {
     const method = text(body.discoveryMethod);
     const host = text(body.hostName);
     const question = makeQuestion({
-      prompt: `In what year was ${body.name} discovered?`,
+      prompt: `In what year was ${quizName(body)} discovered?`,
       correct: year,
       distractors: shuffle(distinct.filter((candidate) => candidate !== year)),
       body,
       family: "discoveryYear",
-      subject: body.name,
+      subject: quizName(body),
       // The host and the method are the context that makes the year mean
       // something. Both come from the same fetched row as the year itself, and
       // each is stated only when the record actually carries it.
       explanation: explain(body, [
-        `${body.name} was discovered in ${year}` +
+        `${quizName(body)} was discovered in ${year}` +
           (method ? ` using the ${method} method.` : "."),
         host ? `It orbits the host star ${host}.` : "",
       ]),
@@ -398,13 +458,13 @@ function spectralOfStarQuestions(records, context) {
     const spectral = text(body.spectralType);
     if (!spectral) continue;
     const question = makeQuestion({
-      prompt: `What spectral type does SIMBAD give for ${body.name}?`,
+      prompt: `What spectral type does SIMBAD give for ${quizName(body)}?`,
       correct: spectral,
       distractors: shuffle(distinct.filter((candidate) => candidate !== spectral)),
       body,
       family: "spectralOfStar",
-      subject: body.name,
-      explanation: explain(body, [`SIMBAD gives ${body.name} the spectral type ${spectral}.`]),
+      subject: quizName(body),
+      explanation: explain(body, [`SIMBAD gives ${quizName(body)} the spectral type ${spectral}.`]),
     });
     if (question) questions.push(question);
   }
@@ -422,12 +482,12 @@ function starOfSpectralQuestions(records, context, tight) {
     const others = distractorBodies(body, context.spectral, tight);
     const question = makeQuestion({
       prompt: `Which of these stars has the spectral type ${spectral}?`,
-      correct: body.name,
-      distractors: others.map((other) => other.name),
+      correct: quizName(body),
+      distractors: others.map((other) => quizName(other)),
       body,
       family: "starOfSpectral",
       subject: spectral,
-      explanation: explain(body, [`${body.name} is the star SIMBAD types ${spectral}.`]),
+      explanation: explain(body, [`${quizName(body)} is the star SIMBAD types ${spectral}.`]),
     });
     if (question) questions.push(question);
   }
@@ -456,13 +516,13 @@ function coordinatesOfObjectQuestions(records, context) {
     if (!hasCoordinates(body)) continue;
     const label = coordinateLabel(body);
     const question = makeQuestion({
-      prompt: `Which coordinates does the catalogue give for ${body.name}?`,
+      prompt: `Which coordinates does the catalogue give for ${quizName(body)}?`,
       correct: label,
       distractors: shuffle(distinct.filter((candidate) => candidate !== label)),
       body,
       family: "coordinatesOfObject",
-      subject: body.name,
-      explanation: explain(body, [`${body.name} lies at ${label} (J2000).`]),
+      subject: quizName(body),
+      explanation: explain(body, [`${quizName(body)} lies at ${label} (J2000).`]),
     });
     if (question) questions.push(question);
   }
@@ -478,12 +538,12 @@ function objectAtCoordinatesQuestions(records, context, tight) {
     const others = distractorBodies(body, context.located, tight);
     const question = makeQuestion({
       prompt: `Which object lies at ${label} (J2000)?`,
-      correct: body.name,
-      distractors: others.map((other) => other.name),
+      correct: quizName(body),
+      distractors: others.map((other) => quizName(other)),
       body,
       family: "objectAtCoordinates",
       subject: label,
-      explanation: explain(body, [`${body.name} is catalogued at ${label} (J2000).`]),
+      explanation: explain(body, [`${quizName(body)} is catalogued at ${label} (J2000).`]),
     });
     if (question) questions.push(question);
   }
@@ -502,19 +562,21 @@ function wellKnownPool(bodies) {
 }
 
 /* Effortless: well-known objects that also have a common name, so the prompt
-   reads "Betelgeuse" rather than "NGC 1300". */
+   reads "Betelgeuse" rather than "NGC 1300". The test is on the *displayed*
+   name, so a record whose designation now carries a sourced common name — "M 1"
+   showing as "Crab" — qualifies where it previously could not. */
 function effortlessPool(bodies) {
-  return wellKnownPool(bodies).filter((body) => !CATALOGUE_DESIGNATION.test(text(body.name)));
+  return wellKnownPool(bodies).filter((body) => !CATALOGUE_DESIGNATION.test(quizName(body)));
 }
 
 const BASIC_FAMILIES = [typeQuestions, membershipQuestions];
 
 const DISTANCE_FAMILY = (records, context) =>
-  valueQuestions(records, context, "distance", (body) => `How far away is ${body.name}?`,
+  valueQuestions(records, context, "distance", (body) => `How far away is ${quizName(body)}?`,
     "Catalogued distance");
 
 const SIZE_FAMILY = (records, context) =>
-  valueQuestions(records, context, "size", (body) => `How large is ${body.name}?`,
+  valueQuestions(records, context, "size", (body) => `How large is ${quizName(body)}?`,
     "Catalogued size");
 
 const TIERS = {
@@ -542,7 +604,8 @@ const TIERS = {
   medium: [
     {
       pool: (bodies) => bodies,
-      families: [classificationQuestions, DISTANCE_FAMILY, SIZE_FAMILY],
+      families: [classificationQuestions, DISTANCE_FAMILY, SIZE_FAMILY,
+        designationOfObjectQuestions],
     },
     { pool: (bodies) => bodies, families: BASIC_FAMILIES },
   ],
@@ -551,7 +614,8 @@ const TIERS = {
   hard: [
     {
       pool: (bodies) => bodies,
-      families: [discoveryYearQuestions, spectralOfStarQuestions, classificationQuestions],
+      families: [discoveryYearQuestions, spectralOfStarQuestions, classificationQuestions,
+        designationOfObjectQuestions],
     },
     { pool: (bodies) => bodies, families: [DISTANCE_FAMILY, SIZE_FAMILY] },
     { pool: (bodies) => bodies, families: BASIC_FAMILIES },
@@ -591,10 +655,8 @@ function buildContext(bodies) {
     all: bodies,
     groups: byType(bodies),
     types: [...byType(bodies).keys()],
-    classifications: bodies.filter(
-      (body) =>
-        text(body.measurementLabel) === "SIMBAD classification" && text(body.measurementValue),
-    ),
+    classifications: bodies.filter((body) => classificationOf(body)),
+    named: bodies.filter((body) => text(body.commonName) && text(body.name)),
     discovered: bodies.filter((body) => text(body.discoveryYear)),
     spectral,
     spectralCounts,
@@ -1307,6 +1369,9 @@ window.unimapQuiz = {
   buildContext,
   effortlessPool,
   wellKnownPool,
+  quizName,
+  classificationOf,
+  designationOfObjectQuestions,
   diagnostics,
   readLeaderboard,
   writeLeaderboard,
