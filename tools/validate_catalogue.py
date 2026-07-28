@@ -105,6 +105,7 @@ OPTIONAL_FIELDS = {
     # over `sourceSummary`; `notability` says why a general reader would care.
     # `summarySource` and `summaryReviewed` record who wrote it and when, and
     # are required whenever either prose field is present.
+    "commonName": str,
     "notability": str,
     "summarySource": str,
     "summaryReviewed": str,

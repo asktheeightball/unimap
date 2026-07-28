@@ -132,22 +132,36 @@ A shared cross-device leaderboard remains a future backend decision requiring id
 
 ### R6 — Catalogue information enrichment
 
-Status: **Partially complete**
+Status: **Complete** (2026-07-28)
 
 Goal: make each detail page useful for learning and support richer quiz questions.
 
-Add verified fields where available:
+Delivered. Every record carries a description (208 of 208, up from 197), and the
+detail page is grouped into Overview, Location, Discovery, Physical details,
+Names and identifiers, Related objects and Source, with empty sections
+suppressed.
 
-- why the object is notable;
-- discovery date and discoverer;
-- discovery or observation method;
-- constellation, host, parent, or region;
-- spectral type or source classification;
-- mass, radius, orbital, or type-appropriate measurements;
-- aliases and catalogue identifiers;
-- visible source attribution and review date.
+Fields added, all from values the catalogue already published or from clearly
+marked editorial text — no new source was probed, because every astronomy host
+is refused by the sandbox network policy:
 
-Hand-written `summary` remains separate from importer-generated `sourceSummary`, takes precedence, and must never be overwritten by imports. Missing facts must render gracefully rather than be invented.
+- `classification` (132), `catalogueIdentifiers` (68), `parallaxMas` (66),
+  `radiusEarth` (60), `constellation` (60), `massEarth` (59),
+  `relatedObjectIds` (7), `semiMajorAxisAu` (5), `parentBody` (3),
+  `discoverer` (2), `discoveryDate` (1);
+- `summary` and `notability` (11) for the records that had no description.
+
+Hand-written `summary` stays separate from importer-generated `sourceSummary`,
+takes precedence, and is never overwritten. Editorial prose must carry its own
+attribution and claims no source URL, because none could be verified offline.
+
+Quiz: one family enabled (mass) and one widened (classification, 66 to 132
+records). Four stayed rejected on fresh evidence — see `DECISIONS.md` D15e.
+
+Deferred to a networked machine, with exact probes recorded in `PRIORITY.md`:
+common names for the 54 Bayer-designated stars, notability beyond the 11
+editorial records, discoverers in bulk, constellation from coordinates, and
+importing the 60 exoplanet host stars as records.
 
 ### R7 — Planet category hierarchy
 

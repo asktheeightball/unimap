@@ -37,17 +37,20 @@ A visitor should be able to:
 - Ranked search over names, aliases, and catalogue ids, with punctuation
   tolerance, spelling correction, and accessible autocomplete
 - Flat category filters
-- Accessible result list and object detail view
-- Four quiz difficulties with local leaderboards
+- Accessible result list, and a grouped object detail view covering overview,
+  location, discovery, physical details, identifiers, related objects and source
+- A description on every record, and hand-written notability text where a
+  source cannot supply it
+- Five quiz difficulties with local leaderboards
 - Responsive dark interface
 - Static hosting
 
 ## Prioritized product expansion
 
-Item 1 is complete. The remaining approved order is:
+Items 1 and 2 are complete. The remaining approved order is:
 
-1. Effortless quiz mode, more question families, stronger Hard/Impossible content, and reliable local leaderboard persistence
-2. More verified information on object profiles
+1. ~~Effortless quiz mode, more question families, stronger Hard/Impossible content, and reliable local leaderboard persistence~~ — done
+2. ~~More verified information on object profiles~~ — done, except for the parts that need network access (see `PRIORITY.md`)
 3. A grouped planet hierarchy covering solar-system planets, exoplanets, dwarf planets, and candidate dwarf planets
 4. More celestial bodies, including candidate dwarf planets, brown dwarfs, and galaxy clusters
 5. Per-object and catalogue-wide celestial maps

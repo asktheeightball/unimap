@@ -158,6 +158,13 @@ function buildIndexEntry(body, position) {
   if (nameTerm) {
     seen.add(nameTerm.normalized);
   }
+  // A record displayed under a common name is headed by that name, so its
+  // formal designation must stay findable — and vice versa. Indexing both means
+  // "Betelgeuse" and "alf Ori" reach the same record whichever one the
+  // catalogue happens to display. No record carries `commonName` yet; this is
+  // here so search does not have to be revisited when a source supplies one.
+  addTerm(String(body.commonName ?? ""), "name");
+
   for (const alias of Array.isArray(body.aliases) ? body.aliases : []) {
     if (typeof alias === "string") {
       addTerm(alias, "alias");

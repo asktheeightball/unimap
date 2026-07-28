@@ -321,6 +321,21 @@ leaderboard schema, migration from the old unversioned shape, corruption
 recovery, export/import round-trips, a full game played by mouse and keyboard,
 persistence across a reload, and the phone layout.
 
+```bash
+node tools/detail_checks.mjs
+```
+
+69 further checks covering the enriched detail view: section structure and
+suppression of empty sections, that no raw field name, null or empty string
+reaches the page, discovery rendering, that a precise date replaces a bare year
+rather than joining it, common-name and formal-designation display, hand-written
+summary precedence and generated fallback, notability, source attribution,
+related-object navigation against a deliberately hostile record carrying a
+self-link, a duplicate and a dangling id, measurement semantics and backward
+compatibility, the moving-body constellation restriction, keyboard navigation and
+focus visibility, render performance over an 11-fold catalogue, and 320×568,
+375×667 and 390×844 with no horizontal overflow.
+
 This is optional maintainer tooling. It needs Node and a Playwright install
 (`npm install -g playwright`), found wherever it happens to live — the
 repository has no `package.json` and no lockfile, and **the site itself still
@@ -391,6 +406,68 @@ Optional: `distance`, `size`, `circumference`, `aliases`, `summary`,
 `sourceUrl`, `lastReviewed`, `rightAscension`, `declination`, `image`,
 `imageAlt`, `imageCredit`.
 
+Quiz fields: `hostName`, `discoveryYear`, `discoveryMethod`, `spectralType`,
+`wellKnown`.
+
+Enrichment fields:
+
+| Field | Meaning |
+|---|---|
+| `classification` | the source's own object-type gloss ("red giant"); `type` stays the coarse filter category |
+| `constellation` | the IAU constellation the object's designation places it in |
+| `commonName` | a recognisable name, when the formal one is a designation |
+| `catalogueIdentifiers` | the subset of `aliases` that is a real designation |
+| `radiusEarth`, `massEarth` | planet radius and mass, in Earth units |
+| `parallaxMas`, `semiMajorAxisAu` | parallax in milliarcseconds, orbital semi-major axis in AU |
+| `discoverer`, `discoveryDate` | who found it and when, where a source says so |
+| `notability` | why a general reader would care |
+| `summarySource`, `summaryReviewed` | who wrote the editorial prose, and when |
+| `parentBody`, `relatedObjectIds` | what it orbits or belongs to, and links to other records |
+
+### Named measurements
+
+`measurementLabel`/`measurementValue` is a single generic slot whose meaning
+changes from record to record: a radius on an exoplanet, a parallax on a star, a
+semi-major axis on a dwarf planet, a classification on a galaxy. **Nothing may
+compare two records through it.**
+
+Each meaning now has a field that names its own quantity and unit. The generic
+slot is kept, and the detail view shows it only when its label has no named
+field — so a record carrying a measurement UniMap has not named still displays
+it instead of silently losing it.
+
+Named measurements are stored as strings. The source's own precision is part of
+the value: `"1.90"` and `"1.9"` say different things about how well the radius is
+known. The validator requires them to parse as numbers without storing them as
+numbers, and no unit conversion is ever performed. See `DECISIONS.md` D15a.
+
+### Constellations
+
+`constellation` is read from an object's Bayer, Flamsteed or variable-star
+designation, never from its coordinates. Those naming systems assign a letter or
+number *within a named constellation*, so the "Ori" in `* alf Ori` is not
+evidence about where the star is — it is the constellation itself. The
+abbreviation is expanded through `tools/constellations.json` and an
+abbreviation that table does not list is refused.
+
+Deriving constellation from coordinates would need the IAU boundary table
+(Delporte 1930, B1875) plus a precession step; that dataset is not in the
+repository and is not approximated. Moving solar-system bodies — planets, dwarf
+planets, moons — are excluded by rule: a constellation is a direction, not a
+place. 60 of 208 records carry one. See `DECISIONS.md` D15c.
+
+### Related objects
+
+`relatedObjectIds` links a record to other catalogue records — a planet to its
+star, a black hole to its host galaxy — and renders as buttons into the same
+detail view. The validator rejects a link to a missing id, a record linking to
+itself, and a duplicate link; the renderer skips all three independently.
+
+Exoplanets are **not** linked to their host stars, and that is a data fact
+rather than an omission: none of the 60 `hostName` values names a record in the
+catalogue, because the archive query selects planets and not their stars.
+Importing those hosts would unlock 60 relations at once. See `DECISIONS.md` D15d.
+
 ### Descriptions
 
 Two fields hold prose, and they are never merged:
@@ -401,14 +478,24 @@ Two fields hold prose, and they are never merged:
   returned. Importer-owned, so a rerun refreshes it.
 
 The detail view prefers `summary` and falls back to `sourceSummary`; a record
-with neither shows no paragraph. 197 of 208 records currently carry a
-`sourceSummary` and none carries a hand-written `summary`.
+with neither shows no paragraph. **Every record now carries one**: 197 have a
+`sourceSummary`, and the 11 that had nothing carry a hand-written `summary`.
 
-A description states what an object is, where it is, and — for exoplanets and
-Ceres, the only sources that publish it — how it was discovered. **Why an object
-is notable is deliberately absent**: no source supplies it, and it is not
-written from recall (`DECISIONS.md` D7 and D12). Adding hand-written `summary`
-text is the intended route.
+A generated description states what an object is, where it is, and — for
+exoplanets and Ceres, the only sources that publish it — how it was discovered.
+
+**Why an object is notable** is the one thing no source supplies. It is written
+by hand, in `tools/editorial.json`, and applied by `tools/apply_editorial.py`.
+Any record carrying `summary` or `notability` must also carry `summarySource`
+and `summaryReviewed`; the validator errors otherwise, because editorial prose
+without attribution is indistinguishable from importer output.
+
+Editorial entries deliberately record **no source URL**. Every one was written
+without network access, so no claim could be checked against an external
+reference, and citing a page nobody opened is fabricated provenance — worse than
+none. Those records show an attribution line reading "UniMap editorial" and no
+link. Coverage is 11 of 208 and stays there until a networked machine can review
+the text and record real references. See `DECISIONS.md` D7, D12 and D15b.
 
 `distance`, `size` and `circumference` are deliberately optional. Many real
 objects have no published diameter, and SIMBAD's `basic` table has no distance

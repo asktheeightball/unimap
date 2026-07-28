@@ -28,8 +28,66 @@ previous catalogue.
 | `promote_staging.py` | validate merged result, then write the catalogue |
 | `validate_catalogue.py` | standalone catalogue validation |
 | `derive_quiz_fields.py` | recover structured quiz fields from importer prose; set `wellKnown` |
+| `derive_enrichment.py` | promote already-published values into named fields; expand constellations |
+| `constellations.json` | the 88 IAU constellations and their three-letter abbreviations |
+| `editorial.json` | hand-written summary, notability and relation data |
+| `apply_editorial.py` | apply `editorial.json`, refusing to overwrite or to invent provenance |
 | `search_checks.mjs` | browser checks for search, autocomplete and layout (Node + Playwright) |
 | `quiz_checks.mjs` | browser checks for quiz content and leaderboards (Node + Playwright) |
+| `detail_checks.mjs` | browser checks for the enriched detail view (Node + Playwright) |
+
+## Enrichment
+
+Two tools fill the P5 fields, and they are deliberately separate because they do
+different kinds of work.
+
+**`derive_enrichment.py` invents nothing.** It only moves values the catalogue
+already publishes into fields that state their own meaning:
+
+- the generic `measurementLabel`/`measurementValue` slot into `radiusEarth`,
+  `massEarth`, `parallaxMas`, `semiMajorAxisAu` and `classification`;
+- `pl_bmasse`, which the importer rendered into the summary sentence but never
+  stored, back out into `massEarth`;
+- SIMBAD's object-type gloss for stars whose measurement slot was already spent
+  on a parallax, and the spectral type for stars that had no alias to read it
+  from;
+- JPL's discovery block for Ceres, into `discoverer` and `discoveryDate`;
+- `constellation`, by expanding the abbreviation in a Bayer, Flamsteed or
+  variable-star designation through `constellations.json`;
+- `catalogueIdentifiers`, the subset of `aliases` that is a real designation.
+
+Where a value has to come back out of prose, that prose is not human writing: it
+is emitted by `import_catalogue.py` from a fixed template in this repository. The
+tool reverses the template and then **proves** the reversal by re-rendering the
+whole sentence from the captured values and requiring byte-for-byte equality. A
+record that does not reproduce exactly is reported and left completely alone. Two
+subtleties that a looser parser gets wrong, and that the round-trip caught:
+
+- a spectral type contains full stops of its own (`K1.5IIIFe-0.5`), so the
+  sentence boundary cannot be found by looking for the next `.`;
+- JPL abbreviates given names (`Piazzi, G.`), so the discovery sentence cannot be
+  located by splitting on `". "` either.
+
+**`apply_editorial.py` writes text a person wrote**, from `editorial.json`. It
+may not set `sourceSummary`, `sourceName`, `sourceUrl` or any measurement —
+those belong to whatever measured the object — and it refuses to overwrite any
+committed value, including a previous edit of its own. Any record it gives
+`summary` or `notability` also gets `summarySource` and `summaryReviewed`, and
+the validator errors if either is missing.
+
+Editorial entries record **no source URL**, because every one was written
+without network access and citing a page nobody opened is fabricated provenance.
+
+Both tools are idempotent: re-running changes nothing. Run them in either order,
+then validate:
+
+```bash
+python3 tools/derive_enrichment.py --dry-run
+python3 tools/apply_editorial.py --dry-run
+python3 tools/derive_enrichment.py
+python3 tools/apply_editorial.py
+python3 tools/validate_catalogue.py
+```
 
 ## Structured quiz fields
 
@@ -139,6 +197,15 @@ python3 tools/validate_catalogue.py tools/staging/<id>.staged.json
 # promote
 python3 tools/promote_staging.py --dry-run
 python3 tools/promote_staging.py
+
+# enrich (idempotent; both refuse rather than guess)
+python3 tools/derive_enrichment.py --dry-run
+python3 tools/apply_editorial.py --dry-run
+
+# browser checks
+node tools/search_checks.mjs
+node tools/quiz_checks.mjs
+node tools/detail_checks.mjs
 ```
 
 ## TLS

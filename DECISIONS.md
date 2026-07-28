@@ -552,6 +552,188 @@ Consequences:
   are not dead data — `hostName` and `discoveryMethod` give discovery answers
   their context in the explanation, and aliases still drive search.
 
+## D15a — Enrichment adds named fields; the generic measurement slot stays for compatibility
+
+Status: **Accepted** (refines D2, D5, D10)
+
+Decision:
+
+`measurementLabel`/`measurementValue` is one slot whose meaning changes per
+record: on an exoplanet it is a radius in Earth radii, on a star a parallax in
+milliarcseconds, on a dwarf planet a semi-major axis in AU, and on a deep-sky
+object a text classification. Nothing may compare two records through it.
+
+P5 gives each meaning a field that names itself — `radiusEarth`, `massEarth`,
+`parallaxMas`, `semiMajorAxisAu`, `classification` — copied from the slot by
+`tools/derive_enrichment.py`. The slot is **not** removed. The detail view shows
+it only when its label has no named field of its own, so a record written before
+these fields existed, or by a future importer with a measurement UniMap has not
+named, still displays its value instead of silently losing it.
+
+The named measurements are stored as strings, not numbers. The source's own
+precision is part of the value: `"1.90"` and `"1.9"` say different things about
+how well the radius is known, and reformatting through a float would discard
+that. The validator requires them to parse as numbers without requiring them to
+be stored as numbers.
+
+Consequences:
+
+- Two records may be compared only through a named field, never through the
+  generic slot.
+- No unit conversion is performed. A value is stored in the unit the source used
+  and displayed with that unit spelled out.
+
+## D15b — Editorial prose is a separate layer with its own attribution
+
+Status: **Accepted** (refines D7, D12)
+
+Decision:
+
+D12 established that importers can say what an object is, where it is and how
+big it is, but not why anyone cares, and left "why it is notable" open. P5
+closes it for the 11 original records that carried no description at all, with
+hand-written text kept in `tools/editorial.json` and applied by
+`tools/apply_editorial.py`.
+
+The editorial layer is deliberately separate from the importers:
+
+- `summary` and `notability` are hand-written and always take precedence over
+  the importer-generated `sourceSummary`. The two are never merged.
+- Any record carrying either must also carry `summarySource` and
+  `summaryReviewed`; the validator errors otherwise. Editorial prose without
+  attribution is indistinguishable from importer output, which is exactly the
+  confusion these fields exist to prevent.
+- `tools/apply_editorial.py` may not set `sourceSummary`, `sourceName`,
+  `sourceUrl` or any measurement. Those belong to whatever measured the object.
+- It refuses to overwrite any committed value, including a previous edit of its
+  own. Re-running changes nothing.
+
+Editorial entries record **no source URL**. Every one was written in a
+network-blocked environment, so no claim could be checked against an external
+reference, and citing a page that was never opened is fabricated provenance —
+worse than none (D7). The detail view therefore shows editorial records an
+attribution line reading "UniMap editorial" and no link.
+
+Consequences:
+
+- Coverage is 11 of 208 and will stay there until a networked machine can review
+  the text and record real references. That is a documented limit, not an
+  oversight.
+- `notability` must not restate a measurement the record already holds. "The
+  largest planet" is a ranking across data UniMap does not have; "its gravity
+  shapes the orbits of asteroids and comets" is not.
+
+## D15c — Constellation is read from a designation, never from coordinates
+
+Status: **Accepted** (refines D5, D7)
+
+Decision:
+
+`constellation` is derived only from an object's Bayer, Flamsteed or
+variable-star designation, by expanding the trailing abbreviation through
+`tools/constellations.json`. It is never derived from right ascension and
+declination.
+
+This is a lookup, not an inference. Those naming systems assign a Greek letter,
+a number or a variable-star letter *within a named constellation*, so the "Ori"
+in "* alf Ori" is not evidence about where the star is — it is the constellation
+itself. An abbreviation the table does not list is refused rather than guessed.
+
+Deriving constellation from coordinates was considered and rejected for now. It
+requires the IAU boundary table (Delporte 1930, expressed in B1875 coordinates)
+plus a precession step from the catalogue's J2000 positions. That dataset is not
+in the repository and could not be fetched. Approximating boundaries, or reading
+a constellation off a nearby object's name, would fabricate a value (D7). The
+work is deferred rather than faked.
+
+Moving solar-system bodies — Planet, Dwarf Planet, Moon — are excluded by rule
+and by validator error. A constellation is a direction, not a place, and a body
+that moves against the background stars does not have one in any fixed sense.
+
+Consequences:
+
+- Coverage is 60 of 208: 58 stars, one pulsar, and Cygnus X-1 (whose X-ray
+  source designation names its constellation by the same convention).
+- Galaxies, nebulae and clusters catalogued as "M 51" or "NGC 3372" get nothing,
+  because a Messier or NGC number encodes no constellation.
+- The field is useful on the detail page and unusable in the quiz — see D15e.
+
+## D15d — Relations are declared, validated, and resolved through a lookup map
+
+Status: **Accepted**
+
+Decision:
+
+`relatedObjectIds` lists ids of other catalogue records; `parentBody` names what
+an object orbits or belongs to. Both are declared in `tools/editorial.json`
+rather than inferred, and only where the relationship is direct and uncontested:
+a planet to its star, a black hole to its host galaxy.
+
+The validator rejects a relation naming a missing id, a record relating to
+itself, and the same relation listed twice. The renderer independently skips all
+three, so a hand-edited catalogue cannot produce a link that goes nowhere.
+
+Exoplanet-to-host-star relations are **not** possible and this is a data fact,
+not an omission: none of the 60 exoplanet `hostName` values names a record in
+the catalogue. The archive query selects planets, not their stars, so every host
+is a name with nothing behind it. `hostName` stays as a displayed field and as
+quiz explanation context.
+
+Relations resolve through a `state.byId` map built once at load rather than by
+scanning the catalogue per render. Measured over an 11-fold catalogue (2,288
+records), detail render time stays flat at 0.058ms.
+
+Consequences:
+
+- Coverage is 7 records: the three solar-system planets and Sol, the Milky Way
+  and Sagittarius A*, and M87* to M 87.
+- Importing host stars as records would unlock 60 relations at once and is the
+  single highest-value item for a networked follow-up.
+
+## D15e — P5 unlocked one quiz family; four stayed rejected on fresh evidence
+
+Status: **Accepted** (refines D14a)
+
+Decision:
+
+Every family D14a rejected was re-measured against the enriched catalogue. One
+became viable; the rest did not, and two of them failed for a *new* reason worth
+recording.
+
+**Enabled — mass.** 59 eligible records, 56 distinct answers, no leak in either
+direction: an archive designation such as `KOI-1599.02` says nothing about the
+planet's mass. Added to Hard and to Impossible's fallback tier.
+
+**Widened — classification.** The family read SIMBAD's gloss out of the generic
+measurement slot, which a star with a published parallax had already spent on
+the parallax. Reading the new `classification` field instead takes the pool from
+66 records to 132 without changing a single answer.
+
+**Still rejected:**
+
+| Family | Old reason | Measured now |
+|---|---|---|
+| Constellation | No record carried it | 60 records carry it, and **60 of 60 name their own answer** — the constellation is derived from the designation the catalogue displays as the name, so "In which constellation does bet Ori lie?" answers itself |
+| Discoverer | No record carried it | 2 records carry one; four choices need four distinct values |
+| Discovery method | One value, `Transit` | 61 records, still one value |
+| Alias / identifier | Five informative aliases | `catalogueIdentifiers` made it measurable rather than viable: 68 of 69 are the object's own name behind a SIMBAD kind marker |
+| Host star | Prompt names the answer | Unchanged |
+
+Rationale:
+
+Constellation is the instructive case. P5 removed the old blocker and replaced
+it with a harder one, and no subset of the catalogue survives: the field is
+genuinely valuable on the detail page and genuinely unusable as a question.
+Adding a field is not the same as unlocking a family, and the reassessment is
+recorded beside each family in `quiz.js` so the evidence stays next to the code.
+
+Consequences:
+
+- Constellation questions return only if a source supplies constellations for
+  objects whose names do not encode them.
+- Discoverer questions return only if a source publishes discoverers in bulk.
+  No source UniMap can currently reach does.
+
 ## D15 — Leaderboard storage is versioned, recoverable and exportable; it stays local
 
 Status: **Accepted** (refines D11)

@@ -4,33 +4,71 @@ This is the authoritative source for selecting the next unit of work.
 
 ## Current priority
 
-### P5 — Catalogue information enrichment
+### P6 — Planet category hierarchy
 
-Status: **Partially complete** — see "Next priorities" below for the full scope.
+Status: **Not started**
 
-P4 raised its own reason to continue P5: four candidate quiz families were
-rejected for want of data, not for want of code (`DECISIONS.md` D14a). A
-discoverer field, a non-transit discovery method, a constellation, or object
-names that are independent of their host would each bring one back.
+See the entry under "Next priorities" below.
+
+## Blocked on network access
+
+These are the P5 items that could not be finished in a sandbox where every
+astronomy host is refused at the proxy (`403 CONNECT`). Nothing here was
+approximated or filled in from recall. Each needs one real probe on a networked
+machine, and each has its query written out so the probe is a command to run
+rather than a problem to re-solve.
+
+**1. Common names for stars.** 54 star records display a Bayer designation
+(`alf Ori`, `51 Peg`) because SIMBAD's `main_id` is what the importer stores.
+The maintainer queried those stars *by* common name — the `select_identifiers`
+list in `tools/sources.json` is full of them — but the importer never recorded
+which identifier matched which row, and `tools/cache/` is regenerable and not
+committed. The pairing therefore cannot be recovered offline, and writing
+"alf Ori is Betelgeuse" from recall is exactly the unsourced mapping this work
+must not do. SIMBAD's `ident` table marks common names with a `NAME ` prefix:
+
+```
+curl -sG 'https://simbad.cds.unistra.fr/simbad/sim-tap/sync' \
+  --data-urlencode 'request=doQuery' --data-urlencode 'lang=ADQL' \
+  --data-urlencode 'format=json' \
+  --data-urlencode "query=select b.main_id, i.id from basic as b
+     join ident as i on b.oid = i.oidref
+     where i.id like 'NAME %' and b.main_id in ('* alf Ori','* alf Lyr', ...)"
+```
+
+The application is already ready for the result: `commonName` is validated, the
+detail view prefers it for the heading while keeping the formal designation
+visible beneath, and the search index covers it. Only the data is missing.
+
+**2. Notability beyond the 11 editorial records.** No source in
+`tools/sources.json` publishes a "why this matters" field. A candidate is
+Wikipedia's REST summary endpoint
+(`https://en.wikipedia.org/api/rest_v1/page/summary/{title}`), which needs a
+title mapping and a licence review (CC BY-SA attribution) before any import.
+Probe it, read the real response, and record the terms before writing a
+normalizer.
+
+**3. Discoverers in bulk.** SIMBAD's `basic` table has no discoverer column.
+JPL's Small-Body Database has a `discovery` block, but only for small bodies,
+and only its per-object endpoint returns it — which is how Ceres got its
+discoverer. Re-probe the other four dwarf planets with the single-object
+endpoint to see whether their blocks are populated:
+
+```
+curl -s 'https://ssd-api.jpl.nasa.gov/sbdb.api?sstr=Pluto&discovery=1&phys-par=1'
+```
+
+**4. Constellation from coordinates.** Needs the IAU boundary table (Delporte
+1930, B1875) and a precession step from the catalogue's J2000 positions. Not in
+the repository, not approximated. See `DECISIONS.md` D15c.
+
+**5. Host stars as records.** The single highest-value follow-up. None of the
+60 exoplanet `hostName` values names a catalogue record, so 60 relations and one
+quiz family are waiting on a star import keyed to those names. The
+exoplanet-archive query already returns `hostname`; a companion SIMBAD query
+over that list would supply the stars.
 
 ## Next priorities
-
-### P5 — Catalogue information enrichment (continued)
-
-Status: **Partially complete**
-
-Sourced descriptions currently answer what an object is, where it is, and in some cases how it was discovered. Continue by adding more verified fields where available:
-
-- why it is notable;
-- discovery date and discoverer;
-- discovery or observation method;
-- constellation, host, parent, or region;
-- spectral type or source classification;
-- mass, radius, orbital, or other type-appropriate measurements;
-- aliases and catalogue identifiers;
-- visible source attribution and review date.
-
-Hand-written `summary` remains separate from importer-generated `sourceSummary` and always takes precedence. Never invent missing facts.
 
 ### P6 — Planet category hierarchy
 
@@ -97,6 +135,71 @@ Status: **Not started**
 Add focused validation for IDs, fields, aliases, sources, coordinates, images, related IDs, quiz eligibility, answer-set integrity, leaderboard migrations, static-host smoke checks, and broken assets without adding runtime dependencies.
 
 ## Completed
+
+### P5 — Catalogue information enrichment
+
+Status: **Complete** (2026-07-28)
+
+Every record now carries a description: **208 of 208**, up from 197. The 11
+original hand-authored records that had none — Earth, Mars, Jupiter,
+Kepler-452b, Sol, the Milky Way, Sagittarius A*, M87*, Cygnus X-1 and two
+pulsars — gained editorial `summary` and `notability` text.
+
+#### What was added, and where each value came from
+
+No new source was probed: every astronomy host is refused by the sandbox
+network policy. Everything below is either a value the catalogue already
+published in a less usable shape, or clearly-marked editorial text.
+
+| Field | Coverage | Method |
+|---|---|---|
+| `classification` | 132 | SIMBAD's object-type gloss, from the measurement slot or reversed from the generated summary |
+| `catalogueIdentifiers` | 68 | `aliases` minus the stored-fact pseudo-aliases |
+| `parallaxMas` | 66 | named from the generic measurement slot |
+| `radiusEarth` | 60 | named from the generic measurement slot |
+| `constellation` | 60 | expanded from a Bayer/Flamsteed/variable-star designation |
+| `massEarth` | 59 | `pl_bmasse`, recovered from the summary the importer rendered it into |
+| `summary`, `notability` | 11 | hand-written editorial (`tools/editorial.json`) |
+| `relatedObjectIds` | 7 | declared editorially, validated against real ids |
+| `semiMajorAxisAu` | 5 | named from the generic measurement slot |
+| `spectralType` | +3 (66) | recovered for stars that had no alias to read it from |
+| `parentBody` | 3 | editorial |
+| `discoveryYear` | +2 (62) | one from JPL's discovery block, one editorial |
+| `discoverer` | 2 | Ceres from JPL's discovery block; PSR B1919+21 editorial |
+| `discoveryDate` | 1 | JPL's discovery block |
+
+Values recovered from generated prose are proved by re-rendering the whole
+sentence from the importer's own template and requiring byte-for-byte equality;
+a record that does not reproduce exactly is refused, not guessed at. Both tools
+are idempotent, and the promotion changed **no existing field value** — verified
+field by field against the pre-promotion catalogue.
+
+#### Quiz result
+
+One family enabled (**mass**: 59 records, 56 distinct answers, no leak) and one
+widened (**classification**: 66 → 132 records, no answer changed). Four stayed
+rejected on fresh measurements, constellation most instructively: 60 of 60
+records name their own answer, because the constellation is derived from the
+designation the catalogue displays as the name. See `DECISIONS.md` D15e.
+
+#### Not done, and why
+
+Common names, notability beyond the 11 records, bulk discoverers, and
+constellation-from-coordinates all need a network probe. Each is written out
+under "Blocked on network access" above as a command to run rather than a
+problem to re-solve. Nothing was approximated to close a gap.
+
+#### Validation
+
+- `python3 tools/validate_catalogue.py` — 208 records, 0 errors, 0 warnings.
+- `node tools/detail_checks.mjs` — 69/69 (new).
+- `node tools/quiz_checks.mjs` — 105/105.
+- `node tools/search_checks.mjs` — 121/121, no regression.
+- `python3 tools/derive_enrichment.py --dry-run` — idempotent, 0 refusals.
+- `python3 tools/apply_editorial.py --dry-run` — idempotent, 0 refusals.
+- `python3 tools/derive_quiz_fields.py --dry-run` — idempotent, 0 refusals.
+- 300 sampled games (60 per difficulty): 3,000 questions, every game exactly 10,
+  zero prompts containing their own answer, zero duplicate option sets.
 
 ### P4 — Quiz expansion and persistence
 
