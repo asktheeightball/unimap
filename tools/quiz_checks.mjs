@@ -345,6 +345,51 @@ async function run() {
     check(`6. Impossible is mostly its preferred families (${(impossibleShare * 100).toFixed(0)}%)`,
       impossibleShare >= 0.8, String(impossibleShare));
 
+    /* 19 — enrichment-backed families --------------------------------------- */
+    section("enrichment");
+
+    const enriched = await page.evaluate(() => {
+      const api = window.unimapQuiz;
+      const bodies = quiz.bodies;
+      const context = api.buildContext(bodies);
+      const questions = api.designationOfObjectQuestions(bodies, context);
+      const flat = (value) => String(value).toLowerCase().replace(/[^a-z0-9]/g, "");
+      return {
+        withCommonName: bodies.filter((body) => (body.commonName || "").trim()).length,
+        classificationEligible: bodies.filter((body) => api.classificationOf(body)).length,
+        effortlessPool: api.effortlessPool(bodies).length,
+        produced: questions.length,
+        distinctAnswers: new Set(questions.map((q) => q.options[q.answerIndex])).size,
+        // A question whose prompt already spells out its answer.
+        leaking: questions.filter((q) => flat(q.prompt).includes(flat(q.options[q.answerIndex]))).length,
+        malformed: questions.filter((q) =>
+          q.options.length !== 4
+          || new Set(q.options.map(flat)).size !== 4
+          || q.answerIndex < 0).length,
+        // The quiz must ask about the name the catalogue displays.
+        asksDisplayedName: questions.every((q) =>
+          bodies.some((body) => q.prompt.includes(api.quizName(body)))),
+      };
+    });
+
+    check("19. the classification family reads the enriched field",
+      enriched.classificationEligible === 132, String(enriched.classificationEligible));
+    check("19. common names widen the Effortless pool",
+      enriched.effortlessPool >= 60, String(enriched.effortlessPool));
+    check("19. the designation family produces questions",
+      enriched.produced > 0, String(enriched.produced));
+    check("19. every designation answer is distinct",
+      enriched.distinctAnswers === enriched.produced,
+      `${enriched.distinctAnswers}/${enriched.produced}`);
+    check("19. no designation question leaks its answer", enriched.leaking === 0,
+      String(enriched.leaking));
+    check("19. every designation question is well formed", enriched.malformed === 0,
+      String(enriched.malformed));
+    check("19. overlapping name pairs are withheld rather than asked",
+      enriched.produced < enriched.withCommonName,
+      `${enriched.produced} asked of ${enriched.withCommonName} named`);
+    check("19. questions ask about the displayed name", enriched.asksDisplayedName);
+
     /* 7 — same-category distractors on the hardest modes ------------------- */
     section("distractors");
 

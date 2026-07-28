@@ -470,6 +470,100 @@ async function run() {
     check("22. the suggestion list renders on desktop", desktopBox.visible);
     check("22. it stays inside the search field", desktopBox.withinField);
     check("24. no horizontal overflow on desktop", desktopBox.overflow <= 0, `${desktopBox.overflow}px`);
+
+    /* 29 — enrichment: common names, identifiers and detail sections --------- */
+    section("enrichment");
+
+    const runQuery = async (text) => {
+      await page.fill(SEARCH, text);
+      await page.click("button[type=submit]");
+      await page.waitForTimeout(60);
+    };
+
+    const detailOf = (target, id) => target.evaluate((wanted) => {
+      const body = state.bodies.find((record) => record.id === wanted);
+      renderDetails(body);
+      const shown = (element) => element && !element.hidden
+        && getComputedStyle(element).display !== "none";
+      const sections = {};
+      for (const key of ["overview", "location", "discovery", "physical", "names", "source"]) {
+        const wrapper = document.getElementById(`detail-section-${key}`);
+        const list = document.getElementById(`detail-list-${key}`);
+        sections[key] = {
+          shown: shown(wrapper),
+          rows: [...list.querySelectorAll(".detail-row")].map((row) => [
+            row.querySelector("dt").textContent, row.querySelector("dd").textContent,
+          ]),
+        };
+      }
+      return {
+        heading: document.getElementById("detail-name").textContent,
+        formal: shown(document.getElementById("detail-formal"))
+          ? document.getElementById("detail-formal").textContent : "",
+        sections,
+        emptyVisibleSections: Object.values(sections)
+          .filter((entry) => entry.shown && entry.rows.length === 0).length,
+        blanks: Object.values(sections).flatMap((entry) => entry.rows.flat())
+          .filter((value) => /undefined|null|NaN|\[object/.test(value)),
+      };
+    }, id);
+
+    const helvetios = await detailOf(page, "51-peg");
+    equal("29. a common name leads the detail heading", helvetios.heading, "Helvetios");
+    equal("29. the formal designation is kept beneath it", helvetios.formal, "51 Peg");
+    check("29. the designation is repeated in Names and identifiers",
+      helvetios.sections.names.rows.some(([label, value]) =>
+        label === "Catalogue designation" && value === "51 Peg"),
+      JSON.stringify(helvetios.sections.names.rows));
+    check("29. the source classification is shown",
+      helvetios.sections.overview.rows.some(([label]) => label === "Source classification"),
+      JSON.stringify(helvetios.sections.overview.rows));
+    check("29. a section with nothing to show is hidden",
+      !helvetios.sections.discovery.shown);
+    check("29. no visible section is empty", helvetios.emptyVisibleSections === 0);
+    check("29. no raw null or undefined reaches the page", helvetios.blanks.length === 0,
+      JSON.stringify(helvetios.blanks));
+
+    // A record with no source metadata at all must not render a shell of headings.
+    const earth = await detailOf(page, "earth");
+    equal("29. a bare record keeps its own name", earth.heading, "Earth");
+    check("29. a bare record shows no discovery, names or source section",
+      !earth.sections.discovery.shown && !earth.sections.names.shown
+        && !earth.sections.source.shown);
+    check("29. a bare record still shows what it has", earth.sections.physical.shown);
+
+    // Discovery attribution, where a source actually supplied it.
+    const ceres = await detailOf(page, "ceres");
+    check("29. a discoverer is shown when the source gave one",
+      ceres.sections.discovery.shown
+        && ceres.sections.discovery.rows.some(([label]) => label === "Discovered by"),
+      JSON.stringify(ceres.sections.discovery.rows));
+
+    await page.click("#back-button");
+
+    // Both names must reach the object, and the common name must rank first.
+    for (const [term, expected] of [["Helvetios", "51 Peg"], ["51 Peg", "51 Peg"],
+      ["Sirius", "Sirius A"], ["Arcturus", "alf Boo"]]) {
+      await runQuery(term);
+      const names = await resultNames(page);
+      check(`29. "${term}" finds its object first`, names.length > 0,
+        JSON.stringify(names.slice(0, 3)));
+      const first = await page.evaluate(() => state.results[0]?.name ?? "");
+      equal(`29. "${term}" ranks ${expected} first`, first, expected);
+    }
+
+    // An alternate name kept from the source stays searchable even though it is
+    // not displayed anywhere.
+    await runQuery("Proxima");
+    equal("29. an alternate identifier still finds its record",
+      await page.evaluate(() => state.results[0]?.name ?? ""), "Proxima Centauri");
+
+    await runQuery("Arcturis");
+    check("29. a misspelled common name is corrected",
+      await page.evaluate(() => state.results[0]?.name ?? "") === "alf Boo",
+      await page.evaluate(() => state.results[0]?.name ?? ""));
+
+    await page.click("#clear-button");
     await desktop.close();
 
     /* 15, 23, 24 — mobile ---------------------------------------------------- */
@@ -518,6 +612,25 @@ async function run() {
       await mobile.waitForTimeout(80);
       equal(`15. ${label}: touch tap selects a suggestion`,
         await mobile.textContent("#detail-name"), "Proxima Centauri");
+
+      // The sectioned detail view has to survive the narrowest phone: a long
+      // label beside a long value is exactly where a two-column row overflows.
+      const detailBox = await mobile.evaluate(() => {
+        renderDetails(state.bodies.find((record) => record.id === "51-peg"));
+        const rows = [...document.querySelectorAll(".detail-section:not([hidden]) .detail-row")];
+        return {
+          rows: rows.length,
+          withinViewport: rows.every((row) =>
+            row.getBoundingClientRect().right <= window.innerWidth + 1),
+          headings: [...document.querySelectorAll(".detail-section:not([hidden]) h3")].length,
+          overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+        };
+      });
+      check(`29. ${label}: detail sections render`, detailBox.rows > 0 && detailBox.headings > 0,
+        JSON.stringify(detailBox));
+      check(`29. ${label}: detail rows stay inside the viewport`, detailBox.withinViewport);
+      check(`24. ${label}: no horizontal overflow on the detail view`,
+        detailBox.overflow <= 0, `${detailBox.overflow}px`);
 
       await mobile.click("#back-button");
       // Selecting a suggestion left its name in the search box; clear it so the
