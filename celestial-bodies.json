@@ -1264,6 +1264,261 @@
     "circumference": "~21,344 km"
   },
   {
+    "id": "zet-leo",
+    "name": "Adhafera",
+    "type": "Star",
+    "distance": "~232.3 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "14.04",
+    "aliases": [
+      "* zet Leo",
+      "Spectral type F0IIIa"
+    ],
+    "rightAscension": "154.17256",
+    "declination": "23.41732",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "eps-cma",
+    "name": "Adhara",
+    "type": "Star",
+    "distance": "~405.2 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "8.05",
+    "aliases": [
+      "* eps CMa",
+      "Spectral type B1.5II"
+    ],
+    "rightAscension": "104.65645",
+    "declination": "-28.97209",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "ksi-and",
+    "name": "Adhil",
+    "type": "Star",
+    "distance": "~223.3 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "14.60",
+    "aliases": [
+      "* ksi And",
+      "Spectral type K0-IIIb"
+    ],
+    "rightAscension": "20.58508",
+    "declination": "45.52878",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "mu-lyr",
+    "name": "Alathfar",
+    "type": "Star",
+    "distance": "~431.3 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "7.56",
+    "aliases": [
+      "* mu. Lyr",
+      "Spectral type A0IV"
+    ],
+    "rightAscension": "276.05744",
+    "declination": "39.50724",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "eps-aqr",
+    "name": "Albali",
+    "type": "Star",
+    "distance": "~244.1 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "13.36",
+    "aliases": [
+      "* eps Aqr",
+      "Spectral type B9.5V"
+    ],
+    "rightAscension": "311.91896",
+    "declination": "-9.49578",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "gam01-and",
+    "name": "Almach",
+    "type": "Star",
+    "distance": "~393.0 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "8.30",
+    "aliases": [
+      "* gam01 And",
+      "Spectral type K2+IIb"
+    ],
+    "rightAscension": "30.97480",
+    "declination": "42.32973",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "alf-hya",
+    "name": "Alphard",
+    "type": "Star",
+    "distance": "~180.3 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "18.09",
+    "aliases": [
+      "* alf Hya",
+      "Spectral type K3IIIa"
+    ],
+    "rightAscension": "141.89684",
+    "declination": "-8.65860",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "nu-cap",
+    "name": "Alshat",
+    "type": "Star",
+    "distance": "~267.9 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "12.17",
+    "aliases": [
+      "* nu. Cap",
+      "Spectral type B9IV"
+    ],
+    "rightAscension": "305.16590",
+    "declination": "-12.75908",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "lam-leo",
+    "name": "Alterf",
+    "type": "Star",
+    "distance": "~372.5 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "8.76",
+    "aliases": [
+      "* lam Leo",
+      "Spectral type K4.5III"
+    ],
+    "rightAscension": "142.93012",
+    "declination": "22.96798",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "nu-uma",
+    "name": "Alula Borealis",
+    "type": "Star",
+    "distance": "~408.6 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "7.98",
+    "aliases": [
+      "* nu. UMa",
+      "Spectral type K3-III:"
+    ],
+    "rightAscension": "169.61974",
+    "declination": "33.09431",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "alf-lep",
+    "name": "Arneb",
+    "type": "Star",
+    "distance": "~2,218.8 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "1.47",
+    "aliases": [
+      "* alf Lep",
+      "Spectral type F0Ib"
+    ],
+    "rightAscension": "83.18257",
+    "declination": "-17.82229",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "iot-car",
+    "name": "Aspidiske",
+    "type": "Star",
+    "distance": "~765.6 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "4.26",
+    "aliases": [
+      "* iot Car",
+      "Spectral type A7Ib"
+    ],
+    "rightAscension": "139.27253",
+    "declination": "-59.27523",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "alf-tra",
+    "name": "Atria",
+    "type": "Star",
+    "distance": "~390.6 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "8.35",
+    "aliases": [
+      "* alf TrA",
+      "Spectral type K2III_Ba1"
+    ],
+    "rightAscension": "252.16623",
+    "declination": "-69.02771",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "ksi-pup",
+    "name": "Azmidiske",
+    "type": "Star",
+    "distance": "~1,085.1 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "3.01",
+    "aliases": [
+      "* ksi Pup",
+      "Spectral type G6Ib"
+    ],
+    "rightAscension": "117.32356",
+    "declination": "-24.85978",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "gam-ori",
+    "name": "Bellatrix",
+    "type": "Star",
+    "distance": "~252.4 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "12.92",
+    "aliases": [
+      "* gam Ori",
+      "Spectral type B2III"
+    ],
+    "rightAscension": "81.28276",
+    "declination": "6.34970",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
     "id": "betelgeuse",
     "name": "Betelgeuse",
     "type": "Star",
@@ -1272,12 +1527,436 @@
     "circumference": "~2.8 billion km"
   },
   {
+    "id": "tyc-3162-665-1",
+    "name": "Boyajian's Star",
+    "type": "Star",
+    "distance": "~1,446.7 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "2.25",
+    "aliases": [
+      "TYC 3162-665-1",
+      "Spectral type F3V"
+    ],
+    "rightAscension": "301.56439",
+    "declination": "44.45689",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "name-kic-8462852b",
+    "name": "Boyajian's Star B",
+    "type": "Star",
+    "distance": "~1,451.5 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "2.25",
+    "aliases": [
+      "NAME KIC 8462852B"
+    ],
+    "rightAscension": "301.56514",
+    "declination": "44.45683",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "alf-car",
+    "name": "Canopus",
+    "type": "Star",
+    "distance": "~309.2 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "10.55",
+    "aliases": [
+      "* alf Car",
+      "Spectral type A9II"
+    ],
+    "rightAscension": "95.98796",
+    "declination": "-52.69566",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "16-tau",
+    "name": "Celeno",
+    "type": "Star",
+    "distance": "~441.6 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "7.39",
+    "aliases": [
+      "* 16 Tau",
+      "Spectral type B7V"
+    ],
+    "rightAscension": "56.20090",
+    "declination": "24.28947",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "name-ds-tau-b",
+    "name": "DS Tau B",
+    "type": "Star",
+    "distance": "~3,869.0 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "0.84",
+    "aliases": [
+      "NAME DS Tau B",
+      "Spectral type F0V"
+    ],
+    "rightAscension": "71.95046",
+    "declination": "29.42069",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "gam-dra",
+    "name": "Eltanin",
+    "type": "Star",
+    "distance": "~154.3 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "21.14",
+    "aliases": [
+      "* gam Dra",
+      "Spectral type K5III"
+    ],
+    "rightAscension": "269.15154",
+    "declination": "51.48890",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "lam-dra",
+    "name": "Giausar",
+    "type": "Star",
+    "distance": "~377.2 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "8.65",
+    "aliases": [
+      "* lam Dra",
+      "Spectral type M0III-IIIaCa1"
+    ],
+    "rightAscension": "172.85092",
+    "declination": "69.33108",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "ome-per",
+    "name": "Gorgonea Quarta",
+    "type": "Star",
+    "distance": "~309.3 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "10.55",
+    "aliases": [
+      "* ome Per",
+      "Spectral type K0III"
+    ],
+    "rightAscension": "47.82242",
+    "declination": "39.61158",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "pi-per",
+    "name": "Gorgonea Secunda",
+    "type": "Star",
+    "distance": "~312.3 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "10.44",
+    "aliases": [
+      "* pi. Per",
+      "Spectral type A2Vn"
+    ],
+    "rightAscension": "44.69029",
+    "declination": "39.66273",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "iot-aur",
+    "name": "Hassaleh",
+    "type": "Star",
+    "distance": "~449.9 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "7.25",
+    "aliases": [
+      "* iot Aur",
+      "Spectral type K3II-III"
+    ],
+    "rightAscension": "74.24842",
+    "declination": "33.16609",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "del-sgr",
+    "name": "Kaus Media",
+    "type": "Star",
+    "distance": "~415.7 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "7.85",
+    "aliases": [
+      "* del Sgr",
+      "Spectral type K2.5IIIaCN0.5"
+    ],
+    "rightAscension": "275.24851",
+    "declination": "-29.82810",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "bet-umi",
+    "name": "Kochab",
+    "type": "Star",
+    "distance": "~130.9 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "24.91",
+    "aliases": [
+      "* bet UMi",
+      "Spectral type K4-III"
+    ],
+    "rightAscension": "222.67636",
+    "declination": "74.15550",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "ups-sco",
+    "name": "Lesath",
+    "type": "Star",
+    "distance": "~576.2 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "5.66",
+    "aliases": [
+      "* ups Sco",
+      "Spectral type B2IV"
+    ],
+    "rightAscension": "262.69099",
+    "declination": "-37.29581",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "lam-her",
+    "name": "Maasym",
+    "type": "Star",
+    "distance": "~393.2 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "8.29",
+    "aliases": [
+      "* lam Her",
+      "Spectral type K3.5III"
+    ],
+    "rightAscension": "262.68462",
+    "declination": "26.11065",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "eps-gem",
+    "name": "Mebsuta",
+    "type": "Star",
+    "distance": "~870.3 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "3.75",
+    "aliases": [
+      "* eps Gem",
+      "Spectral type G8Ib"
+    ],
+    "rightAscension": "100.98303",
+    "declination": "25.13113",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "eta-per",
+    "name": "Miram",
+    "type": "Star",
+    "distance": "~998.7 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "3.27",
+    "aliases": [
+      "* eta Per",
+      "Spectral type K3-Ib-IIa"
+    ],
+    "rightAscension": "42.67421",
+    "declination": "55.89549",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "gam-cma",
+    "name": "Muliphein",
+    "type": "Star",
+    "distance": "~430.2 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "7.58",
+    "aliases": [
+      "* gam CMa",
+      "Spectral type B8II"
+    ],
+    "rightAscension": "105.93956",
+    "declination": "-15.63329",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "tau-sco",
+    "name": "Paikauhale",
+    "type": "Star",
+    "distance": "~474.1 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "6.88",
+    "aliases": [
+      "* tau Sco",
+      "Spectral type B0V"
+    ],
+    "rightAscension": "248.97064",
+    "declination": "-28.21602",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "11-umi",
+    "name": "Pherkad Minor",
+    "type": "Star",
+    "distance": "~411.5 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "7.93",
+    "aliases": [
+      "* 11 UMi",
+      "Spectral type K4III"
+    ],
+    "rightAscension": "229.27454",
+    "declination": "71.82390",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
     "id": "proxima-centauri",
     "name": "Proxima Centauri",
     "type": "Star",
     "distance": "~4.24 ly",
     "size": "214,000 km",
     "circumference": "~672,000 km"
+  },
+  {
+    "id": "bet-dra",
+    "name": "Rastaban",
+    "type": "Star",
+    "distance": "~380.1 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "8.58",
+    "aliases": [
+      "* bet Dra",
+      "Spectral type G2Ib-IIa"
+    ],
+    "rightAscension": "262.60817",
+    "declination": "52.30139",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "alf-aqr",
+    "name": "Sadalmelik",
+    "type": "Star",
+    "distance": "~659.6 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "4.95",
+    "aliases": [
+      "* alf Aqr",
+      "Spectral type G2Ib"
+    ],
+    "rightAscension": "331.44598",
+    "declination": "-0.31985",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "bet-aqr",
+    "name": "Sadalsuud",
+    "type": "Star",
+    "distance": "~546.1 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "5.97",
+    "aliases": [
+      "* bet Aqr",
+      "Spectral type G0Ib"
+    ],
+    "rightAscension": "322.88972",
+    "declination": "-5.57117",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "gam-cyg",
+    "name": "Sadr",
+    "type": "Star",
+    "distance": "~1,832.3 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "1.78",
+    "aliases": [
+      "* gam Cyg",
+      "Spectral type F8Ib"
+    ],
+    "rightAscension": "305.55709",
+    "declination": "40.25668",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "tet-sco",
+    "name": "Sargas",
+    "type": "Star",
+    "distance": "~300.3 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "10.86",
+    "aliases": [
+      "* tet Sco",
+      "Spectral type F1III"
+    ],
+    "rightAscension": "264.32971",
+    "declination": "-42.99783",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "alf-sge",
+    "name": "Sham",
+    "type": "Star",
+    "distance": "~427.2 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "7.64",
+    "aliases": [
+      "* alf Sge",
+      "Spectral type G1II"
+    ],
+    "rightAscension": "295.02413",
+    "declination": "18.01389",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
   },
   {
     "id": "sirius-a",
@@ -1294,5 +1973,88 @@
     "distance": "~8 light-minutes",
     "size": "1.39 million km",
     "circumference": "~4.37 million km"
+  },
+  {
+    "id": "hd-116798",
+    "name": "Stella Ludoviciana",
+    "type": "Star",
+    "distance": "~297.5 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "10.96",
+    "aliases": [
+      "HD 116798",
+      "Spectral type A5"
+    ],
+    "rightAscension": "201.21605",
+    "declination": "54.89746",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "gam-lyr",
+    "name": "Sulafat",
+    "type": "Star",
+    "distance": "~656.8 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "4.97",
+    "aliases": [
+      "* gam Lyr",
+      "Spectral type B9.5II-III"
+    ],
+    "rightAscension": "284.73593",
+    "declination": "32.68956",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "name-t-cha-c",
+    "name": "T Cha C",
+    "type": "Star",
+    "distance": "~343.6 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "9.49",
+    "aliases": [
+      "NAME T Cha C"
+    ],
+    "rightAscension": "178.76373",
+    "declination": "-79.32081",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "cd-47-134",
+    "name": "TPHE G",
+    "type": "Star",
+    "distance": "~3,653.2 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "0.89",
+    "aliases": [
+      "CD-47 134"
+    ],
+    "rightAscension": "7.76793",
+    "declination": "-46.38094",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
+  },
+  {
+    "id": "gam-aql",
+    "name": "Tarazed",
+    "type": "Star",
+    "distance": "~583.5 ly",
+    "measurementLabel": "Parallax (mas)",
+    "measurementValue": "5.59",
+    "aliases": [
+      "* gam Aql",
+      "Spectral type K3II"
+    ],
+    "rightAscension": "296.56491",
+    "declination": "10.61326",
+    "sourceName": "SIMBAD (CDS, Strasbourg)",
+    "sourceUrl": "https://simbad.cds.unistra.fr/",
+    "lastReviewed": "2026-07-28"
   }
 ]

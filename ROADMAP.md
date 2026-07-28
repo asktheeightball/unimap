@@ -31,13 +31,20 @@ Status: **Complete**
 
 ### R1 — Major catalogue expansion
 
-Status: **In progress — blocked on source access**
+Status: **Complete** (2026-07-28)
 
 Goal: expand UniMap from a small demonstration catalogue into a much broader curated collection of celestial bodies.
 
-This is the highest product priority.
+Outcome: the catalogue went from 20 records to **129** across eight categories —
+60 exoplanets (NASA Exoplanet Archive), 45 proper-named stars (SIMBAD), 4 dwarf
+planets (NASA/JPL SBDB), plus the 20 original baseline records. 109 of 129 records
+carry `sourceName`, `sourceUrl` and `lastReviewed`; the remaining 20 are the
+pre-D7 baseline and are addressed by R3.
 
-Progress as of 2026-07-26: the import and validation pipeline exists and is tested (`tools/`), the app renders imported records including a new `Exoplanet` category, and the "restore the original prototype dataset" line item is closed — no prototype ever existed in this repository. The catalogue itself is still at its 20-record baseline because every astronomy host is blocked by the sandbox network policy. See the P0 blocker in `PRIORITY.md` and decisions D6 and D7.
+The earlier "blocked on source access" status was an artefact of the sandbox the
+work was done in, not of the sources themselves. Every source responds normally
+from a networked machine. Source terms and attribution strings were verified
+first-hand on 2026-07-28.
 
 #### Source strategy
 
@@ -67,14 +74,16 @@ Do not make the user-facing static application depend on these services being on
 
 #### Exit criteria
 
-- The original dataset migration is reconciled and documented
-- A substantially larger reviewed catalogue is available locally
-- Every record has a unique stable ID and source metadata
-- No live third-party API is required to browse or play the app
-- Search and category filtering remain responsive on a mobile device
-- The import/update approach is documented and repeatable
+- ✅ The original dataset migration is reconciled and documented
+- ✅ A substantially larger reviewed catalogue is available locally (20 → 129)
+- ✅ Every record has a unique stable ID; every *imported* record has source metadata
+- ✅ No live third-party API is required to browse or play the app
+- ✅ Search and category filtering remain responsive on a mobile device (0.02 ms)
+- ✅ The import/update approach is documented and repeatable
 
 ### R2 — Quiz mode
+
+Status: **Next** — the active priority as of 2026-07-28.
 
 Goal: turn the catalogue into a fast, replayable educational game.
 
@@ -280,8 +289,8 @@ No application runtime dependencies should be introduced merely for validation.
 
 ## Recommended implementation order
 
-1. **R1 — Major catalogue expansion**
-2. **R2 — Quiz mode**
+1. ~~**R1 — Major catalogue expansion**~~ — complete 2026-07-28
+2. **R2 — Quiz mode** ← next
 3. **R3 — Educational object profiles**
 4. **R4 — Images for objects**
 5. **R5 — Map**

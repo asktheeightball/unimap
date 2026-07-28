@@ -4,11 +4,22 @@ This is the authoritative source for selecting the next unit of work.
 
 ## Current priority
 
+### P1 — Build quiz mode
+
+Status: **Not started** — this is now the active task. See the Queue below.
+
+## Completed
+
 ### P0 — Expand the celestial-body catalogue substantially
 
-Status: **In progress** — import pipeline built and validated; bulk import blocked on network access.
+Status: **Complete** (2026-07-28)
 
-Objective: reconcile the original dataset, identify authoritative import sources, and expand UniMap into a much larger locally stored catalogue without making the user-facing application dependent on live APIs.
+The catalogue grew from 20 records to **129** across eight categories, all imported
+through the `tools/` pipeline from sources that were actually retrieved.
+
+Objective (met): reconcile the original dataset, identify authoritative import sources,
+and expand UniMap into a much larger locally stored catalogue without making the
+user-facing application dependent on live APIs.
 
 #### Reconciliation finding (resolved 2026-07-26)
 
@@ -20,47 +31,54 @@ Items 1–3 below are **closed as not applicable**. No original prototype datase
 
 The earlier claim that "the current JSON appears smaller than the original supplied prototype dataset" was an assumption, not an observation, and has been corrected in `HANDOFF.md`. The 20 existing records are the baseline; there is nothing to restore.
 
-#### Blocker
+#### Blocker — resolved 2026-07-28
 
-Bulk import cannot proceed in the current environment. Every astronomy host is refused by the sandbox network policy at the CONNECT stage (HTTP 403), including `exoplanetarchive.ipac.caltech.edu`, `simbad.cds.unistra.fr`, `vizier.cds.unistra.fr`, `ssd-api.jpl.nasa.gov`, `images-api.nasa.gov`, and `api.nasa.gov`. Documentation sites for those services are blocked too, so their terms could not be read first-hand.
+The earlier HTTP 403 blocker was a property of the sandbox the work was done in, not
+of the sources. On a networked machine all three sources respond normally, and the
+SIMBAD TLS failure is fixed by the documented `--ca-bundle` flag. Nothing about the
+pipeline needed to change to unblock it.
 
-Records must not be authored from model recall and labelled with source URLs that were never fetched — that would fabricate provenance and violate the "do not invent values" rule. Expansion resumes when a maintainer either runs the importer from a networked machine or grants the sandbox access to those hosts.
+#### Final catalogue
 
-The import and validation workflow is built and tested; only the network-dependent
-step remains. See `README.md` for the commands and `HANDOFF.md` for the full
-limitation notes.
+| Type | Records | Source |
+|---|---:|---|
+| Exoplanet | 60 | NASA Exoplanet Archive |
+| Star | 49 | 45 SIMBAD + 4 unsourced baseline |
+| Dwarf Planet | 4 | NASA/JPL Small-Body Database |
+| Galaxy | 4 | unsourced baseline |
+| Planet | 4 | unsourced baseline |
+| Black Hole | 3 | unsourced baseline |
+| Nebula | 3 | unsourced baseline |
+| Neutron Star | 2 | unsourced baseline |
+| **Total** | **129** | **109 sourced, 20 baseline** |
 
-Remaining work:
+Acceptance criteria — all met:
 
-4. Define the target categories and practical first expansion size.
-5. Test authoritative source options:
-   - SIMBAD and VizieR for non-solar-system objects;
-   - NASA Exoplanet Archive TAP for exoplanets;
-   - NASA/JPL Small-Body Database and Horizons for solar-system objects;
-   - NASA Image and Video Library for candidate imagery and attribution.
-6. Define a controlled import or curation workflow that writes reviewed records into local JSON. **Done** — `tools/import_catalogue.py` + `tools/promote_staging.py`, see D6.
-7. Do not add live API calls as a required page-view dependency. **Held** — the site still fetches only local JSON.
-8. Add many more objects across existing and approved new categories.
-9. Preserve source identifiers, aliases, coordinates where available, source attribution, and review dates. **Schema ready** — validated optional fields exist; the importer populates them.
-10. Verify unique IDs, required fields, category consistency, duplicate detection, and mobile search performance. **Done** — `tools/validate_catalogue.py`.
-11. Run the application through a local static server and validate all existing core behavior. **Done** — 64/64 behavioural checks plus 19 catalogue-growth checks.
-12. Update `HANDOFF.md`, `ROADMAP.md`, and this file with counts, source decisions, and the next task. **Done**.
+- ✅ The original migration is reconciled with documented counts (closed: no prototype existed).
+- ✅ The catalogue is substantially larger than the baseline — 20 → 129, a 6.45× increase.
+- ✅ Every imported record has a stable unique ID and source metadata (109/109).
+- ✅ The app does not require an external astronomy service to browse the catalogue.
+- ✅ The source/import method is documented and repeatable (`README.md`, D6).
+- ✅ Search and filters remain responsive on mobile — 0.02 ms average at 129 records.
+- ✅ Existing core behavior has no known blocking errors — 40 browser checks, 0 failures.
 
-Acceptance criteria:
+Carried forward, not blocking:
 
-- The original migration is reconciled with documented counts.
-- The catalogue is substantially larger than the current baseline.
-- Every imported record has a stable unique ID and source metadata.
-- The app does not require an external astronomy service to browse the catalogue.
-- The source/import method is documented and repeatable.
-- Search and filters remain responsive on mobile.
-- Existing core behavior has no known blocking errors.
+- The 20 baseline records still carry no provenance. They predate D7 and cannot be
+  given attribution retroactively without refetching each value from a real source.
+  Adding provenance to them belongs to **P2**, which already covers per-object
+  sourced profiles.
+- Three SIMBAD names are catalogue-style rather than recognisable proper names
+  (`DS Tau B`, `T Cha C`, `TPHE G`). They are genuine SIMBAD `NAME` identifiers with
+  real parallax-derived distances, so they are accurate but low-value. Tightening the
+  filter further risks discarding legitimate names; revisit if P1 finds them poor
+  quiz material.
 
 ## Queue
 
 ### P1 — Build quiz mode
 
-Status: **Not started**
+Status: **Not started** — active priority as of 2026-07-28.
 
 Build four quiz modes using validated local catalogue data:
 

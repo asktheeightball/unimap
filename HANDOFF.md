@@ -46,7 +46,8 @@ The existing application is documented to provide:
 
 ## Current priority
 
-Read `PRIORITY.md`. The active task is **P0 — Expand the celestial-body catalogue substantially**, now *In progress* and blocked on network access for the bulk import.
+Read `PRIORITY.md`. **P0 is complete** as of 2026-07-28; the active task is now
+**P1 — Build quiz mode**.
 
 Correction: an earlier version of this file stated that "the current JSON appears smaller than the original supplied prototype dataset." That was an assumption and it is false. No prototype dataset exists in this repository — the full history contains only 12 files and never included one. The 20 records in `celestial-bodies.json` were authored in commit `c55b9bb` and are the baseline. There is nothing to reconcile or restore.
 
@@ -83,71 +84,76 @@ Replace or append this section after meaningful work:
 
 ### Last session
 
-- Date: 2026-07-26
+- Date: 2026-07-28
 - Branch: `claude/unimap-static-app-uj0ql5`
-- Starting commit: `a3f6036`
+- Starting commit: `10998fa`
 - Ending commit: uncommitted at time of writing
 - Task selected: P0 — Expand the celestial-body catalogue substantially
-- Status: **In progress / blocked.** Reconciliation closed, import and validation pipeline built and tested, bulk import blocked on sandbox network policy.
-- Files changed: `tools/sources.json`, `tools/import_catalogue.py`, `tools/promote_staging.py`, `tools/validate_catalogue.py`, `.gitignore` (all new), `app.js`, `index.html`, `styles.css`, `PRIORITY.md`, `DECISIONS.md`, `HANDOFF.md`, `ROADMAP.md`, `README.md`
-- Validation performed: 46 importer unit checks (response shapes, normalizers, URL/cache); 9 pipeline safety checks against a local fixture server (staging, promotion, idempotency, invalid-data refusal, cross-source collision refusal, cache, unreachable source); 11-case validator negative test; 64/64 baseline browser checks; 19/19 category-growth checks; 24/24 checks against a promoted 27-record catalogue. 162 checks, 0 failures.
+- Status: **Complete.** SIMBAD star import run and promoted; source terms verified; P0 closed.
+- Files changed: `celestial-bodies.json`, `tools/sources.json`, `tools/import_catalogue.py`, `PRIORITY.md`, `ROADMAP.md`, `DECISIONS.md`, `README.md`, `HANDOFF.md`
 - Deployment performed: none
-- Known issues: catalogue is still at its 20-record baseline. See the external network limitation below.
-- Next priority: run the import locally (commands in `README.md`), return the outputs, then finish P0
-- Uncommitted files: none — tooling and documentation committed; catalogue unchanged
+- Next priority: **P1 — Build quiz mode**
+- Uncommitted files: all of the above — nothing committed or pushed (not authorized)
 
-### External network limitation (2026-07-26)
+What happened this session:
 
-The environment this work was done in denies outbound access to every astronomy
-service. Each returns HTTP 403 at the proxy CONNECT stage:
+1. **Reconciled the documentation against commit `10998fa`.** The handoff, priority
+   and roadmap documents all claimed the catalogue was at its 20-record baseline and
+   that expansion was blocked. `10998fa` had already promoted 64 sourced records; it
+   changed data only and updated no documentation. Verified state was 84 records.
+2. **Found the network blocker was environment-specific, not real.** All three
+   sources respond normally from this machine. SIMBAD needed only the already-
+   documented `--ca-bundle` flag, which resolved the last unconfirmed normalizer.
+3. **Verified the source terms** that `sources.json` flagged as unchecked. The
+   Exoplanet Archive and SIMBAD acknowledgement strings were correct (SIMBAD's also
+   wants the Wenger et al. 2000 citation, now added). JPL's prescribed citation
+   differed and was corrected. JPL's Fair Use Policy forbids embedding its API in a
+   website — UniMap complies by design under D6.
+4. **Fixed the SIMBAD query before running it.** As configured it would have imported
+   Gaia/UCAC4/2MASS designations. Now joins `ident` for proper-named stars. See D8.
+5. **Imported and promoted 45 stars**, taking the catalogue to 129 records.
 
-| Host | Purpose |
+### Catalogue (2026-07-28)
+
+| Type | Records | Sourced |
+|---|---:|---|
+| Exoplanet | 60 | 60 — NASA Exoplanet Archive |
+| Star | 49 | 45 — SIMBAD (4 baseline unsourced) |
+| Dwarf Planet | 4 | 4 — NASA/JPL SBDB |
+| Galaxy | 4 | 0 |
+| Planet | 4 | 0 |
+| Black Hole | 3 | 0 |
+| Nebula | 3 | 0 |
+| Neutron Star | 2 | 0 |
+| **Total** | **129** | **109 of 129** |
+
+The 20 baseline records predate D7 and carry no provenance. They cannot be given
+attribution retroactively without refetching each value from a real source, so that
+work belongs to P2 (sourced object profiles), not to P0.
+
+### Validation performed (2026-07-28)
+
+Served with `py -m http.server 8000`; never tested through `file://`.
+
+| Check | Result |
 |---|---|
-| `exoplanetarchive.ipac.caltech.edu` | NASA Exoplanet Archive TAP |
-| `simbad.cds.unistra.fr` | SIMBAD TAP |
-| `vizier.cds.unistra.fr` | VizieR |
-| `ssd-api.jpl.nasa.gov` | JPL Small-Body Database |
-| `images-api.nasa.gov` | NASA Image and Video Library |
-| `api.nasa.gov` | NASA APIs generally |
+| `tools/validate_catalogue.py` | 129 records, 0 errors, 0 warnings |
+| Console errors | none |
+| Category filters (all 9) | exact expected counts, `aria-pressed` correct |
+| Search: exact, partial, case-insensitive, whitespace-trimmed | pass |
+| No-results state and message | pass |
+| Clear Search resets query, category and focus | pass |
+| Detail view: legacy, exoplanet, dwarf planet, SIMBAD star | pass |
+| D6a hidden rows for absent size/circumference | pass |
+| Back preserves query, results and focus | pass |
+| Keyboard focus and native buttons | pass |
+| Celeno/Celaeno dedupe (one record, not two) | pass |
+| Mobile 375×812: no overflow, ≥40px targets, 16px input | pass |
+| Desktop 1280×800: no overflow, content constrained | pass |
+| Search + render at 129 records | 0.02 ms average |
+| Data-load failure shows visible `role="alert"` error | pass |
 
-Consequences to carry into the next session:
-
-1. **No record was imported.** The catalogue is unchanged at 20 records.
-2. **The HTTP path of the importer is the one untested part.** Everything after
-   the response — parsing, normalizing, staging, validating, promoting — is
-   tested against fixtures in all three response shapes these services use.
-3. ~~The normalizers are unconfirmed.~~ **Resolved 2026-07-26** by probe output
-   returned from a networked machine. Findings:
-   - **NASA Exoplanet Archive** — confirmed working. Array of objects, all nine
-     columns as expected, 6,248 rows available. No change needed.
-   - **NASA/JPL SBDB** — confirmed shape, but revealed a **data-correctness
-     bug**: `sb-class=TNO` returns every trans-Neptunian object, most of them
-     small bodies, and the normalizer would have labelled all of them
-     `Dwarf Planet`. Fixed with the `select_names` curation filter. Also
-     confirmed that `H`/`a` arrive as strings, `diameter` is frequently null,
-     and `full_name` carries a leading space and a parenthetical designation —
-     all now handled and tested.
-   - **SIMBAD** — not yet reached. The request failed with
-     `CERTIFICATE_VERIFY_FAILED`, a local trust-store problem on the operator's
-     machine rather than a fault in the query. `--ca-bundle` was added so
-     verification stays on. **SIMBAD's response shape remains unconfirmed.**
-4. **The `attribution` and `terms` strings in `tools/sources.json` are
-   unverified** and must be checked against each service's current terms page
-   before a catalogue built from them is published.
-
-### Catalogue baseline (2026-07-26)
-
-| Type | Records |
-|---|---:|
-| Galaxy | 4 |
-| Planet | 4 |
-| Star | 4 |
-| Black Hole | 3 |
-| Nebula | 3 |
-| Neutron Star | 2 |
-| **Total** | **20** |
-
-Records carrying source metadata: 0 of 20. The baseline predates D7 and has no provenance; adding it is part of finishing P0.
+40 browser checks this session, 0 failures, plus the validator.
 
 ## Known cautions
 

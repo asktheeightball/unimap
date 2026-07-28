@@ -1,8 +1,9 @@
 # UniMap
 
-UniMap is a small static web app for browsing a catalogue of celestial bodies — stars,
-planets, nebulae, black holes, neutron stars and galaxies. Search by name, filter by
-category, and open any result to see its type, distance, size and circumference.
+UniMap is a small static web app for browsing a catalogue of 129 celestial bodies —
+stars, planets, exoplanets, dwarf planets, nebulae, black holes, neutron stars and
+galaxies. Search by name, filter by category, and open any result to see its type,
+distance, measurements and source.
 
 ## Technology stack
 
@@ -88,12 +89,14 @@ Each record in `celestial-bodies.json` has a stable lowercase `id` slug:
 - Case-insensitive, partial-match search by name
 - Search button and the Enter key behave identically
 - An empty search shows the full catalogue rather than nothing
-- Category filters: All, Stars, Planets, Nebulae, Black Holes, Neutron Stars,
-  Galaxies — matching tolerates singular and plural type values
+- Category filters: All, Stars, Planets, Exoplanets, Dwarf Planets, Nebulae, Black
+  Holes, Neutron Stars, Galaxies — matching tolerates singular and plural type
+  values, and a category with no records is hidden rather than left dead
 - Result count and a clear no-results message, announced via an ARIA live region
 - Clear Search button that resets both the query and the category
-- Detail view with name, type, distance, size and circumference, plus a Back button
-  that preserves the query, category and result list
+- Detail view with name, type, distance, size, circumference, a named measurement
+  and the source, plus a Back button that preserves the query, category and result
+  list. Rows with no value are hidden rather than shown blank
 - Responsive centered layout for phones, tablets and desktops
 - Keyboard-accessible controls with visible focus states
 - A user-facing error message (and a console log) if the dataset cannot be loaded
@@ -137,11 +140,22 @@ python3 tools/import_catalogue.py --source exoplanet-archive --limit 50
 python3 tools/import_catalogue.py --all --limit 40
 ```
 
+The catalogue currently holds 129 records: 60 exoplanets (NASA Exoplanet Archive),
+49 stars (45 from SIMBAD plus 4 baseline), 4 dwarf planets (NASA/JPL SBDB), and 16
+other baseline records. 109 carry full source metadata.
+
 Sources are declared in `tools/sources.json` — endpoint, query, attribution and
-which normalizer converts its rows. `--probe` fetches a source and reports the
+which normalizer converts its rows. The `attribution` and `terms` fields were
+verified against each service's own page on 2026-07-28; recheck them if you change
+a source. `--probe` fetches a source and reports the
 real response shape without importing; run it first against any new or changed
 source. Responses are cached, so reruns do not refetch unless you pass
 `--refresh`.
+
+A source query must select for readability as well as correctness — see
+`DECISIONS.md` D8. SIMBAD is queried through a join on its `ident` table so only
+objects with a proper name (`Kochab`, not `Gaia DR3 6305165514134625024`) are
+imported. SIMBAD needs the `--ca-bundle` flag on most Windows installations.
 
 A source may also carry `select_names`, an editorial allow-list applied after
 normalization. This exists because a broad query filter is not a claim about an
