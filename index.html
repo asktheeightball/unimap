@@ -63,20 +63,34 @@
 
         <p class="visually-hidden" id="search-suggestion-status" role="status" aria-live="polite"></p>
 
-        <fieldset class="filters">
+        <fieldset class="filters" id="filters">
           <legend>Filter by category</legend>
           <div class="filter-buttons" id="filter-buttons">
-            <button type="button" class="chip is-active" data-category="All" aria-pressed="true">All</button>
-            <button type="button" class="chip" data-category="Stars" aria-pressed="false">Stars</button>
-            <button type="button" class="chip" data-category="Planets" aria-pressed="false">Planets</button>
-            <button type="button" class="chip" data-category="Exoplanets" aria-pressed="false">Exoplanets</button>
-            <button type="button" class="chip" data-category="Dwarf Planets" aria-pressed="false">Dwarf Planets</button>
-            <button type="button" class="chip" data-category="Moons" aria-pressed="false">Moons</button>
-            <button type="button" class="chip" data-category="Nebulae" aria-pressed="false">Nebulae</button>
-            <button type="button" class="chip" data-category="Black Holes" aria-pressed="false">Black Holes</button>
-            <button type="button" class="chip" data-category="Neutron Stars" aria-pressed="false">Neutron Stars</button>
-            <button type="button" class="chip" data-category="Galaxies" aria-pressed="false">Galaxies</button>
-            <button type="button" class="chip" data-category="Star Clusters" aria-pressed="false">Star Clusters</button>
+            <button type="button" class="chip is-active" data-category="all" aria-pressed="true">All</button>
+            <button type="button" class="chip" data-category="stars" aria-pressed="false">Stars</button>
+            <!-- A disclosure, not a filter: it opens the planet sub-filters below
+                 and selects All Planets, so activating it always shows results. -->
+            <button type="button" class="chip chip-group" id="planets-toggle" data-group="planets"
+              aria-expanded="false" aria-controls="planet-filters">Planets</button>
+            <button type="button" class="chip" data-category="moons" aria-pressed="false">Moons</button>
+            <button type="button" class="chip" data-category="brown-dwarfs" aria-pressed="false">Brown Dwarfs</button>
+            <button type="button" class="chip" data-category="nebulae" aria-pressed="false">Nebulae</button>
+            <button type="button" class="chip" data-category="black-holes" aria-pressed="false">Black Holes</button>
+            <button type="button" class="chip" data-category="neutron-stars" aria-pressed="false">Neutron Stars</button>
+            <button type="button" class="chip" data-category="galaxies" aria-pressed="false">Galaxies</button>
+            <button type="button" class="chip" data-category="star-clusters" aria-pressed="false">Star Clusters</button>
+          </div>
+
+          <!-- Second row rather than nested chips: it keeps the parent row from
+               reflowing as it opens, and it wraps predictably on a narrow phone.
+               Hidden while collapsed, so its buttons leave the tab order. -->
+          <div class="filter-children" id="planet-filters" role="group"
+            aria-labelledby="planets-toggle" hidden>
+            <button type="button" class="chip chip-child" data-category="all-planets" aria-pressed="false">All Planets <span class="chip-count"></span></button>
+            <button type="button" class="chip chip-child" data-category="solar-system-planets" aria-pressed="false">Solar System Planets <span class="chip-count"></span></button>
+            <button type="button" class="chip chip-child" data-category="exoplanets" aria-pressed="false">Exoplanets <span class="chip-count"></span></button>
+            <button type="button" class="chip chip-child" data-category="dwarf-planets" aria-pressed="false">Dwarf Planets <span class="chip-count"></span></button>
+            <button type="button" class="chip chip-child" data-category="candidate-dwarf-planets" aria-pressed="false">Candidate Dwarf Planets <span class="chip-count"></span></button>
           </div>
         </fieldset>
 

@@ -295,6 +295,62 @@ input[type="search"]::placeholder {
   font-weight: 600;
 }
 
+/* Category hierarchy.
+
+   The Planets control is a disclosure, so it carries a caret and an "open"
+   state that is deliberately quieter than a selected filter — the selection
+   lives on one of its children, and two controls must not both look chosen. */
+
+.chip-group::after {
+  content: "";
+  display: inline-block;
+  margin-left: 0.4rem;
+  border: 0.3em solid transparent;
+  border-top-color: currentColor;
+  transform: translateY(0.15em);
+}
+
+.chip-group[aria-expanded="true"]::after {
+  transform: translateY(-0.15em) rotate(180deg);
+}
+
+.chip-group.is-active {
+  color: var(--text);
+  background-color: var(--bg-raised);
+  border-color: var(--accent);
+  font-weight: 600;
+}
+
+.filter-children {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+  padding: 0.6rem 0.75rem;
+  background-color: rgba(124, 196, 255, 0.06);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.chip-child {
+  font-size: 0.875rem;
+}
+
+/* The count a control promises, so a filter never looks like it might be empty. */
+.chip-count {
+  margin-left: 0.35rem;
+  opacity: 0.75;
+  font-variant-numeric: tabular-nums;
+}
+
+.chip-count::before {
+  content: "(";
+}
+
+.chip-count::after {
+  content: ")";
+}
+
 /* Status + errors */
 
 .status {
@@ -717,6 +773,18 @@ input[type="search"]::placeholder {
 
   .detail-row dt {
     flex-basis: 100%;
+  }
+
+  /* "Candidate Dwarf Planets (4)" is wider than a 320px phone once padding is
+     counted, so sub-filters wrap to full width rather than being clipped. They
+     stay in the normal flow — nothing is hidden behind a scroll edge. */
+  .filter-children {
+    padding: 0.6rem;
+  }
+
+  .chip-child {
+    flex: 1 1 100%;
+    text-align: left;
   }
 
   .quiz-choices {

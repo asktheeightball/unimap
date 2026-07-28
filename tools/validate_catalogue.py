@@ -37,7 +37,15 @@ KNOWN_TYPES = {
     "Planet",
     "Exoplanet",
     "Dwarf Planet",
+    # A body proposed as a dwarf planet but not recognised as one by the IAU.
+    # Deliberately its own type: calling a candidate a dwarf planet would assert
+    # a classification no source makes. No record carries it yet — the filter is
+    # declared and stays hidden until P7 imports one.
+    "Candidate Dwarf Planet",
     "Moon",
+    # Not a planet and not a star. It sits outside the Planets hierarchy for
+    # that reason, and like the above it has no records yet.
+    "Brown Dwarf",
     "Nebula",
     "Black Hole",
     "Neutron Star",

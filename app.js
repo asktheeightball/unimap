@@ -2,29 +2,99 @@
 
 const DATA_URL = "celestial-bodies.json";
 
-/* Maps a filter button's category to the record `type` values it accepts.
-   Keys and values are compared lowercased, so singular/plural both work. */
-const CATEGORY_TYPES = {
-  all: null,
-  stars: ["star"],
-  planets: ["planet"],
-  exoplanets: ["exoplanet"],
-  "dwarf planets": ["dwarf planet"],
-  moons: ["moon"],
-  nebulae: ["nebula", "nebulae"],
-  "black holes": ["black hole"],
+/* --- Category model ------------------------------------------------------
+
+   One declaration drives the filter buttons, the matching rules, the counts and
+   the empty-category rule. A category is identified by a stable `id`, never by
+   its visible label, so a label can be reworded without changing stored state
+   or the markup's contract.
+
+   `types` lists the catalogue `type` values a category accepts, spelled exactly
+   as records spell them. Matching is an exact comparison against that list —
+   never an inference from pluralising the label, which is what previously tied
+   "Galaxies" to "galaxy" by a second spelling in the list.
+
+   A group owns `children` instead of `types`. Its children are ordinary
+   categories; the group itself is a disclosure control, not a filter. */
+const CATEGORY_GROUPS = [
+  { id: "all", label: "All", types: null },
+  { id: "stars", label: "Stars", types: ["Star"] },
+  {
+    id: "planets",
+    label: "Planets",
+    children: [
+      // A composite: every kind of planet the catalogue distinguishes. Moons and
+      // brown dwarfs are deliberately absent — a moon orbits a planet rather
+      // than being one, and a brown dwarf never became a star but is not a
+      // planet either.
+      {
+        id: "all-planets",
+        label: "All Planets",
+        types: ["Planet", "Exoplanet", "Dwarf Planet", "Candidate Dwarf Planet"],
+      },
+      { id: "solar-system-planets", label: "Solar System Planets", types: ["Planet"] },
+      { id: "exoplanets", label: "Exoplanets", types: ["Exoplanet"] },
+      { id: "dwarf-planets", label: "Dwarf Planets", types: ["Dwarf Planet"] },
+      // A candidate is not a recognised dwarf planet, so it is a separate type
+      // and a separate filter. No record carries it yet; the empty-category rule
+      // keeps the control out of the interface until P7 supplies one.
+      {
+        id: "candidate-dwarf-planets",
+        label: "Candidate Dwarf Planets",
+        types: ["Candidate Dwarf Planet"],
+      },
+    ],
+  },
+  { id: "moons", label: "Moons", types: ["Moon"] },
+  { id: "brown-dwarfs", label: "Brown Dwarfs", types: ["Brown Dwarf"] },
+  { id: "nebulae", label: "Nebulae", types: ["Nebula"] },
+  { id: "black-holes", label: "Black Holes", types: ["Black Hole"] },
   // A pulsar is a neutron star, so one filter reaches both. Catalogue sources
   // distinguish them, and the record keeps whichever type its source reports.
-  "neutron stars": ["neutron star", "pulsar"],
-  galaxies: ["galaxy", "galaxies"],
-  "star clusters": ["star cluster"],
-};
+  { id: "neutron-stars", label: "Neutron Stars", types: ["Neutron Star", "Pulsar"] },
+  { id: "galaxies", label: "Galaxies", types: ["Galaxy"] },
+  { id: "star-clusters", label: "Star Clusters", types: ["Star Cluster"] },
+];
+
+const DEFAULT_CATEGORY = "all";
+/* Activating the Planets group selects this child, so the group always produces
+   a result set rather than only revealing more controls. */
+const DEFAULT_PLANET_CATEGORY = "all-planets";
+
+/* Flatten the model once: id -> { label, types, groupId }. Built at load rather
+   than per keystroke, because filtering and the autocomplete both consult it. */
+const CATEGORIES = new Map();
+for (const entry of CATEGORY_GROUPS) {
+  if (entry.children) {
+    for (const child of entry.children) {
+      CATEGORIES.set(child.id, { ...child, groupId: entry.id });
+    }
+  } else {
+    CATEGORIES.set(entry.id, { ...entry, groupId: null });
+  }
+}
+
+const CATEGORY_GROUP_IDS = new Set(
+  CATEGORY_GROUPS.filter((entry) => entry.children).map((entry) => entry.id),
+);
+
+function categoryById(id) {
+  return CATEGORIES.get(String(id ?? "").trim()) || null;
+}
+
+function categoryLabel(id) {
+  const category = categoryById(id);
+  return category ? category.label : "";
+}
 
 const state = {
   bodies: [],
   index: [],
   query: "",
-  category: "All",
+  category: DEFAULT_CATEGORY,
+  // Which disclosure group is open, or null. Separate from `category` because a
+  // group is a container, never a filter.
+  openGroup: null,
   results: [],
   ranked: [],
   suggestions: [],
@@ -36,7 +106,9 @@ const el = {
   form: document.getElementById("search-form"),
   input: document.getElementById("search-input"),
   clearButton: document.getElementById("clear-button"),
+  filters: document.getElementById("filters"),
   filterButtons: document.getElementById("filter-buttons"),
+  planetFilters: document.getElementById("planet-filters"),
   status: document.getElementById("status"),
   results: document.getElementById("results"),
   error: document.getElementById("error"),
@@ -79,12 +151,37 @@ function normalizeText(value) {
   return String(value ?? "").trim().toLowerCase();
 }
 
-function matchesCategory(body, category) {
-  const types = CATEGORY_TYPES[normalizeText(category)];
-  if (!types) {
-    return true; // "All", or an unknown category, matches everything.
+/* Exact type matching against the category's declared list. An unknown id and
+   the "all" category both match everything, so a stale stored value degrades to
+   showing the catalogue rather than to showing nothing. */
+function matchesCategory(body, categoryId) {
+  const category = categoryById(categoryId);
+  if (!category || !category.types) {
+    return true;
   }
-  return types.includes(normalizeText(body.type));
+  return category.types.includes(String(body?.type ?? "").trim());
+}
+
+/* How many records each category would show, counted once after load. The
+   counts drive the visible counts in the interface and the empty-category rule,
+   and neither should re-scan the catalogue on every click. */
+function countCategories(bodies) {
+  const counts = new Map();
+  for (const [id, category] of CATEGORIES) {
+    counts.set(id, category.types
+      ? bodies.filter((body) => matchesCategory(body, id)).length
+      : bodies.length);
+  }
+  // A group's count is its own children's composite, which is the "All X" child.
+  for (const entry of CATEGORY_GROUPS) {
+    if (!entry.children) {
+      continue;
+    }
+    const total = entry.children.reduce(
+      (best, child) => Math.max(best, counts.get(child.id) || 0), 0);
+    counts.set(entry.id, total);
+  }
+  return counts;
 }
 
 /* --- Search index --------------------------------------------------------
@@ -444,8 +541,8 @@ function describeFilters() {
   if (state.query) {
     parts.push(`matching “${state.query}”`);
   }
-  if (normalizeText(state.category) !== "all") {
-    parts.push(`in ${state.category}`);
+  if (state.category !== DEFAULT_CATEGORY) {
+    parts.push(`in ${categoryLabel(state.category)}`);
   }
   return parts.length ? ` ${parts.join(" ")}` : "";
 }
@@ -861,27 +958,84 @@ function selectSuggestion(position) {
 
 /* --- Interaction --------------------------------------------------------- */
 
-/* Hide category buttons no record can match. This lets a category be added to
-   the markup ahead of its data without leaving a dead filter in the interface. */
-function hideEmptyCategories() {
-  for (const button of el.filterButtons.querySelectorAll(".chip")) {
-    const category = button.dataset.category;
-    const isAll = normalizeText(category) === "all";
-    button.hidden = !isAll && !state.bodies.some((body) => matchesCategory(body, category));
+/* Hide category controls no record can match, so a category can be declared
+   ahead of its data without leaving a dead filter in the interface. This is the
+   single rule for every empty category — Moons, Brown Dwarfs and Candidate Dwarf
+   Planets are all declared and all currently hidden, and each appears by itself
+   the moment P7 supplies a record. A group hides only when every child is empty.
+
+   Counts are written into the labels here too, so the number a control promises
+   is the number it delivers. */
+function renderCategoryControls() {
+  const counts = countCategories(state.bodies);
+
+  for (const button of document.querySelectorAll("[data-category]")) {
+    const id = button.dataset.category;
+    const count = counts.get(id) || 0;
+    button.hidden = id !== DEFAULT_CATEGORY && count === 0;
+    const label = button.querySelector(".chip-count");
+    if (label) {
+      label.textContent = String(count);
+    }
+  }
+
+  for (const toggle of document.querySelectorAll("[data-group]")) {
+    toggle.hidden = (counts.get(toggle.dataset.group) || 0) === 0;
   }
 }
 
-function setCategory(category) {
-  state.category = category;
-  for (const button of el.filterButtons.querySelectorAll(".chip")) {
-    const isActive = button.dataset.category === category;
+/* Open or close a disclosure group. Opening one selects its default child, so a
+   group always produces results rather than only revealing more controls. */
+function setOpenGroup(groupId) {
+  state.openGroup = groupId;
+  for (const toggle of document.querySelectorAll("[data-group]")) {
+    const open = toggle.dataset.group === groupId;
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.classList.toggle("is-open", open);
+    const children = document.getElementById(toggle.getAttribute("aria-controls"));
+    if (children) {
+      children.hidden = !open;
+    }
+  }
+}
+
+function setCategory(categoryId) {
+  const category = categoryById(categoryId);
+  const id = category ? categoryId : DEFAULT_CATEGORY;
+  state.category = id;
+
+  // A child selection keeps its group open; anything else closes every group,
+  // so the planet sub-filters are never left showing beside an unrelated filter.
+  setOpenGroup(category ? category.groupId : null);
+
+  for (const button of document.querySelectorAll("[data-category]")) {
+    const isActive = button.dataset.category === id;
     button.classList.toggle("is-active", isActive);
     button.setAttribute("aria-pressed", String(isActive));
   }
+  // The group control reflects that the filter lives inside it, without
+  // claiming to be the pressed filter itself.
+  for (const toggle of document.querySelectorAll("[data-group]")) {
+    toggle.classList.toggle("is-active",
+      Boolean(category) && category.groupId === toggle.dataset.group);
+  }
+
   renderResults();
   // Suggestions respect the category filter, so a filter change invalidates an
   // open list.
   closeSuggestions();
+}
+
+/* The group control is a disclosure, not a filter: opening it selects the
+   group's default child, closing it returns to the unfiltered catalogue. */
+function toggleGroup(groupId) {
+  if (state.openGroup === groupId) {
+    setCategory(DEFAULT_CATEGORY);
+    return;
+  }
+  const group = CATEGORY_GROUPS.find((entry) => entry.id === groupId);
+  const fallback = group && group.children ? group.children[0].id : DEFAULT_CATEGORY;
+  setCategory(groupId === "planets" ? DEFAULT_PLANET_CATEGORY : fallback);
 }
 
 function submitSearch() {
@@ -893,7 +1047,7 @@ function resetSearch() {
   el.input.value = "";
   state.query = "";
   closeSuggestions();
-  setCategory("All");
+  setCategory(DEFAULT_CATEGORY);
   el.input.focus();
 }
 
@@ -936,8 +1090,15 @@ function attachHandlers() {
   el.clearButton.addEventListener("click", resetSearch);
   el.backButton.addEventListener("click", showBrowseView);
 
-  el.filterButtons.addEventListener("click", (event) => {
-    const button = event.target.closest(".chip");
+  // One handler for the whole filter area, including the second row of planet
+  // sub-filters, so a category added to the markup needs no new wiring.
+  el.filters.addEventListener("click", (event) => {
+    const toggle = event.target.closest("[data-group]");
+    if (toggle) {
+      toggleGroup(toggle.dataset.group);
+      return;
+    }
+    const button = event.target.closest("[data-category]");
     if (button) {
       setCategory(button.dataset.category);
     }
@@ -1024,7 +1185,7 @@ async function init() {
   // Build the search index once, immediately after load: every keystroke then
   // compares pre-normalized strings instead of re-folding the catalogue.
   state.index = buildSearchIndex(state.bodies);
-  hideEmptyCategories();
+  renderCategoryControls();
   closeSuggestions();
   renderResults();
 
