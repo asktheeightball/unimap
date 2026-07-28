@@ -136,6 +136,19 @@ DEEP_SKY_SUMMARY = re.compile(
 # `~1,234.5 ly`, the only distance shape `simbad_star()` writes.
 LIGHT_YEARS = re.compile(r"^~(?P<value>[\d,]+\.\d) ly$")
 
+# NASA/JPL's Small-Body Database returns a `discovery` block that the importer
+# appends to the summary verbatim, in the shape "Discovered 1801-01-01 by
+# Piazzi, G. at Palermo." Unlike the sentences around it that string is JPL's
+# prose, not ours, so it is matched by a fully anchored pattern and then
+# re-rendered and compared: a fragment that does not reproduce exactly is
+# refused rather than parsed loosely. The discoverer is kept exactly as JPL
+# writes it - "Piazzi, G." is not reformatted into "G. Piazzi", because a
+# normalisation nobody asked for is a change to a sourced value.
+JPL_DISCOVERY = re.compile(
+    r"^Discovered (?P<date>\d{4}-\d{2}-\d{2}) by (?P<who>.+?)"
+    r"(?: at (?P<site>.+?))?\.$"
+)
+
 
 # --- derivations -----------------------------------------------------------
 
@@ -282,6 +295,46 @@ def derive_constellation(record: dict, abbreviations: dict) -> tuple[dict, str]:
     return {}, ""
 
 
+def derive_jpl_discovery(record: dict) -> tuple[dict, str]:
+    """Recover discoverer and discovery date from JPL's own discovery sentence.
+
+    The Small-Body Database single-object endpoint returns a `discovery` block
+    that `jpl_sbdb_object()` appends to the summary as the source wrote it. That
+    sentence therefore carries a discoverer and a precise date that never
+    reached a field.
+    """
+    if record.get("sourceName") != "NASA/JPL Small-Body Database":
+        return {}, ""
+    summary = record.get("sourceSummary")
+    if not isinstance(summary, str) or not summary:
+        return {}, ""
+
+    # The importer joins fragments with a single space and puts the discovery
+    # sentence last. It cannot be found by splitting on ". ", because JPL writes
+    # discoverers as "Piazzi, G." and that abbreviation ends in a full stop too.
+    start = summary.rfind(". Discovered ")
+    if start == -1:
+        return {}, ""
+    fragment = summary[start + 2:]
+
+    match = JPL_DISCOVERY.match(fragment)
+    if not match:
+        return {}, f"discovery sentence {fragment!r} does not match JPL's shape"
+
+    site = match.group("site")
+    rebuilt = (f"Discovered {match.group('date')} by {match.group('who')}"
+               + (f" at {site}" if site else "") + ".")
+    if rebuilt != fragment:
+        return {}, "discovery sentence did not round-trip; leaving the record alone"
+
+    date = match.group("date")
+    return {
+        "discoverer": match.group("who"),
+        "discoveryDate": date,
+        "discoveryYear": date[:4],
+    }, ""
+
+
 def derive_catalogue_identifiers(record: dict) -> dict:
     """Split the alias list into designations and stored facts.
 
@@ -321,6 +374,7 @@ def main() -> int:
         for derivation in (
             lambda r: derive_mass(r) if r.get("type") == "Exoplanet" else ({}, ""),
             derive_simbad_fields,
+            derive_jpl_discovery,
             lambda r: derive_constellation(r, abbreviations),
         ):
             fields, refusal = derivation(record)

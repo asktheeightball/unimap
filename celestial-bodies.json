@@ -64,7 +64,10 @@
     "catalogueIdentifiers": [
       "1 Ceres (A801 AA)",
       "Main-belt Asteroid (JPL orbit class)"
-    ]
+    ],
+    "discoverer": "Piazzi, G.",
+    "discoveryDate": "1801-01-01",
+    "discoveryYear": "1801"
   },
   {
     "id": "eris",
