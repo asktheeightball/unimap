@@ -1,0 +1,102 @@
+{
+  "_comment": [
+    "Hand-written editorial enrichment, applied by tools/apply_editorial.py.",
+    "",
+    "WHAT THIS FILE IS FOR",
+    "Importers can say what an object is, where it is, and how big it is. They",
+    "cannot say why anyone cares. That gap is what P5 calls 'notability', and it",
+    "cannot be closed by an importer because no source UniMap queries publishes a",
+    "'why this matters' column. This file is the editorial layer that closes it,",
+    "kept deliberately separate from the catalogue so that hand-written prose and",
+    "importer-generated prose can never be confused for one another.",
+    "",
+    "PROVENANCE CAVEAT - READ BEFORE EXTENDING",
+    "Every entry below was written WITHOUT network access. Nothing here could be",
+    "checked against an external source, so no entry claims a source URL: writing",
+    "a citation that was never opened would be fabricated provenance, which is",
+    "worse than none (DECISIONS.md D7). Applied records are therefore marked",
+    "summarySource: 'UniMap editorial' and NOT given a sourceUrl. When a",
+    "networked machine is available, review these strings against a real",
+    "reference, record it, and only then treat them as sourced.",
+    "",
+    "WHAT MAY GO IN AN ENTRY",
+    "- summary: what the object is, in one or two plain sentences.",
+    "- notability: why a general reader would care. No superlative, ranking,",
+    "  record or 'first' unless it is the specific, checkable claim the object is",
+    "  actually known for.",
+    "- notability must not be a restatement of a measurement already in the",
+    "  record. 'The largest planet' is a ranking across data UniMap does not",
+    "  hold; 'its gravity shapes the orbits of asteroids and comets' is not.",
+    "- discoverer / discoveryYear: only where attribution is specific and",
+    "  uncontested. Ancient, collective or disputed discoveries get neither.",
+    "- parentBody / relatedObjectIds: see the relation rules in tools/README.md.",
+    "",
+    "SCOPE OF THIS PASS",
+    "The 11 original hand-authored records that carried no description of any",
+    "kind. Extending notability to the wider catalogue is deliberately NOT done",
+    "here: it needs a source, and every astronomy host is refused by the sandbox",
+    "network policy. See PRIORITY.md for the probes that would unblock it."
+  ],
+  "reviewed": "2026-07-28",
+  "records": {
+    "sol": {
+      "summary": "Sol is the Sun, the star at the centre of the solar system. It is an ordinary main-sequence star, and it supplies nearly all of the energy that reaches Earth.",
+      "notability": "The only star close enough to observe in detail, which makes it the reference against which the mass, size and brightness of every other star are measured.",
+      "relatedObjectIds": ["earth", "mars", "jupiter"]
+    },
+    "earth": {
+      "summary": "Earth is the third planet from the Sun and the only world where life is known to exist. It is the largest of the solar system's four rocky planets.",
+      "notability": "The only known home of life, and the body whose radius and mass are used as the units for describing other planets.",
+      "parentBody": "Sol",
+      "relatedObjectIds": ["sol"]
+    },
+    "mars": {
+      "summary": "Mars is the fourth planet from the Sun, a cold desert world with a thin carbon-dioxide atmosphere and iron-rich dust that gives its surface a red colour.",
+      "notability": "The most intensively explored planet beyond Earth, and the main target in the search for evidence of past life in the solar system.",
+      "parentBody": "Sol",
+      "relatedObjectIds": ["sol"]
+    },
+    "jupiter": {
+      "summary": "Jupiter is the fifth planet from the Sun and the largest in the solar system. It is a gas giant with no solid surface and a banded atmosphere marked by long-lived storms.",
+      "notability": "Massive enough that its gravity shapes the orbits of asteroids and comets throughout the inner solar system.",
+      "parentBody": "Sol",
+      "relatedObjectIds": ["sol"]
+    },
+    "kepler-452b": {
+      "summary": "Kepler-452b is a planet orbiting a Sun-like star roughly 1,800 light years away. It was found by NASA's Kepler mission, which detected the small dip in starlight caused by the planet passing in front of its star.",
+      "notability": "Announced in 2015 as a near-Earth-size planet orbiting within the habitable zone of a Sun-like star.",
+      "discoveryYear": "2015",
+      "discoveryMethod": "Transit"
+    },
+    "milky-way": {
+      "summary": "The Milky Way is the barred spiral galaxy that contains the Sun, Earth, and every star visible to the unaided eye. Its disc is seen from inside as a band of light across the night sky.",
+      "notability": "The one galaxy that can be studied from within, which is why its structure is both the best measured and the hardest to see as a whole.",
+      "relatedObjectIds": ["sagittarius-a-star"]
+    },
+    "sagittarius-a-star": {
+      "summary": "Sagittarius A* is the supermassive black hole at the centre of the Milky Way. Its mass was established by tracking the orbits of stars that circle an otherwise invisible object.",
+      "notability": "The supermassive black hole at the centre of our own galaxy, and the second to have its shadow imaged directly, in 2022.",
+      "relatedObjectIds": ["milky-way"]
+    },
+    "m87-star": {
+      "summary": "M87* is the supermassive black hole at the centre of the giant elliptical galaxy M 87. Radio telescopes across the Earth were combined to resolve the ring of light around it.",
+      "notability": "The subject of the first direct image of a black hole's shadow, published in 2019.",
+      "relatedObjectIds": ["m-87"]
+    },
+    "cygnus-x-1": {
+      "summary": "Cygnus X-1 is a bright X-ray source in the constellation Cygnus. The X-rays come from gas pulled off a blue supergiant star as it falls towards a compact, unseen companion.",
+      "notability": "One of the first objects widely accepted as containing a stellar-mass black hole.",
+      "constellation": "Cygnus"
+    },
+    "psr-b1919-21": {
+      "summary": "PSR B1919+21 is a rotating neutron star that sweeps a beam of radio waves past the Earth, producing a pulse roughly every 1.34 seconds.",
+      "notability": "The first pulsar discovered, and the object that established that neutron stars exist.",
+      "discoverer": "Jocelyn Bell Burnell",
+      "discoveryYear": "1967"
+    },
+    "psr-j0348-0432": {
+      "summary": "PSR J0348+0432 is a millisecond pulsar in a tight orbit with a white dwarf companion, completing one orbit in about two and a half hours.",
+      "notability": "A massive neutron star whose orbit is used to test general relativity in gravity far stronger than anything available in the solar system."
+    }
+  }
+}

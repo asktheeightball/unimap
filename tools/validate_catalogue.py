@@ -78,11 +78,66 @@ OPTIONAL_FIELDS = {
     "discoveryMethod": str,
     "spectralType": str,
     "wellKnown": bool,
+    # --- P5 enrichment -----------------------------------------------------
+    # Named measurements. `measurementLabel`/`measurementValue` is one generic
+    # slot whose meaning changes from record to record, so nothing may compare
+    # two records through it. These name their own quantity and unit, and are
+    # written by tools/derive_enrichment.py from the value already stored in
+    # that slot. They are strings, not numbers, because the source's own
+    # precision is part of the value and reformatting it would lose that.
+    "radiusEarth": str,          # planet radius in Earth radii
+    "massEarth": str,            # planet mass in Earth masses
+    "parallaxMas": str,          # measured parallax in milliarcseconds
+    "semiMajorAxisAu": str,      # orbital semi-major axis in astronomical units
+    # SIMBAD's own object-type gloss ("red giant", "planetary nebula"). A
+    # classification the source published, not a UniMap judgement; `type` stays
+    # the coarse category the interface filters by.
+    "classification": str,
+    # The IAU constellation the object's designation places it in. Derived only
+    # from a Bayer/Flamsteed/variable-star designation, never from coordinates,
+    # and never applied to a moving solar-system body. See CONSTELLATIONS.
+    "constellation": str,
+    # The subset of `aliases` that is a real catalogue designation, with the
+    # stored-fact pseudo-aliases ("Spectral type G2V", "Kepler-11 system")
+    # removed. `aliases` itself is unchanged so search behaviour is unaffected.
+    "catalogueIdentifiers": list,
+    # Editorial. `summary` is hand-written prose and always takes precedence
+    # over `sourceSummary`; `notability` says why a general reader would care.
+    # `summarySource` and `summaryReviewed` record who wrote it and when, and
+    # are required whenever either prose field is present.
+    "notability": str,
+    "summarySource": str,
+    "summaryReviewed": str,
+    # Discovery attribution. `discoverer` is free text so a team, a survey or
+    # several people can be credited without being forced into one name.
+    "discoverer": str,
+    "discoveryDate": str,        # YYYY-MM-DD, when the source is that precise
+    # Relationships. `parentBody` is the name of what this object orbits or
+    # belongs to; `relatedObjectIds` are ids of other catalogue records.
+    "parentBody": str,
+    "relatedObjectIds": list,
 }
+
+# Constellation values are checked against the IAU table rather than accepted
+# as free text, so a typo or an abbreviation that was never expanded is an
+# error instead of a label nobody notices.
+CONSTELLATIONS = Path(__file__).resolve().parent / "constellations.json"
+
+# A sky constellation is a direction, not a place, so it is not a property a
+# body that moves against the background stars can have.
+MOVING_TYPES = {"Planet", "Dwarf Planet", "Moon"}
 
 ID_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 DATE_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 YEAR_PATTERN = re.compile(r"^\d{4}$")
+
+try:
+    CONSTELLATION_NAMES = set(
+        json.loads(CONSTELLATIONS.read_text(encoding="utf-8"))["abbreviations"].values()
+    )
+except (OSError, ValueError, KeyError) as exc:  # pragma: no cover - setup error
+    print(f"error: cannot read {CONSTELLATIONS}: {exc}", file=sys.stderr)
+    sys.exit(1)
 
 errors: list[str] = []
 warnings: list[str] = []
@@ -173,6 +228,47 @@ def check_record(index: int, record) -> None:
     if isinstance(host, str) and host.strip() == str(record.get("name") or "").strip():
         error(f"{label}: hostName is the record's own name")
 
+    date = record.get("discoveryDate")
+    if isinstance(date, str) and not DATE_PATTERN.match(date):
+        error(f"{label}: discoveryDate must be YYYY-MM-DD, found {date!r}")
+
+    # A precise date and a year must not contradict each other.
+    if isinstance(date, str) and isinstance(year, str) and DATE_PATTERN.match(date):
+        if date[:4] != year:
+            error(f"{label}: discoveryDate {date!r} disagrees with discoveryYear {year!r}")
+
+    reviewed_summary = record.get("summaryReviewed")
+    if isinstance(reviewed_summary, str) and not DATE_PATTERN.match(reviewed_summary):
+        error(f"{label}: summaryReviewed must be YYYY-MM-DD, found {reviewed_summary!r}")
+
+    # Editorial prose without attribution is indistinguishable from importer
+    # output, which is exactly the confusion the two fields exist to prevent.
+    if record.get("summary") or record.get("notability"):
+        if not record.get("summarySource"):
+            error(f"{label}: has editorial prose but no summarySource")
+        if not record.get("summaryReviewed"):
+            error(f"{label}: has editorial prose but no summaryReviewed")
+
+    constellation = record.get("constellation")
+    if isinstance(constellation, str):
+        if constellation not in CONSTELLATION_NAMES:
+            error(f"{label}: constellation {constellation!r} is not one of the 88 "
+                  f"IAU constellations")
+        if body_type in MOVING_TYPES:
+            error(f"{label}: {body_type} moves against the background stars, so a "
+                  f"constellation is not a property it has")
+
+    # A named measurement must be a number: these fields exist precisely so a
+    # value can be compared or converted, which text cannot be.
+    for field in ("radiusEarth", "massEarth", "parallaxMas", "semiMajorAxisAu"):
+        value = record.get(field)
+        if not isinstance(value, str):
+            continue
+        try:
+            float(value.replace(",", ""))
+        except ValueError:
+            error(f"{label}: {field} must be numeric, found {value!r}")
+
     # Provenance is paired: a URL without a name (or vice versa) is incomplete.
     has_name, has_url = "sourceName" in record, "sourceUrl" in record
     if has_name != has_url:
@@ -218,6 +314,32 @@ def check_collisions(records) -> None:
                          f"of record(s) {owner}")
 
 
+def check_relations(records) -> None:
+    """Every relation must point at a real, different record, exactly once.
+
+    A relation that names a missing id renders as a dead link; a self-relation
+    renders as a link back to the page the reader is already on; a duplicate
+    renders the same link twice. None of the three is caught by JSON validity.
+    """
+    ids = {r.get("id") for r in records if isinstance(r, dict)}
+
+    for record in records:
+        if not isinstance(record, dict):
+            continue
+        related = record.get("relatedObjectIds")
+        if not isinstance(related, list):
+            continue
+        label = repr(record.get("id"))
+        seen = Counter(target for target in related if isinstance(target, str))
+        for target, count in sorted(seen.items()):
+            if count > 1:
+                error(f"{label}: relatedObjectIds lists {target!r} {count} times")
+            if target == record.get("id"):
+                error(f"{label}: relatedObjectIds contains the record's own id")
+            elif target not in ids:
+                error(f"{label}: relatedObjectIds names {target!r}, which is not a record")
+
+
 def check_local_references(records, root: Path) -> None:
     for record in records:
         if not isinstance(record, dict):
@@ -242,6 +364,25 @@ def report(records, quiet: bool) -> None:
         provenance = sum(1 for r in records if isinstance(r, dict) and r.get("sourceUrl"))
         print(f"with source metadata: {provenance}/{len(records)}")
 
+        # Coverage per enriched field, so a promotion can be compared against
+        # the numbers reported before it rather than eyeballed.
+        total = len(records)
+        print("field coverage:")
+        for field in ("summary", "notability", "sourceSummary", "classification",
+                      "constellation", "spectralType", "hostName", "parentBody",
+                      "discoverer", "discoveryYear", "discoveryMethod",
+                      "catalogueIdentifiers", "relatedObjectIds", "aliases",
+                      "distance", "size", "radiusEarth", "massEarth",
+                      "parallaxMas", "semiMajorAxisAu",
+                      "rightAscension", "declination"):
+            count = sum(1 for r in records
+                        if isinstance(r, dict) and r.get(field) not in (None, "", []))
+            print(f"  {field:<22} {count:>4}/{total}")
+
+        described = sum(1 for r in records if isinstance(r, dict)
+                        and (r.get("summary") or r.get("sourceSummary")))
+        print(f"with any description: {described}/{total}")
+
     for message in warnings:
         print(f"warning: {message}")
     for message in errors:
@@ -260,6 +401,7 @@ def main() -> int:
     for index, record in enumerate(records):
         check_record(index, record)
     check_collisions(records)
+    check_relations(records)
     check_local_references(records, args.path.resolve().parent)
 
     report(records, args.quiet)
