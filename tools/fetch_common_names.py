@@ -129,17 +129,32 @@ def build_mapping(rows: list[dict], catalogue: list[dict], overrides: dict) -> t
             continue
 
         names = sorted(entry["names"])
-        chosen = choose(names)
+        record_name = str(record.get("name", ""))
+
+        # The point of a common name is to replace a catalogue designation. When
+        # SIMBAD's own main_id is already a NAME, the record is displaying a
+        # common name and a shorter variant would be a downgrade, not an
+        # improvement: "Proxima" for Proxima Centauri, "Vel A" for the Vela
+        # Pulsar. Keep the alternates so search still matches them, but name
+        # nothing.
+        already_named = entry["identifier"].startswith("NAME ")
+        chosen = None if already_named else choose(names)
 
         # A common name that only repeats the record's own name adds nothing and
         # would show the same string twice in the interface.
-        if chosen.casefold() == str(record.get("name", "")).casefold():
+        if chosen is not None and chosen.casefold() == record_name.casefold():
             refusals.append((record_id, entry["identifier"], f"name already {chosen!r}"))
+            continue
+
+        alternates = [n for n in names
+                      if n != chosen and n.casefold() != record_name.casefold()]
+        if chosen is None and not alternates:
+            refusals.append((record_id, entry["identifier"], "already displays its common name"))
             continue
 
         mapping[record_id] = {
             "commonName": chosen,
-            "alternates": [n for n in names if n != chosen],
+            "alternates": alternates,
             "simbadIdentifier": entry["identifier"],
             "sourceName": SOURCE_NAME,
             "sourceUrl": SOURCE_URL,
@@ -181,10 +196,12 @@ def main() -> int:
 
     mapping, refusals = build_mapping(rows, catalogue, overrides)
 
-    print(f"\nmapped {len(mapping)} record(s) to a SIMBAD common name")
+    named = sum(1 for e in mapping.values() if e["commonName"])
+    print(f"\nmapped {len(mapping)} record(s): {named} given a common name, "
+          f"{len(mapping) - named} given alternates only")
     for record_id, entry in list(mapping.items())[:10]:
         extra = f"  (also {', '.join(entry['alternates'])})" if entry["alternates"] else ""
-        print(f"  {record_id:24} -> {entry['commonName']}{extra}")
+        print(f"  {record_id:24} -> {entry['commonName'] or '(alternates only)'}{extra}")
     if len(mapping) > 10:
         print(f"  ... and {len(mapping) - 10} more")
 
@@ -195,6 +212,8 @@ def main() -> int:
 
     duplicates = {}
     for record_id, entry in mapping.items():
+        if not entry["commonName"]:
+            continue
         duplicates.setdefault(entry["commonName"].casefold(), []).append(record_id)
     clashes = {name: ids for name, ids in duplicates.items() if len(ids) > 1}
     if clashes:

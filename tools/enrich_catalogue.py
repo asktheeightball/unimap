@@ -183,7 +183,9 @@ def enrich_common_name(record: dict, mapping: dict) -> dict:
     entry = mapping.get(record["id"])
     if not entry:
         return record
-    record["commonName"] = entry["commonName"]
+    # A record already displaying its common name gets alternates only.
+    if entry.get("commonName"):
+        record["commonName"] = entry["commonName"]
     alternates = [a for a in entry.get("alternates") or []
                   if a.casefold() != str(record.get("name", "")).casefold()]
     if alternates:

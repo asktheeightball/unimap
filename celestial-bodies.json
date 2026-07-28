@@ -40,7 +40,12 @@
     "sourceName": "NASA/JPL Small-Body Database",
     "sourceUrl": "https://ssd.jpl.nasa.gov/tools/sbdb_lookup.html",
     "lastReviewed": "2026-07-26",
-    "sourceSummary": "Ceres orbits the Sun at a mean distance of 2.77 AU. Its measured diameter is 939 km. NASA/JPL's Small-Body Database records its orbit class as Main-belt Asteroid. Discovered 1801-01-01 by Piazzi, G. at Palermo."
+    "sourceSummary": "Ceres orbits the Sun at a mean distance of 2.77 AU. Its measured diameter is 939 km. NASA/JPL's Small-Body Database records its orbit class as Main-belt Asteroid. Discovered 1801-01-01 by Piazzi, G. at Palermo.",
+    "orbitClass": "Main-belt Asteroid",
+    "discoverer": "Piazzi, G.",
+    "discoveryDate": "1801-01-01",
+    "discoveryYear": "1801",
+    "discoverySite": "Palermo"
   },
   {
     "id": "eris",
@@ -56,7 +61,8 @@
     "sourceUrl": "https://ssd.jpl.nasa.gov/tools/sbdb_query.html",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "Eris orbits the Sun at a mean distance of 67.93 AU. NASA/JPL's Small-Body Database records its orbit class as TNO. The Small-Body Database lists no measured diameter for it.",
-    "wellKnown": true
+    "wellKnown": true,
+    "orbitClass": "TNO"
   },
   {
     "id": "haumea",
@@ -72,7 +78,8 @@
     "sourceUrl": "https://ssd.jpl.nasa.gov/tools/sbdb_query.html",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "Haumea orbits the Sun at a mean distance of 43.06 AU. NASA/JPL's Small-Body Database records its orbit class as TNO. The Small-Body Database lists no measured diameter for it.",
-    "wellKnown": true
+    "wellKnown": true,
+    "orbitClass": "TNO"
   },
   {
     "id": "makemake",
@@ -88,7 +95,8 @@
     "sourceUrl": "https://ssd.jpl.nasa.gov/tools/sbdb_query.html",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "Makemake orbits the Sun at a mean distance of 45.57 AU. NASA/JPL's Small-Body Database records its orbit class as TNO. The Small-Body Database lists no measured diameter for it.",
-    "wellKnown": true
+    "wellKnown": true,
+    "orbitClass": "TNO"
   },
   {
     "id": "pluto",
@@ -104,7 +112,8 @@
     "sourceUrl": "https://ssd.jpl.nasa.gov/tools/sbdb_query.html",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "Pluto orbits the Sun at a mean distance of 39.59 AU. NASA/JPL's Small-Body Database records its orbit class as TNO. The Small-Body Database lists no measured diameter for it.",
-    "wellKnown": true
+    "wellKnown": true,
+    "orbitClass": "TNO"
   },
   {
     "id": "koi-1599-02",
@@ -126,7 +135,8 @@
     "sourceSummary": "KOI-1599.02 is a confirmed exoplanet orbiting KOI-1599. The system lies about 3,690.9 light years from Earth. The planet's radius is 1.90 times Earth's. Its best mass estimate is 9.00 times Earth's. It was discovered in 2019 using the Transit method.",
     "hostName": "KOI-1599",
     "discoveryYear": "2019",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "9.00"
   },
   {
     "id": "kepler-114-b",
@@ -148,7 +158,8 @@
     "sourceSummary": "Kepler-114 b is a confirmed exoplanet orbiting Kepler-114. The system lies about 846.5 light years from Earth. The planet's radius is 1.26 times Earth's. Its best mass estimate is 1.09 times Earth's. It was discovered in 2014 using the Transit method.",
     "hostName": "Kepler-114",
     "discoveryYear": "2014",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "1.09"
   },
   {
     "id": "kepler-1176-b",
@@ -170,7 +181,8 @@
     "sourceSummary": "Kepler-1176 b is a confirmed exoplanet orbiting Kepler-1176. The system lies about 2,820.3 light years from Earth. The planet's radius is 2.45 times Earth's. Its best mass estimate is 6.57 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-1176",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "6.57"
   },
   {
     "id": "kepler-1207-b",
@@ -192,7 +204,8 @@
     "sourceSummary": "Kepler-1207 b is a confirmed exoplanet orbiting Kepler-1207. The system lies about 5,721.4 light years from Earth. The planet's radius is 1.62 times Earth's. Its best mass estimate is 3.26 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-1207",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "3.26"
   },
   {
     "id": "kepler-1225-b",
@@ -214,7 +227,8 @@
     "sourceSummary": "Kepler-1225 b is a confirmed exoplanet orbiting Kepler-1225. The system lies about 4,395.0 light years from Earth. The planet's radius is 1.82 times Earth's. Its best mass estimate is 3.97 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-1225",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "3.97"
   },
   {
     "id": "kepler-1244-b",
@@ -236,7 +250,8 @@
     "sourceSummary": "Kepler-1244 b is a confirmed exoplanet orbiting Kepler-1244. The system lies about 3,508.8 light years from Earth. The planet's radius is 1.35 times Earth's. Its best mass estimate is 2.39 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-1244",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "2.39"
   },
   {
     "id": "kepler-1249-b",
@@ -258,7 +273,8 @@
     "sourceSummary": "Kepler-1249 b is a confirmed exoplanet orbiting Kepler-1249. The system lies about 6,211.8 light years from Earth. The planet's radius is 2.38 times Earth's. Its best mass estimate is 6.26 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-1249",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "6.26"
   },
   {
     "id": "kepler-1275-b",
@@ -280,7 +296,8 @@
     "sourceSummary": "Kepler-1275 b is a confirmed exoplanet orbiting Kepler-1275. The system lies about 3,763.8 light years from Earth. The planet's radius is 1.48 times Earth's. Its best mass estimate is 2.79 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-1275",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "2.79"
   },
   {
     "id": "kepler-130-d",
@@ -302,7 +319,8 @@
     "sourceSummary": "Kepler-130 d is a confirmed exoplanet orbiting Kepler-130. The system lies about 1,032.8 light years from Earth. The planet's radius is 1.64 times Earth's. Its best mass estimate is 3.33 times Earth's. It was discovered in 2014 using the Transit method.",
     "hostName": "Kepler-130",
     "discoveryYear": "2014",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "3.33"
   },
   {
     "id": "kepler-1388-b",
@@ -324,7 +342,8 @@
     "sourceSummary": "Kepler-1388 b is a confirmed exoplanet orbiting Kepler-1388. The system lies about 1,480.1 light years from Earth. The planet's radius is 2.59 times Earth's. Its best mass estimate is 7.22 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-1388",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "7.22"
   },
   {
     "id": "kepler-1408-b",
@@ -346,7 +365,8 @@
     "sourceSummary": "Kepler-1408 b is a confirmed exoplanet orbiting Kepler-1408. The system lies about 1,745.1 light years from Earth. The planet's radius is 0.89 times Earth's. Its best mass estimate is 0.64 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-1408",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "0.64"
   },
   {
     "id": "kepler-1427-b",
@@ -368,7 +388,8 @@
     "sourceSummary": "Kepler-1427 b is a confirmed exoplanet orbiting Kepler-1427. The system lies about 3,979.1 light years from Earth. The planet's radius is 1.10 times Earth's. Its best mass estimate is 1.37 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-1427",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "1.37"
   },
   {
     "id": "kepler-1490-b",
@@ -390,7 +411,8 @@
     "sourceSummary": "Kepler-1490 b is a confirmed exoplanet orbiting Kepler-1490. The system lies about 2,814.5 light years from Earth. The planet's radius is 3.04 times Earth's. Its best mass estimate is 9.48 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-1490",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "9.48"
   },
   {
     "id": "kepler-1491-b",
@@ -412,7 +434,8 @@
     "sourceSummary": "Kepler-1491 b is a confirmed exoplanet orbiting Kepler-1491. The system lies about 6,737.1 light years from Earth. The planet's radius is 1.51 times Earth's. Its best mass estimate is 2.89 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-1491",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "2.89"
   },
   {
     "id": "kepler-1494-b",
@@ -434,7 +457,8 @@
     "sourceSummary": "Kepler-1494 b is a confirmed exoplanet orbiting Kepler-1494. The system lies about 4,192.7 light years from Earth. The planet's radius is 3.07 times Earth's. Its best mass estimate is 9.64 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-1494",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "9.64"
   },
   {
     "id": "kepler-150-c",
@@ -456,7 +480,8 @@
     "sourceSummary": "Kepler-150 c is a confirmed exoplanet orbiting Kepler-150. The system lies about 2,906.4 light years from Earth. The planet's radius is 3.69 times Earth's. Its best mass estimate is 13.20 times Earth's. It was discovered in 2014 using the Transit method.",
     "hostName": "Kepler-150",
     "discoveryYear": "2014",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "13.20"
   },
   {
     "id": "kepler-1502-b",
@@ -478,7 +503,8 @@
     "sourceSummary": "Kepler-1502 b is a confirmed exoplanet orbiting Kepler-1502. The system lies about 4,938.1 light years from Earth. The planet's radius is 3.18 times Earth's. Its best mass estimate is 10.20 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-1502",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "10.20"
   },
   {
     "id": "kepler-1585-b",
@@ -500,7 +526,8 @@
     "sourceSummary": "Kepler-1585 b is a confirmed exoplanet orbiting Kepler-1585. The system lies about 3,080.4 light years from Earth. The planet's radius is 1.79 times Earth's. Its best mass estimate is 3.86 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-1585",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "3.86"
   },
   {
     "id": "kepler-1596-b",
@@ -522,7 +549,8 @@
     "sourceSummary": "Kepler-1596 b is a confirmed exoplanet orbiting Kepler-1596. The system lies about 7,000.1 light years from Earth. The planet's radius is 1.90 times Earth's. Its best mass estimate is 4.27 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-1596",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "4.27"
   },
   {
     "id": "kepler-1597-b",
@@ -544,7 +572,8 @@
     "sourceSummary": "Kepler-1597 b is a confirmed exoplanet orbiting Kepler-1597. The system lies about 3,982.5 light years from Earth. The planet's radius is 1.06 times Earth's. Its best mass estimate is 1.20 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-1597",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "1.20"
   },
   {
     "id": "kepler-1631-b",
@@ -566,7 +595,8 @@
     "sourceSummary": "Kepler-1631 b is a confirmed exoplanet orbiting Kepler-1631. The system lies about 4,259.6 light years from Earth. The planet's radius is 1.35 times Earth's. Its best mass estimate is 2.39 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-1631",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "2.39"
   },
   {
     "id": "kepler-1665-b",
@@ -588,7 +618,8 @@
     "sourceSummary": "Kepler-1665 b is a confirmed exoplanet orbiting Kepler-1665. The system lies about 1,094.3 light years from Earth. The planet's radius is 2.84 times Earth's. Its best mass estimate is 8.44 times Earth's. It was discovered in 2020 using the Transit method.",
     "hostName": "Kepler-1665",
     "discoveryYear": "2020",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "8.44"
   },
   {
     "id": "kepler-171-b",
@@ -610,7 +641,8 @@
     "sourceSummary": "Kepler-171 b is a confirmed exoplanet orbiting Kepler-171. The system lies about 2,817.5 light years from Earth. The planet's radius is 2.34 times Earth's. Its best mass estimate is 6.08 times Earth's. It was discovered in 2014 using the Transit method.",
     "hostName": "Kepler-171",
     "discoveryYear": "2014",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "6.08"
   },
   {
     "id": "kepler-1738-b",
@@ -632,7 +664,8 @@
     "sourceSummary": "Kepler-1738 b is a confirmed exoplanet orbiting Kepler-1738. The system lies about 4,249.4 light years from Earth. The planet's radius is 2.82 times Earth's. Its best mass estimate is 8.37 times Earth's. It was discovered in 2021 using the Transit method.",
     "hostName": "Kepler-1738",
     "discoveryYear": "2021",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "8.37"
   },
   {
     "id": "kepler-174-d",
@@ -654,7 +687,8 @@
     "sourceSummary": "Kepler-174 d is a confirmed exoplanet orbiting Kepler-174. The system lies about 1,254.9 light years from Earth. The planet's radius is 2.19 times Earth's. Its best mass estimate is 5.43 times Earth's. It was discovered in 2014 using the Transit method.",
     "hostName": "Kepler-174",
     "discoveryYear": "2014",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "5.43"
   },
   {
     "id": "kepler-1792-b",
@@ -676,7 +710,8 @@
     "sourceSummary": "Kepler-1792 b is a confirmed exoplanet orbiting Kepler-1792. The system lies about 1,960.3 light years from Earth. The planet's radius is 2.52 times Earth's. Its best mass estimate is 6.89 times Earth's. It was discovered in 2021 using the Transit method.",
     "hostName": "Kepler-1792",
     "discoveryYear": "2021",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "6.89"
   },
   {
     "id": "kepler-1805-b",
@@ -698,7 +733,8 @@
     "sourceSummary": "Kepler-1805 b is a confirmed exoplanet orbiting Kepler-1805. The system lies about 722.9 light years from Earth. The planet's radius is 1.55 times Earth's. Its best mass estimate is 3.00 times Earth's. It was discovered in 2021 using the Transit method.",
     "hostName": "Kepler-1805",
     "discoveryYear": "2021",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "3.00"
   },
   {
     "id": "kepler-1859-b",
@@ -720,7 +756,8 @@
     "sourceSummary": "Kepler-1859 b is a confirmed exoplanet orbiting Kepler-1859. The system lies about 4,342.0 light years from Earth. The planet's radius is 1.58 times Earth's. Its best mass estimate is 3.13 times Earth's. It was discovered in 2021 using the Transit method.",
     "hostName": "Kepler-1859",
     "discoveryYear": "2021",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "3.13"
   },
   {
     "id": "kepler-1926-b",
@@ -742,7 +779,8 @@
     "sourceSummary": "Kepler-1926 b is a confirmed exoplanet orbiting Kepler-1926. The system lies about 2,176.8 light years from Earth. The planet's radius is 2.31 times Earth's. Its best mass estimate is 5.97 times Earth's. It was discovered in 2021 using the Transit method.",
     "hostName": "Kepler-1926",
     "discoveryYear": "2021",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "5.97"
   },
   {
     "id": "kepler-200-c",
@@ -764,7 +802,8 @@
     "sourceSummary": "Kepler-200 c is a confirmed exoplanet orbiting Kepler-200. The system lies about 2,171.9 light years from Earth. The planet's radius is 1.59 times Earth's. Its best mass estimate is 3.15 times Earth's. It was discovered in 2014 using the Transit method.",
     "hostName": "Kepler-200",
     "discoveryYear": "2014",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "3.15"
   },
   {
     "id": "kepler-213-c",
@@ -786,7 +825,8 @@
     "sourceSummary": "Kepler-213 c is a confirmed exoplanet orbiting Kepler-213. The system lies about 2,070.9 light years from Earth. The planet's radius is 2.34 times Earth's. Its best mass estimate is 6.08 times Earth's. It was discovered in 2014 using the Transit method.",
     "hostName": "Kepler-213",
     "discoveryYear": "2014",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "6.08"
   },
   {
     "id": "kepler-233-c",
@@ -808,7 +848,8 @@
     "sourceSummary": "Kepler-233 c is a confirmed exoplanet orbiting Kepler-233. The system lies about 2,793.3 light years from Earth. The planet's radius is 2.71 times Earth's. Its best mass estimate is 7.80 times Earth's. It was discovered in 2014 using the Transit method.",
     "hostName": "Kepler-233",
     "discoveryYear": "2014",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "7.80"
   },
   {
     "id": "kepler-258-c",
@@ -830,7 +871,8 @@
     "sourceSummary": "Kepler-258 c is a confirmed exoplanet orbiting Kepler-258. The system lies about 1,878.6 light years from Earth. The planet's radius is 3.61 times Earth's. Its best mass estimate is 12.70 times Earth's. It was discovered in 2014 using the Transit method.",
     "hostName": "Kepler-258",
     "discoveryYear": "2014",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "12.70"
   },
   {
     "id": "kepler-267-b",
@@ -852,7 +894,8 @@
     "sourceSummary": "Kepler-267 b is a confirmed exoplanet orbiting Kepler-267. The system lies about 864.3 light years from Earth. The planet's radius is 1.98 times Earth's. Its best mass estimate is 37.90 times Earth's. It was discovered in 2014 using the Transit method.",
     "hostName": "Kepler-267",
     "discoveryYear": "2014",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "37.90"
   },
   {
     "id": "kepler-272-c",
@@ -874,7 +917,8 @@
     "sourceSummary": "Kepler-272 c is a confirmed exoplanet orbiting Kepler-272. The system lies about 2,901.5 light years from Earth. The planet's radius is 1.79 times Earth's. Its best mass estimate is 97.80 times Earth's. It was discovered in 2014 using the Transit method.",
     "hostName": "Kepler-272",
     "discoveryYear": "2014",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "97.80"
   },
   {
     "id": "kepler-276-d",
@@ -896,7 +940,8 @@
     "sourceSummary": "Kepler-276 d is a confirmed exoplanet orbiting Kepler-276. The system lies about 3,734.0 light years from Earth. The planet's radius is 2.80 times Earth's. Its best mass estimate is 16.30 times Earth's. It was discovered in 2013 using the Transit method.",
     "hostName": "Kepler-276",
     "discoveryYear": "2013",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "16.30"
   },
   {
     "id": "kepler-288-c",
@@ -918,7 +963,8 @@
     "sourceSummary": "Kepler-288 c is a confirmed exoplanet orbiting Kepler-288. The system lies about 3,894.8 light years from Earth. The planet's radius is 2.85 times Earth's. Its best mass estimate is 8.50 times Earth's. It was discovered in 2014 using the Transit method.",
     "hostName": "Kepler-288",
     "discoveryYear": "2014",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "8.50"
   },
   {
     "id": "kepler-324-e",
@@ -940,7 +986,8 @@
     "sourceSummary": "Kepler-324 e is a confirmed exoplanet orbiting Kepler-324. The system lies about 1,635.9 light years from Earth. The planet's radius is 2.04 times Earth's. Its best mass estimate is 235.01 times Earth's. It was discovered in 2021 using the Transit method.",
     "hostName": "Kepler-324",
     "discoveryYear": "2021",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "235.01"
   },
   {
     "id": "kepler-330-b",
@@ -962,7 +1009,8 @@
     "sourceSummary": "Kepler-330 b is a confirmed exoplanet orbiting Kepler-330. The system lies about 2,340.3 light years from Earth. The planet's radius is 1.35 times Earth's. Its best mass estimate is 2.39 times Earth's. It was discovered in 2014 using the Transit method.",
     "hostName": "Kepler-330",
     "discoveryYear": "2014",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "2.39"
   },
   {
     "id": "kepler-333-b",
@@ -984,7 +1032,8 @@
     "sourceSummary": "Kepler-333 b is a confirmed exoplanet orbiting Kepler-333. The system lies about 1,058.1 light years from Earth. The planet's radius is 1.32 times Earth's. Its best mass estimate is 28.20 times Earth's. It was discovered in 2014 using the Transit method.",
     "hostName": "Kepler-333",
     "discoveryYear": "2014",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "28.20"
   },
   {
     "id": "kepler-340-c",
@@ -1006,7 +1055,8 @@
     "sourceSummary": "Kepler-340 c is a confirmed exoplanet orbiting Kepler-340. The system lies about 2,637.8 light years from Earth. The planet's radius is 3.37 times Earth's. Its best mass estimate is 11.30 times Earth's. It was discovered in 2014 using the Transit method.",
     "hostName": "Kepler-340",
     "discoveryYear": "2014",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "11.30"
   },
   {
     "id": "kepler-342-e",
@@ -1028,7 +1078,8 @@
     "sourceSummary": "Kepler-342 e is a confirmed exoplanet orbiting Kepler-342. The system lies about 2,549.3 light years from Earth. The planet's radius is 0.88 times Earth's. Its best mass estimate is 0.61 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-342",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "0.61"
   },
   {
     "id": "kepler-355-b",
@@ -1050,7 +1101,8 @@
     "sourceSummary": "Kepler-355 b is a confirmed exoplanet orbiting Kepler-355. The system lies about 4,671.1 light years from Earth. The planet's radius is 1.46 times Earth's. Its best mass estimate is 2.73 times Earth's. It was discovered in 2014 using the Transit method.",
     "hostName": "Kepler-355",
     "discoveryYear": "2014",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "2.73"
   },
   {
     "id": "kepler-372-c",
@@ -1072,7 +1124,8 @@
     "sourceSummary": "Kepler-372 c is a confirmed exoplanet orbiting Kepler-372. The system lies about 4,872.6 light years from Earth. The planet's radius is 2.09 times Earth's. Its best mass estimate is 5.02 times Earth's. It was discovered in 2014 using the Transit method.",
     "hostName": "Kepler-372",
     "discoveryYear": "2014",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "5.02"
   },
   {
     "id": "kepler-485-b",
@@ -1116,7 +1169,8 @@
     "sourceSummary": "Kepler-498 b is a confirmed exoplanet orbiting Kepler-498. The system lies about 3,062.1 light years from Earth. The planet's radius is 3.03 times Earth's. Its best mass estimate is 9.43 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-498",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "9.43"
   },
   {
     "id": "kepler-541-b",
@@ -1138,7 +1192,8 @@
     "sourceSummary": "Kepler-541 b is a confirmed exoplanet orbiting Kepler-541. The system lies about 3,459.5 light years from Earth. The planet's radius is 3.36 times Earth's. Its best mass estimate is 11.20 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-541",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "11.20"
   },
   {
     "id": "kepler-60-d",
@@ -1160,7 +1215,8 @@
     "sourceSummary": "Kepler-60 d is a confirmed exoplanet orbiting Kepler-60. The system lies about 3,343.4 light years from Earth. The planet's radius is 1.99 times Earth's. Its best mass estimate is 4.16 times Earth's. It was discovered in 2012 using the Transit method.",
     "hostName": "Kepler-60",
     "discoveryYear": "2012",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "4.16"
   },
   {
     "id": "kepler-66-b",
@@ -1182,7 +1238,8 @@
     "sourceSummary": "Kepler-66 b is a confirmed exoplanet orbiting Kepler-66. The system lies about 3,923.5 light years from Earth. The planet's radius is 2.80 times Earth's. Its best mass estimate is 8.25 times Earth's. It was discovered in 2013 using the Transit method.",
     "hostName": "Kepler-66",
     "discoveryYear": "2013",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "8.25"
   },
   {
     "id": "kepler-687-b",
@@ -1204,7 +1261,8 @@
     "sourceSummary": "Kepler-687 b is a confirmed exoplanet orbiting Kepler-687. The system lies about 2,066.7 light years from Earth. The planet's radius is 3.52 times Earth's. Its best mass estimate is 12.20 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-687",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "12.20"
   },
   {
     "id": "kepler-692-b",
@@ -1226,7 +1284,8 @@
     "sourceSummary": "Kepler-692 b is a confirmed exoplanet orbiting Kepler-692. The system lies about 3,233.3 light years from Earth. The planet's radius is 3.11 times Earth's. Its best mass estimate is 9.85 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-692",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "9.85"
   },
   {
     "id": "kepler-719-b",
@@ -1248,7 +1307,8 @@
     "sourceSummary": "Kepler-719 b is a confirmed exoplanet orbiting Kepler-719. The system lies about 8,145.8 light years from Earth. The planet's radius is 8.52 times Earth's. Its best mass estimate is 54.50 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-719",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "54.50"
   },
   {
     "id": "kepler-734-b",
@@ -1270,7 +1330,8 @@
     "sourceSummary": "Kepler-734 b is a confirmed exoplanet orbiting Kepler-734. The system lies about 3,774.3 light years from Earth. The planet's radius is 3.56 times Earth's. Its best mass estimate is 12.40 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-734",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "12.40"
   },
   {
     "id": "kepler-746-b",
@@ -1292,7 +1353,8 @@
     "sourceSummary": "Kepler-746 b is a confirmed exoplanet orbiting Kepler-746. The system lies about 1,467.7 light years from Earth. The planet's radius is 1.11 times Earth's. Its best mass estimate is 1.41 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-746",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "1.41"
   },
   {
     "id": "kepler-760-b",
@@ -1314,7 +1376,8 @@
     "sourceSummary": "Kepler-760 b is a confirmed exoplanet orbiting Kepler-760. The system lies about 2,584.3 light years from Earth. The planet's radius is 3.06 times Earth's. Its best mass estimate is 9.59 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-760",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "9.59"
   },
   {
     "id": "kepler-775-b",
@@ -1336,7 +1399,8 @@
     "sourceSummary": "Kepler-775 b is a confirmed exoplanet orbiting Kepler-775. The system lies about 1,300.3 light years from Earth. The planet's radius is 1.19 times Earth's. Its best mass estimate is 1.81 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-775",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "1.81"
   },
   {
     "id": "kepler-794-b",
@@ -1358,7 +1422,8 @@
     "sourceSummary": "Kepler-794 b is a confirmed exoplanet orbiting Kepler-794. The system lies about 3,037.1 light years from Earth. The planet's radius is 2.11 times Earth's. Its best mass estimate is 5.10 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-794",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "5.10"
   },
   {
     "id": "kepler-865-b",
@@ -1380,7 +1445,8 @@
     "sourceSummary": "Kepler-865 b is a confirmed exoplanet orbiting Kepler-865. The system lies about 1,911.7 light years from Earth. The planet's radius is 2.49 times Earth's. Its best mass estimate is 6.76 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-865",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "6.76"
   },
   {
     "id": "kepler-877-b",
@@ -1402,7 +1468,8 @@
     "sourceSummary": "Kepler-877 b is a confirmed exoplanet orbiting Kepler-877. The system lies about 1,964.0 light years from Earth. The planet's radius is 2.12 times Earth's. Its best mass estimate is 5.14 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-877",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "5.14"
   },
   {
     "id": "kepler-951-b",
@@ -1424,7 +1491,8 @@
     "sourceSummary": "Kepler-951 b is a confirmed exoplanet orbiting Kepler-951. The system lies about 1,247.6 light years from Earth. The planet's radius is 5.59 times Earth's. Its best mass estimate is 26.70 times Earth's. It was discovered in 2016 using the Transit method.",
     "hostName": "Kepler-951",
     "discoveryYear": "2016",
-    "discoveryMethod": "Transit"
+    "discoveryMethod": "Transit",
+    "massEarth": "26.70"
   },
   {
     "id": "andromeda",
@@ -1441,7 +1509,8 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "Andromeda is classified by SIMBAD as an active galaxy nucleus. It lies at right ascension 10.68471°, declination 41.26875° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "active galaxy nucleus"
   },
   {
     "id": "ic-1101",
@@ -1455,7 +1524,8 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "IC 1101 is classified by SIMBAD as a radio galaxy. It lies at right ascension 227.73375°, declination 5.74477° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "radio galaxy"
   },
   {
     "id": "lmc",
@@ -1472,7 +1542,12 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "LMC is classified by SIMBAD as a galaxy. It lies at right ascension 80.89417°, declination -69.75611° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "galaxy",
+    "catalogueIdentifiers": [
+      "Large Magellanic Cloud",
+      "Nubecula Major"
+    ]
   },
   {
     "id": "m-101",
@@ -1486,7 +1561,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "M 101 is classified by SIMBAD as a galaxy in a pair. It lies at right ascension 210.80243°, declination 54.34875° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "galaxy in a pair",
+    "commonName": "Pinwheel"
   },
   {
     "id": "m-49",
@@ -1500,7 +1577,8 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "M 49 is classified by SIMBAD as a Seyfert 2 galaxy. It lies at right ascension 187.44490°, declination 8.00040° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "Seyfert 2 galaxy"
   },
   {
     "id": "m-51",
@@ -1514,7 +1592,13 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "M 51 is classified by SIMBAD as a Seyfert 2 galaxy. It lies at right ascension 202.46957°, declination 47.19526° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "Seyfert 2 galaxy",
+    "commonName": "Whirlpool",
+    "catalogueIdentifiers": [
+      "Question Mark Galaxy",
+      "Whirlpool Galaxy"
+    ]
   },
   {
     "id": "m-60",
@@ -1528,7 +1612,8 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "M 60 is classified by SIMBAD as a galaxy in a cluster. It lies at right ascension 190.91655°, declination 11.55269° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "galaxy in a cluster"
   },
   {
     "id": "m-63",
@@ -1542,7 +1627,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "M 63 is classified by SIMBAD as a LINER-type active galaxy nucleus. It lies at right ascension 198.95531°, declination 42.02937° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "LINER-type active galaxy nucleus",
+    "commonName": "Sunflower Galaxy"
   },
   {
     "id": "m-64",
@@ -1556,7 +1643,12 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "M 64 is classified by SIMBAD as a Seyfert galaxy. It lies at right ascension 194.18207°, declination 21.68266° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "Seyfert galaxy",
+    "commonName": "Evil Eye Galaxy",
+    "catalogueIdentifiers": [
+      "Black Eye Galaxy"
+    ]
   },
   {
     "id": "m-74",
@@ -1570,7 +1662,8 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "M 74 is classified by SIMBAD as a galaxy. It lies at right ascension 24.17394°, declination 15.78364° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "galaxy"
   },
   {
     "id": "m-77",
@@ -1584,7 +1677,8 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "M 77 is classified by SIMBAD as a Seyfert 2 galaxy. It lies at right ascension 40.66962°, declination -0.01329° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "Seyfert 2 galaxy"
   },
   {
     "id": "m-81",
@@ -1598,7 +1692,12 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "M 81 is classified by SIMBAD as a Seyfert 2 galaxy. It lies at right ascension 148.88822°, declination 69.06530° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "Seyfert 2 galaxy",
+    "commonName": "M 81*",
+    "catalogueIdentifiers": [
+      "Bode's Galaxy"
+    ]
   },
   {
     "id": "m-82",
@@ -1612,7 +1711,12 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "M 82 is classified by SIMBAD as an active galaxy nucleus. It lies at right ascension 148.96846°, declination 69.67970° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "active galaxy nucleus",
+    "commonName": "UMa A",
+    "catalogueIdentifiers": [
+      "Cigar Galaxy"
+    ]
   },
   {
     "id": "m-87",
@@ -1626,7 +1730,15 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "M 87 is classified by SIMBAD as an active galaxy nucleus. It lies at right ascension 187.70593°, declination 12.39112° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "active galaxy nucleus",
+    "commonName": "M 87*",
+    "catalogueIdentifiers": [
+      "SMOKING GUN",
+      "Vir A",
+      "Virgo A",
+      "Virgo Galaxy"
+    ]
   },
   {
     "id": "m-94",
@@ -1640,7 +1752,8 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "M 94 is classified by SIMBAD as a Seyfert galaxy. It lies at right ascension 192.72114°, declination 41.12025° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "Seyfert galaxy"
   },
   {
     "id": "milky-way",
@@ -1663,7 +1776,8 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "NGC 1300 is classified by SIMBAD as a Seyfert 2 galaxy. It lies at right ascension 49.92103°, declination -19.41116° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "Seyfert 2 galaxy"
   },
   {
     "id": "ngc-1316",
@@ -1677,7 +1791,12 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "NGC 1316 is classified by SIMBAD as a radio galaxy. It lies at right ascension 50.67412°, declination -37.20820° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "radio galaxy",
+    "commonName": "For A",
+    "catalogueIdentifiers": [
+      "Fornax A"
+    ]
   },
   {
     "id": "ngc-1365",
@@ -1691,7 +1810,8 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "NGC 1365 is classified by SIMBAD as a Seyfert 1 galaxy. It lies at right ascension 53.40191°, declination -36.14066° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "Seyfert 1 galaxy"
   },
   {
     "id": "ngc-2403",
@@ -1705,7 +1825,8 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "NGC 2403 is classified by SIMBAD as an active galaxy nucleus. It lies at right ascension 114.21391°, declination 65.60268° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "active galaxy nucleus"
   },
   {
     "id": "ngc-253",
@@ -1719,7 +1840,13 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "NGC 253 is classified by SIMBAD as a Seyfert galaxy. It lies at right ascension 11.88806°, declination -25.28880° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "Seyfert galaxy",
+    "commonName": "Silver Coin",
+    "catalogueIdentifiers": [
+      "Scl Filament",
+      "Sculptor Filament"
+    ]
   },
   {
     "id": "ngc-300",
@@ -1733,7 +1860,8 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "NGC 300 is classified by SIMBAD as a galaxy in a group. It lies at right ascension 13.72269°, declination -37.68421° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "galaxy in a group"
   },
   {
     "id": "ngc-4565",
@@ -1747,7 +1875,8 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "NGC 4565 is classified by SIMBAD as a Seyfert 2 galaxy. It lies at right ascension 189.08668°, declination 25.98739° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "Seyfert 2 galaxy"
   },
   {
     "id": "ngc-6822",
@@ -1761,7 +1890,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "NGC 6822 is classified by SIMBAD as a galaxy. It lies at right ascension 296.23416°, declination -14.79758° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "galaxy",
+    "commonName": "Barnard's Galaxy"
   },
   {
     "id": "smc",
@@ -1778,7 +1909,12 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "SMC is classified by SIMBAD as a galaxy. It lies at right ascension 13.15833°, declination -72.80028° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "galaxy",
+    "catalogueIdentifiers": [
+      "Nubecula Minor",
+      "Small Magellanic Cloud"
+    ]
   },
   {
     "id": "sombrero-galaxy",
@@ -1795,7 +1931,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "Sombrero Galaxy is classified by SIMBAD as a LINER-type active galaxy nucleus. It lies at right ascension 189.99763°, declination -11.62305° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "LINER-type active galaxy nucleus",
+    "commonName": "Sombrero"
   },
   {
     "id": "triangulum",
@@ -1812,7 +1950,12 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "Triangulum is classified by SIMBAD as a galaxy in a group. It lies at right ascension 23.46207°, declination 30.66018° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "galaxy in a group",
+    "commonName": "Triangulum Galaxy",
+    "catalogueIdentifiers": [
+      "Triangulum Pinwheel"
+    ]
   },
   {
     "id": "ugca-34",
@@ -1825,7 +1968,8 @@
     "sourceName": "SIMBAD (CDS, Strasbourg)",
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
-    "sourceSummary": "UGCA 34 is classified by SIMBAD as a galaxy in a group. It lies at right ascension 39.14778°, declination 59.65486° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here."
+    "sourceSummary": "UGCA 34 is classified by SIMBAD as a galaxy in a group. It lies at right ascension 39.14778°, declination 59.65486° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
+    "classification": "galaxy in a group"
   },
   {
     "id": "crab-nebula",
@@ -1842,7 +1986,14 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "Crab Nebula is classified by SIMBAD as a supernova remnant. It lies at right ascension 83.63240°, declination 22.01740° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "supernova remnant",
+    "commonName": "Crab",
+    "catalogueIdentifiers": [
+      "CRAB NEB",
+      "Tau A",
+      "Taurus A"
+    ]
   },
   {
     "id": "helix-nebula",
@@ -1859,7 +2010,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "Helix Nebula is classified by SIMBAD as a planetary nebula. It lies at right ascension 337.41061°, declination -20.83715° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "planetary nebula",
+    "commonName": "HELICAL NEB"
   },
   {
     "id": "ic-434",
@@ -1873,7 +2026,8 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "IC 434 is classified by SIMBAD as an HII region. It lies at right ascension 85.25000°, declination -2.50000° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "HII region"
   },
   {
     "id": "m-27",
@@ -1887,7 +2041,12 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "M 27 is classified by SIMBAD as a planetary nebula. It lies at right ascension 299.90151°, declination 22.72120° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "planetary nebula",
+    "commonName": "Diabolo Nebula",
+    "catalogueIdentifiers": [
+      "Dumbbell Nebula"
+    ]
   },
   {
     "id": "m-43",
@@ -1901,7 +2060,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "M 43 is classified by SIMBAD as an HII region. It lies at right ascension 83.87917°, declination -5.27000° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "HII region",
+    "commonName": "Mairan's Nebula"
   },
   {
     "id": "m-57",
@@ -1915,7 +2076,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "M 57 is classified by SIMBAD as a planetary nebula. It lies at right ascension 283.39624°, declination 33.02913° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "planetary nebula",
+    "commonName": "Ring Nebula"
   },
   {
     "id": "m-76",
@@ -1929,7 +2092,13 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "M 76 is classified by SIMBAD as a planetary nebula. It lies at right ascension 25.58190°, declination 51.57543° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "planetary nebula",
+    "commonName": "Cork Nebula",
+    "catalogueIdentifiers": [
+      "Barbell Nebula",
+      "Little Dumbbell Nebula"
+    ]
   },
   {
     "id": "m-78",
@@ -1943,7 +2112,8 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "M 78 is classified by SIMBAD as a reflection nebula. It lies at right ascension 86.69083°, declination 0.07917° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "reflection nebula"
   },
   {
     "id": "m-97",
@@ -1957,7 +2127,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "M 97 is classified by SIMBAD as a planetary nebula. It lies at right ascension 168.69880°, declination 55.01902° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "planetary nebula",
+    "commonName": "Owl Nebula"
   },
   {
     "id": "ngc-2392",
@@ -1971,7 +2143,8 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "NGC 2392 is classified by SIMBAD as a planetary nebula. It lies at right ascension 112.29486°, declination 20.91180° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "planetary nebula"
   },
   {
     "id": "ngc-281",
@@ -1985,7 +2158,8 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "NGC 281 is classified by SIMBAD as an HII region. It lies at right ascension 13.10458°, declination 56.56500° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "HII region"
   },
   {
     "id": "ngc-3132",
@@ -1999,7 +2173,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "NGC 3132 is classified by SIMBAD as a planetary nebula. It lies at right ascension 151.75736°, declination -40.43643° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "planetary nebula",
+    "commonName": "Eight-Burst Nebula"
   },
   {
     "id": "ngc-3372",
@@ -2013,7 +2189,15 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "NGC 3372 is classified by SIMBAD as an HII region. It lies at right ascension 161.25929°, declination -59.69994° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "HII region",
+    "commonName": "Keyhole",
+    "catalogueIdentifiers": [
+      "Car Nebula",
+      "Carina Nebula",
+      "Keyhole Nebula",
+      "eta Car Nebula"
+    ]
   },
   {
     "id": "ngc-6302",
@@ -2027,7 +2211,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "NGC 6302 is classified by SIMBAD as a planetary nebula. It lies at right ascension 258.43540°, declination -37.10310° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "planetary nebula",
+    "commonName": "Bug Nebula"
   },
   {
     "id": "ngc-6543",
@@ -2041,7 +2227,13 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "NGC 6543 is classified by SIMBAD as a planetary nebula. It lies at right ascension 269.63918°, declination 66.63299° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "planetary nebula",
+    "commonName": "Snail Nebula",
+    "catalogueIdentifiers": [
+      "Cat's Eye Nebula",
+      "Sunflower Nebula"
+    ]
   },
   {
     "id": "ngc-7635",
@@ -2055,7 +2247,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "NGC 7635 is classified by SIMBAD as an HII region. It lies at right ascension 350.20125°, declination 61.20167° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "HII region",
+    "commonName": "Bubble Nebula"
   },
   {
     "id": "orion-nebula",
@@ -2072,7 +2266,12 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "Orion Nebula is classified by SIMBAD as an HII region. It lies at right ascension 83.82010°, declination -5.38760° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "HII region",
+    "commonName": "Ori Nebula",
+    "catalogueIdentifiers": [
+      "Great Orion Nebula"
+    ]
   },
   {
     "id": "psr-b1919-21",
@@ -2142,7 +2341,13 @@
     "sourceName": "SIMBAD (CDS, Strasbourg)",
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
-    "sourceSummary": "CM Tau is classified by SIMBAD as a pulsar. It lies at right ascension 83.63311°, declination 22.01449° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here."
+    "sourceSummary": "CM Tau is classified by SIMBAD as a pulsar. It lies at right ascension 83.63311°, declination 22.01449° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
+    "classification": "pulsar",
+    "commonName": "Crab SN",
+    "catalogueIdentifiers": [
+      "Crab PSR",
+      "Crab Pulsar"
+    ]
   },
   {
     "id": "psr-b0329-54",
@@ -2156,7 +2361,8 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "PSR B0329+54 is classified by SIMBAD as a pulsar. It lies at right ascension 53.24724°, declination 54.57917° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "pulsar"
   },
   {
     "id": "psr-b1257-12",
@@ -2170,7 +2376,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "PSR B1257+12 is classified by SIMBAD as a pulsar. It lies at right ascension 195.01295°, declination 12.68199° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "pulsar",
+    "commonName": "Lich"
   },
   {
     "id": "psr-b1509-58",
@@ -2184,7 +2392,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "PSR B1509-58 is classified by SIMBAD as a pulsar. It lies at right ascension 228.44820°, declination -59.13180° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "pulsar",
+    "commonName": "Cir Pulsar"
   },
   {
     "id": "psr-j0437-47",
@@ -2197,7 +2407,8 @@
     "sourceName": "SIMBAD (CDS, Strasbourg)",
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
-    "sourceSummary": "PSR J0437-47 is classified by SIMBAD as a pulsar. It lies at right ascension 69.31583°, declination -47.25237° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here."
+    "sourceSummary": "PSR J0437-47 is classified by SIMBAD as a pulsar. It lies at right ascension 69.31583°, declination -47.25237° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
+    "classification": "pulsar"
   },
   {
     "id": "psr-j0633-1746",
@@ -2210,7 +2421,13 @@
     "sourceName": "SIMBAD (CDS, Strasbourg)",
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
-    "sourceSummary": "PSR J0633+1746 is classified by SIMBAD as a pulsar. It lies at right ascension 98.47564°, declination 17.77025° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here."
+    "sourceSummary": "PSR J0633+1746 is classified by SIMBAD as a pulsar. It lies at right ascension 98.47564°, declination 17.77025° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
+    "classification": "pulsar",
+    "commonName": "Geminga",
+    "catalogueIdentifiers": [
+      "Geminga Pulsar",
+      "Geminga SNR"
+    ]
   },
   {
     "id": "psr-j0740-6620",
@@ -2224,7 +2441,8 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "PSR J0740+6620 is classified by SIMBAD as a pulsar. It lies at right ascension 115.19083°, declination 66.34267° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "pulsar"
   },
   {
     "id": "psr-j1614-2230",
@@ -2238,7 +2456,8 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "PSR J1614-2230 is classified by SIMBAD as a pulsar. It lies at right ascension 243.65212°, declination -22.50876° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "pulsar"
   },
   {
     "id": "psr-j1748-2446ad",
@@ -2252,7 +2471,8 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "PSR J1748-2446ad is classified by SIMBAD as a pulsar. It lies at right ascension 267.02042°, declination -24.76778° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "pulsar"
   },
   {
     "id": "psr-j1915-1606",
@@ -2265,7 +2485,9 @@
     "sourceName": "SIMBAD (CDS, Strasbourg)",
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
-    "sourceSummary": "PSR J1915+1606 is classified by SIMBAD as a pulsar. It lies at right ascension 288.86667°, declination 16.10761° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here."
+    "sourceSummary": "PSR J1915+1606 is classified by SIMBAD as a pulsar. It lies at right ascension 288.86667°, declination 16.10761° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
+    "classification": "pulsar",
+    "commonName": "Hulse-Taylor PSR"
   },
   {
     "id": "rx-j1856-6-3754",
@@ -2278,7 +2500,8 @@
     "sourceName": "SIMBAD (CDS, Strasbourg)",
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
-    "sourceSummary": "RX J1856.6-3754 is classified by SIMBAD as a pulsar. It lies at right ascension 284.14629°, declination -37.90847° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here."
+    "sourceSummary": "RX J1856.6-3754 is classified by SIMBAD as a pulsar. It lies at right ascension 284.14629°, declination -37.90847° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
+    "classification": "pulsar"
   },
   {
     "id": "vela-pulsar",
@@ -2294,7 +2517,13 @@
     "sourceName": "SIMBAD (CDS, Strasbourg)",
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
-    "sourceSummary": "Vela Pulsar is classified by SIMBAD as a pulsar. It lies at right ascension 128.83606°, declination -45.17643° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here."
+    "sourceSummary": "Vela Pulsar is classified by SIMBAD as a pulsar. It lies at right ascension 128.83606°, declination -45.17643° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
+    "classification": "pulsar",
+    "catalogueIdentifiers": [
+      "Vel A",
+      "Vel Pulsar",
+      "Vela PSR"
+    ]
   },
   {
     "id": "51-peg",
@@ -2314,7 +2543,9 @@
     "lastReviewed": "2026-07-26",
     "sourceSummary": "51 Peg is classified by SIMBAD as a high proper-motion star of spectral type G2IV. Its measured parallax of 64.4048 mas puts it about 50.6 light years from Earth. It lies at right ascension 344.36659°, declination 20.76883° (J2000).",
     "spectralType": "G2IV",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "high proper-motion star",
+    "commonName": "Helvetios"
   },
   {
     "id": "barnard-s-star",
@@ -2334,7 +2565,11 @@
     "lastReviewed": "2026-07-26",
     "sourceSummary": "Barnard's star is classified by SIMBAD as a BY Draconis variable of spectral type M4V. Its measured parallax of 546.9759 mas puts it about 6.0 light years from Earth. It lies at right ascension 269.45208°, declination 4.69336° (J2000).",
     "spectralType": "M4V",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "BY Draconis variable",
+    "catalogueIdentifiers": [
+      "Barnard Star"
+    ]
   },
   {
     "id": "betelgeuse",
@@ -2351,7 +2586,8 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "Betelgeuse is classified by SIMBAD as a red supergiant of spectral type M1-M2Ia-Iab. Its measured parallax of 6.5500 mas puts it about 497.9 light years from Earth. It lies at right ascension 88.79294°, declination 7.40706° (J2000).",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "red supergiant"
   },
   {
     "id": "cd-23-14742",
@@ -2369,7 +2605,8 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "CD-23 14742 is classified by SIMBAD as a high proper-motion star of spectral type M3.5Ve. Its measured parallax of 336.0266 mas puts it about 9.7 light years from Earth. It lies at right ascension 282.45568°, declination -23.83624° (J2000).",
-    "spectralType": "M3.5Ve"
+    "spectralType": "M3.5Ve",
+    "classification": "high proper-motion star"
   },
   {
     "id": "hd-95735",
@@ -2387,7 +2624,8 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "HD 95735 is classified by SIMBAD as a high proper-motion star of spectral type M2+V. Its measured parallax of 392.7529 mas puts it about 8.3 light years from Earth. It lies at right ascension 165.83415°, declination 35.96988° (J2000).",
-    "spectralType": "M2+V"
+    "spectralType": "M2+V",
+    "classification": "high proper-motion star"
   },
   {
     "id": "kepler-186",
@@ -2406,7 +2644,8 @@
     "lastReviewed": "2026-07-26",
     "sourceSummary": "Kepler-186 is classified by SIMBAD as an eruptive variable of spectral type M1V. Its measured parallax of 5.6336 mas puts it about 578.9 light years from Earth. It lies at right ascension 298.65272°, declination 43.95501° (J2000).",
     "spectralType": "M1V",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "eruptive variable"
   },
   {
     "id": "proxima-centauri",
@@ -2423,7 +2662,12 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "Proxima Centauri is classified by SIMBAD as a high proper-motion star of spectral type M5.5Ve. Its measured parallax of 768.0665 mas puts it about 4.2 light years from Earth. It lies at right ascension 217.42894°, declination -62.67949° (J2000).",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "high proper-motion star",
+    "catalogueIdentifiers": [
+      "Proxima",
+      "Proxima Cen"
+    ]
   },
   {
     "id": "sirius-a",
@@ -2440,7 +2684,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "Sirius A is classified by SIMBAD as a spectroscopic binary of spectral type A0mA1Va. Its measured parallax of 379.2100 mas puts it about 8.6 light years from Earth. It lies at right ascension 101.28716°, declination -16.71612° (J2000).",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "spectroscopic binary",
+    "commonName": "Sirius"
   },
   {
     "id": "sol",
@@ -2468,7 +2714,8 @@
     "lastReviewed": "2026-07-26",
     "sourceSummary": "TRAPPIST-1 is classified by SIMBAD as a low-mass star of spectral type M7.5e. Its measured parallax of 80.2123 mas puts it about 40.7 light years from Earth. It lies at right ascension 346.62237°, declination -5.04140° (J2000).",
     "spectralType": "M7.5e",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "low-mass star"
   },
   {
     "id": "uy-sct",
@@ -2488,7 +2735,8 @@
     "lastReviewed": "2026-07-26",
     "sourceSummary": "UY Sct is classified by SIMBAD as a red supergiant of spectral type M4Iae. Its measured parallax of 0.5166 mas puts it about 6,313.5 light years from Earth. It lies at right ascension 276.90220°, declination -12.46636° (J2000).",
     "spectralType": "M4Iae",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "red supergiant"
   },
   {
     "id": "vy-cma",
@@ -2508,7 +2756,8 @@
     "lastReviewed": "2026-07-26",
     "sourceSummary": "VY CMa is classified by SIMBAD as a red supergiant of spectral type M5Iae. Its measured parallax of 0.4192 mas puts it about 7,780.4 light years from Earth. It lies at right ascension 110.74303°, declination -25.76755° (J2000).",
     "spectralType": "M5Iae",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "red supergiant"
   },
   {
     "id": "wolf-359",
@@ -2527,7 +2776,8 @@
     "lastReviewed": "2026-07-26",
     "sourceSummary": "Wolf 359 is classified by SIMBAD as a high proper-motion star of spectral type dM6. Its measured parallax of 415.1794 mas puts it about 7.9 light years from Earth. It lies at right ascension 164.12050°, declination 7.01472° (J2000).",
     "spectralType": "dM6",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "high proper-motion star"
   },
   {
     "id": "alf-and",
@@ -2546,7 +2796,12 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "alf And is classified by SIMBAD as an Alpha2 Canum Venaticorum variable of spectral type B8IV-VHgMn. Its measured parallax of 33.6200 mas puts it about 97.0 light years from Earth. It lies at right ascension 2.09692°, declination 29.09043° (J2000).",
-    "spectralType": "B8IV-VHgMn"
+    "spectralType": "B8IV-VHgMn",
+    "classification": "Alpha2 Canum Venaticorum variable",
+    "commonName": "Sirrah",
+    "catalogueIdentifiers": [
+      "Alpheratz"
+    ]
   },
   {
     "id": "alf-aql",
@@ -2565,7 +2820,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "alf Aql is classified by SIMBAD as a Delta Scuti variable of spectral type A7Vn. Its measured parallax of 194.9500 mas puts it about 16.7 light years from Earth. It lies at right ascension 297.69583°, declination 8.86832° (J2000).",
-    "spectralType": "A7Vn"
+    "spectralType": "A7Vn",
+    "classification": "Delta Scuti variable",
+    "commonName": "Altair"
   },
   {
     "id": "alf-ari",
@@ -2584,7 +2841,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "alf Ari is classified by SIMBAD as a high proper-motion star of spectral type K2-IIIbCa-1. Its measured parallax of 49.5600 mas puts it about 65.8 light years from Earth. It lies at right ascension 31.79336°, declination 23.46242° (J2000).",
-    "spectralType": "K2-IIIbCa-1"
+    "spectralType": "K2-IIIbCa-1",
+    "classification": "high proper-motion star",
+    "commonName": "Hamal"
   },
   {
     "id": "alf-aur",
@@ -2603,7 +2862,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "alf Aur is classified by SIMBAD as a spectroscopic binary of spectral type G3III:. Its measured parallax of 76.2000 mas puts it about 42.8 light years from Earth. It lies at right ascension 79.17233°, declination 45.99799° (J2000).",
-    "spectralType": "G3III:"
+    "spectralType": "G3III:",
+    "classification": "spectroscopic binary",
+    "commonName": "Capella"
   },
   {
     "id": "alf-boo",
@@ -2622,7 +2883,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "alf Boo is classified by SIMBAD as a red giant of spectral type K1.5IIIFe-0.5. Its measured parallax of 88.8300 mas puts it about 36.7 light years from Earth. It lies at right ascension 213.91530°, declination 19.18241° (J2000).",
-    "spectralType": "K1.5IIIFe-0.5"
+    "spectralType": "K1.5IIIFe-0.5",
+    "classification": "red giant",
+    "commonName": "Arcturus"
   },
   {
     "id": "alf-cmi",
@@ -2641,7 +2904,12 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "alf CMi is classified by SIMBAD as a spectroscopic binary of spectral type F5IV-V+DQZ. Its measured parallax of 284.5600 mas puts it about 11.5 light years from Earth. It lies at right ascension 114.82550°, declination 5.22499° (J2000).",
-    "spectralType": "F5IV-V+DQZ"
+    "spectralType": "F5IV-V+DQZ",
+    "classification": "spectroscopic binary",
+    "commonName": "Procyon",
+    "catalogueIdentifiers": [
+      "Procyon A"
+    ]
   },
   {
     "id": "alf-car",
@@ -2660,7 +2928,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "alf Car is classified by SIMBAD as a star of spectral type A9II. Its measured parallax of 10.5500 mas puts it about 309.2 light years from Earth. It lies at right ascension 95.98796°, declination -52.69566° (J2000).",
-    "spectralType": "A9II"
+    "spectralType": "A9II",
+    "classification": "star",
+    "commonName": "Canopus"
   },
   {
     "id": "alf-cen-a",
@@ -2680,7 +2950,12 @@
     "lastReviewed": "2026-07-26",
     "sourceSummary": "alf Cen A is classified by SIMBAD as a high proper-motion star of spectral type G2V. Its measured parallax of 742.1200 mas puts it about 4.4 light years from Earth. It lies at right ascension 219.90206°, declination -60.83399° (J2000).",
     "spectralType": "G2V",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "high proper-motion star",
+    "commonName": "Rigel Kentaurus",
+    "catalogueIdentifiers": [
+      "Rigil Kentaurus"
+    ]
   },
   {
     "id": "alf-cen-b",
@@ -2700,7 +2975,9 @@
     "lastReviewed": "2026-07-26",
     "sourceSummary": "alf Cen B is classified by SIMBAD as a high proper-motion star of spectral type K1V. Its measured parallax of 742.1200 mas puts it about 4.4 light years from Earth. It lies at right ascension 219.89610°, declination -60.83753° (J2000).",
     "spectralType": "K1V",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "high proper-motion star",
+    "commonName": "Toliman"
   },
   {
     "id": "alf-cru",
@@ -2719,7 +2996,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "alf Cru is classified by SIMBAD as a spectroscopic binary of spectral type B0.5IV+B1V. Its measured parallax of 10.1300 mas puts it about 322.0 light years from Earth. It lies at right ascension 186.64956°, declination -63.09909° (J2000).",
-    "spectralType": "B0.5IV+B1V"
+    "spectralType": "B0.5IV+B1V",
+    "classification": "spectroscopic binary",
+    "commonName": "Acrux"
   },
   {
     "id": "alf-cyg",
@@ -2738,7 +3017,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "alf Cyg is classified by SIMBAD as a supergiant of spectral type A2Ia. Its measured parallax of 2.3100 mas puts it about 1,411.9 light years from Earth. It lies at right ascension 310.35798°, declination 45.28034° (J2000).",
-    "spectralType": "A2Ia"
+    "spectralType": "A2Ia",
+    "classification": "supergiant",
+    "commonName": "Deneb"
   },
   {
     "id": "alf-eri",
@@ -2757,7 +3038,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "alf Eri is classified by SIMBAD as a Be star of spectral type B6Vpe. Its measured parallax of 23.3900 mas puts it about 139.4 light years from Earth. It lies at right ascension 24.42852°, declination -57.23675° (J2000).",
-    "spectralType": "B6Vpe"
+    "spectralType": "B6Vpe",
+    "classification": "Be star",
+    "commonName": "Achernar"
   },
   {
     "id": "alf-gem",
@@ -2776,7 +3059,12 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "alf Gem is classified by SIMBAD as a double or multiple star of spectral type A1V+A2Vm. Its measured parallax of 64.1200 mas puts it about 50.9 light years from Earth. It lies at right ascension 113.64947°, declination 31.88828° (J2000).",
-    "spectralType": "A1V+A2Vm"
+    "spectralType": "A1V+A2Vm",
+    "classification": "double or multiple star",
+    "commonName": "Castor",
+    "catalogueIdentifiers": [
+      "Castor AB"
+    ]
   },
   {
     "id": "alf-gru",
@@ -2795,7 +3083,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "alf Gru is classified by SIMBAD as a high proper-motion star of spectral type B6V. Its measured parallax of 32.2900 mas puts it about 101.0 light years from Earth. It lies at right ascension 332.05827°, declination -46.96097° (J2000).",
-    "spectralType": "B6V"
+    "spectralType": "B6V",
+    "classification": "high proper-motion star",
+    "commonName": "Alnair"
   },
   {
     "id": "alf-hya",
@@ -2814,7 +3104,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "alf Hya is classified by SIMBAD as a star of spectral type K3IIIa. Its measured parallax of 18.0900 mas puts it about 180.3 light years from Earth. It lies at right ascension 141.89684°, declination -8.65860° (J2000).",
-    "spectralType": "K3IIIa"
+    "spectralType": "K3IIIa",
+    "classification": "star",
+    "commonName": "Alphard"
   },
   {
     "id": "alf-leo",
@@ -2833,7 +3125,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "alf Leo is classified by SIMBAD as a high proper-motion star of spectral type B8IVn. Its measured parallax of 41.1300 mas puts it about 79.3 light years from Earth. It lies at right ascension 152.09296°, declination 11.96721° (J2000).",
-    "spectralType": "B8IVn"
+    "spectralType": "B8IVn",
+    "classification": "high proper-motion star",
+    "commonName": "Regulus"
   },
   {
     "id": "alf-lyr",
@@ -2852,7 +3146,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "alf Lyr is classified by SIMBAD as a Delta Scuti variable of spectral type A0V. Its measured parallax of 130.2300 mas puts it about 25.0 light years from Earth. It lies at right ascension 279.23473°, declination 38.78369° (J2000).",
-    "spectralType": "A0V"
+    "spectralType": "A0V",
+    "classification": "Delta Scuti variable",
+    "commonName": "Vega"
   },
   {
     "id": "alf-oph",
@@ -2871,7 +3167,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "alf Oph is classified by SIMBAD as a double or multiple star of spectral type A5IVnn. Its measured parallax of 67.1300 mas puts it about 48.6 light years from Earth. It lies at right ascension 263.73362°, declination 12.56004° (J2000).",
-    "spectralType": "A5IVnn"
+    "spectralType": "A5IVnn",
+    "classification": "double or multiple star",
+    "commonName": "Rasalhague"
   },
   {
     "id": "alf-pav",
@@ -2890,7 +3188,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "alf Pav is classified by SIMBAD as a spectroscopic binary of spectral type B2IV. Its measured parallax of 18.2400 mas puts it about 178.8 light years from Earth. It lies at right ascension 306.41190°, declination -56.73509° (J2000).",
-    "spectralType": "B2IV"
+    "spectralType": "B2IV",
+    "classification": "spectroscopic binary",
+    "commonName": "Peacock"
   },
   {
     "id": "alf-per",
@@ -2909,7 +3209,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "alf Per is classified by SIMBAD as a variable star of spectral type F5Ib. Its measured parallax of 6.4400 mas puts it about 506.5 light years from Earth. It lies at right ascension 51.08071°, declination 49.86118° (J2000).",
-    "spectralType": "F5Ib"
+    "spectralType": "F5Ib",
+    "classification": "variable star",
+    "commonName": "Mirfak"
   },
   {
     "id": "alf-psa",
@@ -2928,7 +3230,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "alf PsA is classified by SIMBAD as a high proper-motion star of spectral type A4V. Its measured parallax of 129.8100 mas puts it about 25.1 light years from Earth. It lies at right ascension 344.41269°, declination -29.62224° (J2000).",
-    "spectralType": "A4V"
+    "spectralType": "A4V",
+    "classification": "high proper-motion star",
+    "commonName": "Fomalhaut"
   },
   {
     "id": "alf-sco",
@@ -2947,7 +3251,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "alf Sco is classified by SIMBAD as a red supergiant of spectral type M1.5Iab+B2Vn. Its measured parallax of 5.8900 mas puts it about 553.7 light years from Earth. It lies at right ascension 247.35192°, declination -26.43200° (J2000).",
-    "spectralType": "M1.5Iab+B2Vn"
+    "spectralType": "M1.5Iab+B2Vn",
+    "classification": "red supergiant",
+    "commonName": "Antares"
   },
   {
     "id": "alf-tau",
@@ -2966,7 +3272,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "alf Tau is classified by SIMBAD as a candidate long-period variable of spectral type K5+III. Its measured parallax of 48.9400 mas puts it about 66.6 light years from Earth. It lies at right ascension 68.98016°, declination 16.50930° (J2000).",
-    "spectralType": "K5+III"
+    "spectralType": "K5+III",
+    "classification": "candidate long-period variable",
+    "commonName": "Aldebaran"
   },
   {
     "id": "alf-uma",
@@ -2985,7 +3293,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "alf UMa is classified by SIMBAD as a spectroscopic binary of spectral type G9III+A7.5. Its measured parallax of 26.5400 mas puts it about 122.9 light years from Earth. It lies at right ascension 165.93196°, declination 61.75103° (J2000).",
-    "spectralType": "G9III+A7.5"
+    "spectralType": "G9III+A7.5",
+    "classification": "spectroscopic binary",
+    "commonName": "Dubhe"
   },
   {
     "id": "alf-umi",
@@ -3004,7 +3314,13 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "alf UMi is classified by SIMBAD as a classical Cepheid variable of spectral type F8Ib. Its measured parallax of 7.5400 mas puts it about 432.6 light years from Earth. It lies at right ascension 37.95456°, declination 89.26411° (J2000).",
-    "spectralType": "F8Ib"
+    "spectralType": "F8Ib",
+    "classification": "classical Cepheid variable",
+    "commonName": "Polaris",
+    "catalogueIdentifiers": [
+      "Lodestar",
+      "North Star"
+    ]
   },
   {
     "id": "alf-vir",
@@ -3023,7 +3339,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "alf Vir is classified by SIMBAD as a Beta Cephei variable of spectral type B1V. Its measured parallax of 13.0600 mas puts it about 249.7 light years from Earth. It lies at right ascension 201.29825°, declination -11.16132° (J2000).",
-    "spectralType": "B1V"
+    "spectralType": "B1V",
+    "classification": "Beta Cephei variable",
+    "commonName": "Spica"
   },
   {
     "id": "bet-cma",
@@ -3042,7 +3360,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "bet CMa is classified by SIMBAD as a Beta Cephei variable of spectral type B1II-III. Its measured parallax of 6.6200 mas puts it about 492.7 light years from Earth. It lies at right ascension 95.67494°, declination -17.95592° (J2000).",
-    "spectralType": "B1II-III"
+    "spectralType": "B1II-III",
+    "classification": "Beta Cephei variable",
+    "commonName": "Mirzam"
   },
   {
     "id": "bet-car",
@@ -3061,7 +3381,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "bet Car is classified by SIMBAD as a high proper-motion star of spectral type A1III-. Its measured parallax of 28.8200 mas puts it about 113.2 light years from Earth. It lies at right ascension 138.29991°, declination -69.71721° (J2000).",
-    "spectralType": "A1III-"
+    "spectralType": "A1III-",
+    "classification": "high proper-motion star",
+    "commonName": "Miaplacidus"
   },
   {
     "id": "bet-cen",
@@ -3080,7 +3402,12 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "bet Cen is classified by SIMBAD as a Beta Cephei variable of spectral type B1III. Its measured parallax of 8.3200 mas puts it about 392.0 light years from Earth. It lies at right ascension 210.95586°, declination -60.37304° (J2000).",
-    "spectralType": "B1III"
+    "spectralType": "B1III",
+    "classification": "Beta Cephei variable",
+    "commonName": "Agena",
+    "catalogueIdentifiers": [
+      "Hadar"
+    ]
   },
   {
     "id": "bet-cru",
@@ -3099,7 +3426,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "bet Cru is classified by SIMBAD as a Beta Cephei variable of spectral type B1IV. Its measured parallax of 11.7100 mas puts it about 278.5 light years from Earth. It lies at right ascension 191.93029°, declination -59.68877° (J2000).",
-    "spectralType": "B1IV"
+    "spectralType": "B1IV",
+    "classification": "Beta Cephei variable",
+    "commonName": "Mimosa"
   },
   {
     "id": "bet-gem",
@@ -3118,7 +3447,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "bet Gem is classified by SIMBAD as a high proper-motion star of spectral type K0IIIb. Its measured parallax of 96.5400 mas puts it about 33.8 light years from Earth. It lies at right ascension 116.32896°, declination 28.02620° (J2000).",
-    "spectralType": "K0IIIb"
+    "spectralType": "K0IIIb",
+    "classification": "high proper-motion star",
+    "commonName": "Pollux"
   },
   {
     "id": "bet-leo",
@@ -3137,7 +3468,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "bet Leo is classified by SIMBAD as a Delta Scuti variable of spectral type A3Va. Its measured parallax of 90.9100 mas puts it about 35.9 light years from Earth. It lies at right ascension 177.26491°, declination 14.57206° (J2000).",
-    "spectralType": "A3Va"
+    "spectralType": "A3Va",
+    "classification": "Delta Scuti variable",
+    "commonName": "Denebola"
   },
   {
     "id": "bet-ori",
@@ -3156,7 +3489,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "bet Ori is classified by SIMBAD as a blue supergiant of spectral type B8Ia. Its measured parallax of 3.7800 mas puts it about 862.8 light years from Earth. It lies at right ascension 78.63447°, declination -8.20164° (J2000).",
-    "spectralType": "B8Ia"
+    "spectralType": "B8Ia",
+    "classification": "blue supergiant",
+    "commonName": "Rigel"
   },
   {
     "id": "bet-per",
@@ -3175,7 +3510,14 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "bet Per is classified by SIMBAD as a spectroscopic binary of spectral type B8V. Its measured parallax of 36.2700 mas puts it about 89.9 light years from Earth. It lies at right ascension 47.04222°, declination 40.95565° (J2000).",
-    "spectralType": "B8V"
+    "spectralType": "B8V",
+    "classification": "spectroscopic binary",
+    "commonName": "Algol",
+    "catalogueIdentifiers": [
+      "Algol A",
+      "Algol B",
+      "Algol C"
+    ]
   },
   {
     "id": "bet-tau",
@@ -3194,7 +3536,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "bet Tau is classified by SIMBAD as a high proper-motion star of spectral type B7III. Its measured parallax of 24.3600 mas puts it about 133.9 light years from Earth. It lies at right ascension 81.57297°, declination 28.60745° (J2000).",
-    "spectralType": "B7III"
+    "spectralType": "B7III",
+    "classification": "high proper-motion star",
+    "commonName": "Elnath"
   },
   {
     "id": "bet-umi",
@@ -3213,7 +3557,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "bet UMi is classified by SIMBAD as a star of spectral type K4-III. Its measured parallax of 24.9100 mas puts it about 130.9 light years from Earth. It lies at right ascension 222.67636°, declination 74.15550° (J2000).",
-    "spectralType": "K4-III"
+    "spectralType": "K4-III",
+    "classification": "star",
+    "commonName": "Kochab"
   },
   {
     "id": "del-cma",
@@ -3232,7 +3578,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "del CMa is classified by SIMBAD as a yellow supergiant of spectral type F8Ia. Its measured parallax of 2.0300 mas puts it about 1,606.7 light years from Earth. It lies at right ascension 107.09785°, declination -26.39320° (J2000).",
-    "spectralType": "F8Ia"
+    "spectralType": "F8Ia",
+    "classification": "yellow supergiant",
+    "commonName": "Wezen"
   },
   {
     "id": "del-cep",
@@ -3252,7 +3600,8 @@
     "lastReviewed": "2026-07-26",
     "sourceSummary": "del Cep is classified by SIMBAD as a classical Cepheid variable of spectral type F5Iab:+B7-8. Its measured parallax of 3.5551 mas puts it about 917.4 light years from Earth. It lies at right ascension 337.29276°, declination 58.41519° (J2000).",
     "spectralType": "F5Iab:+B7-8",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "classical Cepheid variable"
   },
   {
     "id": "eps-cma",
@@ -3271,7 +3620,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "eps CMa is classified by SIMBAD as a star of spectral type B1.5II. Its measured parallax of 8.0500 mas puts it about 405.2 light years from Earth. It lies at right ascension 104.65645°, declination -28.97209° (J2000).",
-    "spectralType": "B1.5II"
+    "spectralType": "B1.5II",
+    "classification": "star",
+    "commonName": "Adhara"
   },
   {
     "id": "eps-eri",
@@ -3291,7 +3642,9 @@
     "lastReviewed": "2026-07-26",
     "sourceSummary": "eps Eri is classified by SIMBAD as a BY Draconis variable of spectral type K2V. Its measured parallax of 310.5773 mas puts it about 10.5 light years from Earth. It lies at right ascension 53.23269°, declination -9.45826° (J2000).",
     "spectralType": "K2V",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "BY Draconis variable",
+    "commonName": "Ran"
   },
   {
     "id": "eps-ori",
@@ -3310,7 +3663,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "eps Ori is classified by SIMBAD as a blue supergiant of spectral type B0Ia. Its measured parallax of 1.6500 mas puts it about 1,976.7 light years from Earth. It lies at right ascension 84.05339°, declination -1.20192° (J2000).",
-    "spectralType": "B0Ia"
+    "spectralType": "B0Ia",
+    "classification": "blue supergiant",
+    "commonName": "Alnilam"
   },
   {
     "id": "eps-sgr",
@@ -3329,7 +3684,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "eps Sgr is classified by SIMBAD as a high proper-motion star of spectral type B9IVp_lB?. Its measured parallax of 22.7600 mas puts it about 143.3 light years from Earth. It lies at right ascension 276.04299°, declination -34.38462° (J2000).",
-    "spectralType": "B9IVp_lB?"
+    "spectralType": "B9IVp_lB?",
+    "classification": "high proper-motion star",
+    "commonName": "Kaus Australis"
   },
   {
     "id": "eps-uma",
@@ -3348,7 +3705,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "eps UMa is classified by SIMBAD as an Alpha2 Canum Venaticorum variable of spectral type A1III-IVpkB9. Its measured parallax of 39.5100 mas puts it about 82.6 light years from Earth. It lies at right ascension 193.50729°, declination 55.95982° (J2000).",
-    "spectralType": "A1III-IVpkB9"
+    "spectralType": "A1III-IVpkB9",
+    "classification": "Alpha2 Canum Venaticorum variable",
+    "commonName": "Alioth"
   },
   {
     "id": "eta-car",
@@ -3367,7 +3726,8 @@
     "lastReviewed": "2026-07-26",
     "sourceSummary": "eta Car is classified by SIMBAD as a blue supergiant of spectral type LBV. SIMBAD publishes no parallax for it, so it carries no distance. It lies at right ascension 161.26477°, declination -59.68443° (J2000).",
     "spectralType": "LBV",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "blue supergiant"
   },
   {
     "id": "eta-uma",
@@ -3386,7 +3746,12 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "eta UMa is classified by SIMBAD as a high proper-motion star of spectral type B3V. Its measured parallax of 31.3800 mas puts it about 103.9 light years from Earth. It lies at right ascension 206.88516°, declination 49.31327° (J2000).",
-    "spectralType": "B3V"
+    "spectralType": "B3V",
+    "classification": "high proper-motion star",
+    "commonName": "Alcaid",
+    "catalogueIdentifiers": [
+      "Alkaid"
+    ]
   },
   {
     "id": "gam-cru",
@@ -3405,7 +3770,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "gam Cru is classified by SIMBAD as a high proper-motion star of spectral type M3.5III. Its measured parallax of 36.8300 mas puts it about 88.6 light years from Earth. It lies at right ascension 187.79150°, declination -57.11321° (J2000).",
-    "spectralType": "M3.5III"
+    "spectralType": "M3.5III",
+    "classification": "high proper-motion star",
+    "commonName": "Gacrux"
   },
   {
     "id": "gam-gem",
@@ -3424,7 +3791,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "gam Gem is classified by SIMBAD as a spectroscopic binary of spectral type A1.5IV+. Its measured parallax of 29.8400 mas puts it about 109.3 light years from Earth. It lies at right ascension 99.42796°, declination 16.39928° (J2000).",
-    "spectralType": "A1.5IV+"
+    "spectralType": "A1.5IV+",
+    "classification": "spectroscopic binary",
+    "commonName": "Alhena"
   },
   {
     "id": "gam-ori",
@@ -3443,7 +3812,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "gam Ori is classified by SIMBAD as a star of spectral type B2III. Its measured parallax of 12.9200 mas puts it about 252.4 light years from Earth. It lies at right ascension 81.28276°, declination 6.34970° (J2000).",
-    "spectralType": "B2III"
+    "spectralType": "B2III",
+    "classification": "star",
+    "commonName": "Bellatrix"
   },
   {
     "id": "kap-ori",
@@ -3462,7 +3833,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "kap Ori is classified by SIMBAD as a blue supergiant of spectral type B0.5Ia. Its measured parallax of 5.0400 mas puts it about 647.1 light years from Earth. It lies at right ascension 86.93912°, declination -9.66960° (J2000).",
-    "spectralType": "B0.5Ia"
+    "spectralType": "B0.5Ia",
+    "classification": "blue supergiant",
+    "commonName": "Saiph"
   },
   {
     "id": "lam-sco",
@@ -3481,7 +3854,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "lam Sco is classified by SIMBAD as a Beta Cephei variable of spectral type B2IV+DA7.9. Its measured parallax of 5.7100 mas puts it about 571.2 light years from Earth. It lies at right ascension 263.40217°, declination -37.10382° (J2000).",
-    "spectralType": "B2IV+DA7.9"
+    "spectralType": "B2IV+DA7.9",
+    "classification": "Beta Cephei variable",
+    "commonName": "Shaula"
   },
   {
     "id": "omi-cet",
@@ -3500,7 +3875,12 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "omi Cet is classified by SIMBAD as a Mira variable of spectral type M5/6IIIe. Its measured parallax of 10.9100 mas puts it about 299.0 light years from Earth. It lies at right ascension 34.83663°, declination -2.97764° (J2000).",
-    "spectralType": "M5/6IIIe"
+    "spectralType": "M5/6IIIe",
+    "classification": "Mira variable",
+    "commonName": "Mira",
+    "catalogueIdentifiers": [
+      "Mira A"
+    ]
   },
   {
     "id": "sig-sgr",
@@ -3519,7 +3899,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "sig Sgr is classified by SIMBAD as a double or multiple star of spectral type B2.5V. Its measured parallax of 14.3200 mas puts it about 227.8 light years from Earth. It lies at right ascension 283.81636°, declination -26.29672° (J2000).",
-    "spectralType": "B2.5V"
+    "spectralType": "B2.5V",
+    "classification": "double or multiple star",
+    "commonName": "Nunki"
   },
   {
     "id": "tau-cet",
@@ -3538,7 +3920,8 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "tau Cet is classified by SIMBAD as a high proper-motion star of spectral type G8V. Its measured parallax of 273.8097 mas puts it about 11.9 light years from Earth. It lies at right ascension 26.01701°, declination -15.93748° (J2000).",
-    "spectralType": "G8V"
+    "spectralType": "G8V",
+    "classification": "high proper-motion star"
   },
   {
     "id": "zet-ori",
@@ -3557,7 +3940,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "zet Ori is classified by SIMBAD as a double or multiple star of spectral type O9.7Ib+B0III. Its measured parallax of 4.4300 mas puts it about 736.2 light years from Earth. It lies at right ascension 85.18969°, declination -1.94257° (J2000).",
-    "spectralType": "O9.7Ib+B0III"
+    "spectralType": "O9.7Ib+B0III",
+    "classification": "double or multiple star",
+    "commonName": "Alnitak"
   },
   {
     "id": "zet-uma",
@@ -3574,7 +3959,9 @@
     "sourceName": "SIMBAD (CDS, Strasbourg)",
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
-    "sourceSummary": "zet UMa is classified by SIMBAD as a double or multiple star. Its measured parallax of 38.0100 mas puts it about 85.8 light years from Earth. It lies at right ascension 200.98142°, declination 54.92535° (J2000)."
+    "sourceSummary": "zet UMa is classified by SIMBAD as a double or multiple star. Its measured parallax of 38.0100 mas puts it about 85.8 light years from Earth. It lies at right ascension 200.98142°, declination 54.92535° (J2000).",
+    "classification": "double or multiple star",
+    "commonName": "Mizar"
   },
   {
     "id": "ic-1396",
@@ -3588,7 +3975,8 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "IC 1396 is classified by SIMBAD as an open cluster. It lies at right ascension 324.74500°, declination 57.51389° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "open cluster"
   },
   {
     "id": "m-16",
@@ -3602,7 +3990,12 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "M 16 is classified by SIMBAD as an open cluster. It lies at right ascension 274.68800°, declination -13.79200° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "open cluster",
+    "commonName": "Star Queen",
+    "catalogueIdentifiers": [
+      "Eagle Nebula"
+    ]
   },
   {
     "id": "m-20",
@@ -3616,7 +4009,9 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "M 20 is classified by SIMBAD as an open cluster. It lies at right ascension 270.67500°, declination -22.97167° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "open cluster",
+    "commonName": "Trifid Nebula"
   },
   {
     "id": "m-8",
@@ -3630,7 +4025,12 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "M 8 is classified by SIMBAD as an open cluster. It lies at right ascension 270.90417°, declination -24.38667° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "open cluster",
+    "commonName": "Lagoon",
+    "catalogueIdentifiers": [
+      "Lagoon Nebula"
+    ]
   },
   {
     "id": "ngc-2024",
@@ -3644,7 +4044,8 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "NGC 2024 is classified by SIMBAD as a cluster of stars. It lies at right ascension 85.42917°, declination -1.84167° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "cluster of stars"
   },
   {
     "id": "ngc-2237",
@@ -3658,7 +4059,12 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "NGC 2237 is classified by SIMBAD as a cluster of stars. It lies at right ascension 97.65042°, declination 4.98072° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "cluster of stars",
+    "commonName": "Rosette A",
+    "catalogueIdentifiers": [
+      "NGC 2244 Satellite Cluster"
+    ]
   },
   {
     "id": "ngc-2264",
@@ -3672,7 +4078,12 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "NGC 2264 is classified by SIMBAD as an open cluster. It lies at right ascension 100.21708°, declination 9.87694° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "open cluster",
+    "commonName": "XMAS TREE CL",
+    "catalogueIdentifiers": [
+      "Christmas Tree Cluster"
+    ]
   },
   {
     "id": "ngc-6618",
@@ -3685,7 +4096,15 @@
     "sourceName": "SIMBAD (CDS, Strasbourg)",
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
-    "sourceSummary": "NGC 6618 is classified by SIMBAD as an open cluster. It lies at right ascension 275.19583°, declination -16.17167° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here."
+    "sourceSummary": "NGC 6618 is classified by SIMBAD as an open cluster. It lies at right ascension 275.19583°, declination -16.17167° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
+    "classification": "open cluster",
+    "commonName": "Swan Nebula",
+    "catalogueIdentifiers": [
+      "Checkmark Nebula",
+      "Lobster Nebula",
+      "NGC 6618 Horseshoe",
+      "omega Nebula"
+    ]
   },
   {
     "id": "ngc-7000",
@@ -3699,6 +4118,13 @@
     "sourceUrl": "https://simbad.cds.unistra.fr/",
     "lastReviewed": "2026-07-26",
     "sourceSummary": "NGC 7000 is classified by SIMBAD as a cluster of stars. It lies at right ascension 314.69583°, declination 44.33000° (J2000). SIMBAD's basic table publishes no distance for this object, so none is recorded here.",
-    "wellKnown": true
+    "wellKnown": true,
+    "classification": "cluster of stars",
+    "commonName": "North America",
+    "catalogueIdentifiers": [
+      "Bermuda Cluster",
+      "NORTH AMER NEB",
+      "North America Nebula"
+    ]
   }
 ]

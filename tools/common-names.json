@@ -1,0 +1,785 @@
+{
+  "_comment": [
+    "Curated SIMBAD common names, fetched by tools/fetch_common_names.py.",
+    "Values come from SIMBAD's ident table; none is authored here.",
+    "Where an object carries several NAME entries the shortest wins, ties",
+    "break alphabetically, and the rest are kept in 'alternates'.",
+    "Applied to the catalogue by tools/enrich_catalogue.py."
+  ],
+  "reviewed": "2026-07-28",
+  "sourceName": "SIMBAD (CDS, Strasbourg)",
+  "sourceUrl": "https://simbad.cds.unistra.fr/",
+  "records": {
+    "51-peg": {
+      "commonName": "Helvetios",
+      "alternates": [],
+      "simbadIdentifier": "* 51 Peg",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "alf-and": {
+      "commonName": "Sirrah",
+      "alternates": [
+        "Alpheratz"
+      ],
+      "simbadIdentifier": "* alf And",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "alf-aql": {
+      "commonName": "Altair",
+      "alternates": [],
+      "simbadIdentifier": "* alf Aql",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "alf-ari": {
+      "commonName": "Hamal",
+      "alternates": [],
+      "simbadIdentifier": "* alf Ari",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "alf-aur": {
+      "commonName": "Capella",
+      "alternates": [],
+      "simbadIdentifier": "* alf Aur",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "alf-boo": {
+      "commonName": "Arcturus",
+      "alternates": [],
+      "simbadIdentifier": "* alf Boo",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "alf-car": {
+      "commonName": "Canopus",
+      "alternates": [],
+      "simbadIdentifier": "* alf Car",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "alf-cen-a": {
+      "commonName": "Rigel Kentaurus",
+      "alternates": [
+        "Rigil Kentaurus"
+      ],
+      "simbadIdentifier": "* alf Cen A",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "alf-cen-b": {
+      "commonName": "Toliman",
+      "alternates": [],
+      "simbadIdentifier": "* alf Cen B",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "alf-cmi": {
+      "commonName": "Procyon",
+      "alternates": [
+        "Procyon A"
+      ],
+      "simbadIdentifier": "* alf CMi",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "alf-cru": {
+      "commonName": "Acrux",
+      "alternates": [],
+      "simbadIdentifier": "* alf Cru",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "alf-cyg": {
+      "commonName": "Deneb",
+      "alternates": [],
+      "simbadIdentifier": "* alf Cyg",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "alf-eri": {
+      "commonName": "Achernar",
+      "alternates": [],
+      "simbadIdentifier": "* alf Eri",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "alf-gem": {
+      "commonName": "Castor",
+      "alternates": [
+        "Castor AB"
+      ],
+      "simbadIdentifier": "* alf Gem",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "alf-gru": {
+      "commonName": "Alnair",
+      "alternates": [],
+      "simbadIdentifier": "* alf Gru",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "alf-hya": {
+      "commonName": "Alphard",
+      "alternates": [],
+      "simbadIdentifier": "* alf Hya",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "alf-leo": {
+      "commonName": "Regulus",
+      "alternates": [],
+      "simbadIdentifier": "* alf Leo",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "alf-lyr": {
+      "commonName": "Vega",
+      "alternates": [],
+      "simbadIdentifier": "* alf Lyr",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "alf-oph": {
+      "commonName": "Rasalhague",
+      "alternates": [],
+      "simbadIdentifier": "* alf Oph",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "alf-pav": {
+      "commonName": "Peacock",
+      "alternates": [],
+      "simbadIdentifier": "* alf Pav",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "alf-per": {
+      "commonName": "Mirfak",
+      "alternates": [],
+      "simbadIdentifier": "* alf Per",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "alf-psa": {
+      "commonName": "Fomalhaut",
+      "alternates": [],
+      "simbadIdentifier": "* alf PsA",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "alf-sco": {
+      "commonName": "Antares",
+      "alternates": [],
+      "simbadIdentifier": "* alf Sco",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "alf-tau": {
+      "commonName": "Aldebaran",
+      "alternates": [],
+      "simbadIdentifier": "* alf Tau",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "alf-uma": {
+      "commonName": "Dubhe",
+      "alternates": [],
+      "simbadIdentifier": "* alf UMa",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "alf-umi": {
+      "commonName": "Polaris",
+      "alternates": [
+        "Lodestar",
+        "North Star"
+      ],
+      "simbadIdentifier": "* alf UMi",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "alf-vir": {
+      "commonName": "Spica",
+      "alternates": [],
+      "simbadIdentifier": "* alf Vir",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "barnard-s-star": {
+      "commonName": null,
+      "alternates": [
+        "Barnard Star"
+      ],
+      "simbadIdentifier": "NAME Barnard's star",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "bet-car": {
+      "commonName": "Miaplacidus",
+      "alternates": [],
+      "simbadIdentifier": "* bet Car",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "bet-cen": {
+      "commonName": "Agena",
+      "alternates": [
+        "Hadar"
+      ],
+      "simbadIdentifier": "* bet Cen",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "bet-cma": {
+      "commonName": "Mirzam",
+      "alternates": [],
+      "simbadIdentifier": "* bet CMa",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "bet-cru": {
+      "commonName": "Mimosa",
+      "alternates": [],
+      "simbadIdentifier": "* bet Cru",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "bet-gem": {
+      "commonName": "Pollux",
+      "alternates": [],
+      "simbadIdentifier": "* bet Gem",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "bet-leo": {
+      "commonName": "Denebola",
+      "alternates": [],
+      "simbadIdentifier": "* bet Leo",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "bet-ori": {
+      "commonName": "Rigel",
+      "alternates": [],
+      "simbadIdentifier": "* bet Ori",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "bet-per": {
+      "commonName": "Algol",
+      "alternates": [
+        "Algol A",
+        "Algol B",
+        "Algol C"
+      ],
+      "simbadIdentifier": "* bet Per",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "bet-tau": {
+      "commonName": "Elnath",
+      "alternates": [],
+      "simbadIdentifier": "* bet Tau",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "bet-umi": {
+      "commonName": "Kochab",
+      "alternates": [],
+      "simbadIdentifier": "* bet UMi",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "cm-tau": {
+      "commonName": "Crab SN",
+      "alternates": [
+        "Crab PSR",
+        "Crab Pulsar"
+      ],
+      "simbadIdentifier": "V* CM Tau",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "crab-nebula": {
+      "commonName": "Crab",
+      "alternates": [
+        "CRAB NEB",
+        "Tau A",
+        "Taurus A"
+      ],
+      "simbadIdentifier": "M 1",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "del-cma": {
+      "commonName": "Wezen",
+      "alternates": [],
+      "simbadIdentifier": "* del CMa",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "eps-cma": {
+      "commonName": "Adhara",
+      "alternates": [],
+      "simbadIdentifier": "* eps CMa",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "eps-eri": {
+      "commonName": "Ran",
+      "alternates": [],
+      "simbadIdentifier": "* eps Eri",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "eps-ori": {
+      "commonName": "Alnilam",
+      "alternates": [],
+      "simbadIdentifier": "* eps Ori",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "eps-sgr": {
+      "commonName": "Kaus Australis",
+      "alternates": [],
+      "simbadIdentifier": "* eps Sgr",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "eps-uma": {
+      "commonName": "Alioth",
+      "alternates": [],
+      "simbadIdentifier": "* eps UMa",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "eta-uma": {
+      "commonName": "Alcaid",
+      "alternates": [
+        "Alkaid"
+      ],
+      "simbadIdentifier": "* eta UMa",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "gam-cru": {
+      "commonName": "Gacrux",
+      "alternates": [],
+      "simbadIdentifier": "* gam Cru",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "gam-gem": {
+      "commonName": "Alhena",
+      "alternates": [],
+      "simbadIdentifier": "* gam Gem",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "gam-ori": {
+      "commonName": "Bellatrix",
+      "alternates": [],
+      "simbadIdentifier": "* gam Ori",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "helix-nebula": {
+      "commonName": "HELICAL NEB",
+      "alternates": [],
+      "simbadIdentifier": "NGC 7293",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "kap-ori": {
+      "commonName": "Saiph",
+      "alternates": [],
+      "simbadIdentifier": "* kap Ori",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "lam-sco": {
+      "commonName": "Shaula",
+      "alternates": [],
+      "simbadIdentifier": "* lam Sco",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "lmc": {
+      "commonName": null,
+      "alternates": [
+        "Large Magellanic Cloud",
+        "Nubecula Major"
+      ],
+      "simbadIdentifier": "NAME LMC",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "m-101": {
+      "commonName": "Pinwheel",
+      "alternates": [],
+      "simbadIdentifier": "M 101",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "m-16": {
+      "commonName": "Star Queen",
+      "alternates": [
+        "Eagle Nebula"
+      ],
+      "simbadIdentifier": "M 16",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "m-20": {
+      "commonName": "Trifid Nebula",
+      "alternates": [],
+      "simbadIdentifier": "M 20",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "m-27": {
+      "commonName": "Diabolo Nebula",
+      "alternates": [
+        "Dumbbell Nebula"
+      ],
+      "simbadIdentifier": "M 27",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "m-43": {
+      "commonName": "Mairan's Nebula",
+      "alternates": [],
+      "simbadIdentifier": "M 43",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "m-51": {
+      "commonName": "Whirlpool",
+      "alternates": [
+        "Question Mark Galaxy",
+        "Whirlpool Galaxy"
+      ],
+      "simbadIdentifier": "M 51",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "m-57": {
+      "commonName": "Ring Nebula",
+      "alternates": [],
+      "simbadIdentifier": "M 57",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "m-63": {
+      "commonName": "Sunflower Galaxy",
+      "alternates": [],
+      "simbadIdentifier": "M 63",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "m-64": {
+      "commonName": "Evil Eye Galaxy",
+      "alternates": [
+        "Black Eye Galaxy"
+      ],
+      "simbadIdentifier": "M 64",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "m-76": {
+      "commonName": "Cork Nebula",
+      "alternates": [
+        "Barbell Nebula",
+        "Little Dumbbell Nebula"
+      ],
+      "simbadIdentifier": "M 76",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "m-8": {
+      "commonName": "Lagoon",
+      "alternates": [
+        "Lagoon Nebula"
+      ],
+      "simbadIdentifier": "M 8",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "m-81": {
+      "commonName": "M 81*",
+      "alternates": [
+        "Bode's Galaxy"
+      ],
+      "simbadIdentifier": "M 81",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "m-82": {
+      "commonName": "UMa A",
+      "alternates": [
+        "Cigar Galaxy"
+      ],
+      "simbadIdentifier": "M 82",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "m-87": {
+      "commonName": "M 87*",
+      "alternates": [
+        "SMOKING GUN",
+        "Vir A",
+        "Virgo A",
+        "Virgo Galaxy"
+      ],
+      "simbadIdentifier": "M 87",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "m-97": {
+      "commonName": "Owl Nebula",
+      "alternates": [],
+      "simbadIdentifier": "M 97",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "ngc-1316": {
+      "commonName": "For A",
+      "alternates": [
+        "Fornax A"
+      ],
+      "simbadIdentifier": "NGC 1316",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "ngc-2237": {
+      "commonName": "Rosette A",
+      "alternates": [
+        "NGC 2244 Satellite Cluster"
+      ],
+      "simbadIdentifier": "NGC 2237",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "ngc-2264": {
+      "commonName": "XMAS TREE CL",
+      "alternates": [
+        "Christmas Tree Cluster"
+      ],
+      "simbadIdentifier": "NGC 2264",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "ngc-253": {
+      "commonName": "Silver Coin",
+      "alternates": [
+        "Scl Filament",
+        "Sculptor Filament"
+      ],
+      "simbadIdentifier": "NGC 253",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "ngc-3132": {
+      "commonName": "Eight-Burst Nebula",
+      "alternates": [],
+      "simbadIdentifier": "NGC 3132",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "ngc-3372": {
+      "commonName": "Keyhole",
+      "alternates": [
+        "Car Nebula",
+        "Carina Nebula",
+        "Keyhole Nebula",
+        "eta Car Nebula"
+      ],
+      "simbadIdentifier": "NGC 3372",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "ngc-6302": {
+      "commonName": "Bug Nebula",
+      "alternates": [],
+      "simbadIdentifier": "NGC 6302",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "ngc-6543": {
+      "commonName": "Snail Nebula",
+      "alternates": [
+        "Cat's Eye Nebula",
+        "Sunflower Nebula"
+      ],
+      "simbadIdentifier": "NGC 6543",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "ngc-6618": {
+      "commonName": "Swan Nebula",
+      "alternates": [
+        "Checkmark Nebula",
+        "Lobster Nebula",
+        "NGC 6618 Horseshoe",
+        "omega Nebula"
+      ],
+      "simbadIdentifier": "NGC 6618",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "ngc-6822": {
+      "commonName": "Barnard's Galaxy",
+      "alternates": [],
+      "simbadIdentifier": "NGC 6822",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "ngc-7000": {
+      "commonName": "North America",
+      "alternates": [
+        "Bermuda Cluster",
+        "NORTH AMER NEB",
+        "North America Nebula"
+      ],
+      "simbadIdentifier": "NGC 7000",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "ngc-7635": {
+      "commonName": "Bubble Nebula",
+      "alternates": [],
+      "simbadIdentifier": "NGC 7635",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "omi-cet": {
+      "commonName": "Mira",
+      "alternates": [
+        "Mira A"
+      ],
+      "simbadIdentifier": "* omi Cet",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "orion-nebula": {
+      "commonName": "Ori Nebula",
+      "alternates": [
+        "Great Orion Nebula"
+      ],
+      "simbadIdentifier": "M 42",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "proxima-centauri": {
+      "commonName": null,
+      "alternates": [
+        "Proxima",
+        "Proxima Cen"
+      ],
+      "simbadIdentifier": "NAME Proxima Centauri",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "psr-b1257-12": {
+      "commonName": "Lich",
+      "alternates": [],
+      "simbadIdentifier": "PSR B1257+12",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "psr-b1509-58": {
+      "commonName": "Cir Pulsar",
+      "alternates": [],
+      "simbadIdentifier": "PSR B1509-58",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "psr-j0633-1746": {
+      "commonName": "Geminga",
+      "alternates": [
+        "Geminga Pulsar",
+        "Geminga SNR"
+      ],
+      "simbadIdentifier": "PSR J0633+1746",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "psr-j1915-1606": {
+      "commonName": "Hulse-Taylor PSR",
+      "alternates": [],
+      "simbadIdentifier": "PSR J1915+1606",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "sig-sgr": {
+      "commonName": "Nunki",
+      "alternates": [],
+      "simbadIdentifier": "* sig Sgr",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "sirius-a": {
+      "commonName": "Sirius",
+      "alternates": [],
+      "simbadIdentifier": "* alf CMa",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "smc": {
+      "commonName": null,
+      "alternates": [
+        "Nubecula Minor",
+        "Small Magellanic Cloud"
+      ],
+      "simbadIdentifier": "NAME SMC",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "sombrero-galaxy": {
+      "commonName": "Sombrero",
+      "alternates": [],
+      "simbadIdentifier": "M 104",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "triangulum": {
+      "commonName": "Triangulum Galaxy",
+      "alternates": [
+        "Triangulum Pinwheel"
+      ],
+      "simbadIdentifier": "M 33",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "vela-pulsar": {
+      "commonName": null,
+      "alternates": [
+        "Vel A",
+        "Vel Pulsar",
+        "Vela PSR"
+      ],
+      "simbadIdentifier": "NAME Vela Pulsar",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "zet-ori": {
+      "commonName": "Alnitak",
+      "alternates": [],
+      "simbadIdentifier": "* zet Ori",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    },
+    "zet-uma": {
+      "commonName": "Mizar",
+      "alternates": [],
+      "simbadIdentifier": "* zet UMa",
+      "sourceName": "SIMBAD (CDS, Strasbourg)",
+      "sourceUrl": "https://simbad.cds.unistra.fr/"
+    }
+  }
+}
