@@ -28,6 +28,9 @@ previous catalogue.
 | `promote_staging.py` | validate merged result, then write the catalogue |
 | `validate_catalogue.py` | standalone catalogue validation |
 | `derive_quiz_fields.py` | recover structured quiz fields from importer prose; set `wellKnown` |
+| `fetch_common_names.py` | SIMBAD `NAME` identifiers → `common-names.json` |
+| `common-names.json` | curated common-name mapping, with provenance and review date |
+| `enrich_catalogue.py` | apply common names; recover classification, mass, orbit class, discovery |
 | `search_checks.mjs` | browser checks for search, autocomplete and layout (Node + Playwright) |
 | `quiz_checks.mjs` | browser checks for quiz content and leaderboards (Node + Playwright) |
 
@@ -71,6 +74,39 @@ python3 tools/derive_quiz_fields.py             # write the catalogue
 ```
 
 Both are idempotent and exit non-zero if any record is refused.
+
+## Enrichment fields
+
+`enrich_catalogue.py` adds structured fields from values that were already
+fetched. It never authors a value, and it tries three routes in order of how
+strong the evidence is:
+
+1. **A cached source response** — `massEarth` from the exoplanet archive's own
+   `pl_bmasse` column in `tools/cache/`, keyed by planet name.
+2. **A structured value the importer already stored** — `orbitClass` from the
+   `"<x> (JPL orbit class)"` alias.
+3. **Reversal of our own generated sentence** — same rule as
+   `derive_quiz_fields.py`: reverse the fixed template, re-render the whole
+   sentence from the captured values, and require it to equal the stored string
+   exactly. Anything that does not round-trip is reported and left untouched.
+
+```bash
+python3 tools/fetch_common_names.py --dry-run   # ask SIMBAD, report, write nothing
+python3 tools/fetch_common_names.py             # write tools/common-names.json
+python3 tools/enrich_catalogue.py --dry-run     # report coverage, write nothing
+python3 tools/enrich_catalogue.py               # write the catalogue
+```
+
+Both are idempotent and exit non-zero if any record is refused. SIMBAD needs the
+`--ca-bundle` flag on most Windows installs; see **TLS** below.
+
+`fetch_common_names.py` asks SIMBAD's `ident` table for every `NAME` identifier
+belonging to an object already curated in `sources.json`. Where an object has
+several, the shortest wins and ties break alphabetically; the rest are kept as
+`catalogueIdentifiers` so search still matches them. A record whose SIMBAD
+`main_id` is *already* a `NAME` is left alone — it is displaying a common name
+already, and the shortest-name rule would demote `Proxima Centauri` to
+`Proxima`. See `DECISIONS.md` D16.
 
 ## Probe before you import
 

@@ -30,9 +30,11 @@ There is no framework, package manager, build command, backend, database, or aut
 - `app.js` loads the catalogue, builds the search index, ranks and filters results, renders details, drives the autocomplete combobox, and switches modes.
 - `quiz.js` implements question generation, difficulty tiers, timing, scoring, and versioned local leaderboards.
 - `celestial-bodies.json` contains **208 records**.
-- The detail view prefers hand-written `summary` over importer-generated `sourceSummary`.
+- The detail view prefers hand-written `summary` over importer-generated `sourceSummary`, and groups fields into six sections that hide when empty.
 - 197 records carry source metadata and generated descriptions; 192 carry coordinates.
 - Structured quiz fields: `hostName`, `discoveryYear` and `discoveryMethod` on the 60 exoplanets, `spectralType` on 63 stars, and the editorial `wellKnown` flag on 85 records.
+- Enrichment fields (P5): `classification` 132, `commonName` 91, `massEarth` 59, `catalogueIdentifiers` 36, `orbitClass` 5, and `discoverer`/`discoveryDate`/`discoverySite` 1 each.
+- `name` always holds the formal designation. Where a record has a `commonName` that is what the interface shows, with the designation beside it; both are searchable.
 - Project-control documents define product scope, priorities, roadmap, decisions, deployment, and contributor instructions.
 
 ## Current functional behavior
@@ -79,12 +81,16 @@ distinct value), discoverer and constellation (no such field on any record), and
 host-star relationships and aliases (both give the answer away through naming
 convention). Each returns automatically when the data supports it.
 
-### Current: P5 — Catalogue information enrichment
+### Complete: P5 — Catalogue information enrichment
+
+Delivered 2026-07-28. See `DECISIONS.md` D16, D17 and D18, and the "Record
+schema" and "Searching" sections of `README.md`.
+
+### Current: P6 — Group all planet types under one Planets hierarchy
 
 ### Then
 
-1. P6 — Group all planet types under one Planets hierarchy
-2. P7 — Add candidate dwarf planets, brown dwarfs, galaxy clusters, and more sourced objects
+1. P7 — Add candidate dwarf planets, brown dwarfs, galaxy clusters, and more sourced objects
 3. P8 — Add per-object and catalogue-wide celestial maps
 4. P9 — Add properly attributed local images
 5. P10 — Expand lightweight validation automation
@@ -105,9 +111,11 @@ See `PRIORITY.md` for acceptance criteria and `ROADMAP.md` for full outcomes.
 ## Known limitations
 
 - Leaderboards persist only in `localStorage` on the same browser and device. Export/import is the supported way to move them; there is no cross-device sync.
-- Discovery data exists only for the 60 exoplanets, and its `discoveryMethod` is `Transit` for every one of them, so no discovery-method question can be asked.
-- No record carries a discoverer or a constellation, so those question families cannot be built at all.
-- Exoplanets are named after their host stars and the five informative aliases embed their object's name, so host and alias question families are withdrawn (`DECISIONS.md` D14a).
+- Discovery data exists for the 60 exoplanets plus Ceres. `discoveryMethod` is `Transit` for all 60, so no discovery-method question can be asked. Only Ceres carries a `discoverer`, so that family needs four distinct values before it can exist.
+- No record carries a constellation. See the probe steps below.
+- Exoplanets are named after their host stars, so the host question family stays withdrawn (`DECISIONS.md` D14a). The alias family is superseded by the designation family, which pairs `commonName` with `name` instead.
+- **No exoplanet host star exists as a record.** All 60 were checked by name and alias; none resolves. Related-object links cannot be built until the hosts are imported.
+- `massEarth` is available on 59 records with 56 distinct values, so a mass question family is *possible* but was not enabled: it would be exoplanets only, in a unit most players have no intuition for.
 - `distance` and `size` are absent from most imported deep-sky records — 24 of 28 galaxies and 14 of 17 nebulae have neither — so measurement questions come mostly from stars and exoplanets.
 - Why an object is notable is not available from current imported source responses for most records.
 - Black-hole expansion remains blocked on a defensible authoritative classification source.
@@ -123,10 +131,20 @@ See `PRIORITY.md` for acceptance criteria and `ROADMAP.md` for full outcomes.
 - `tools/search_checks.mjs` and `tools/quiz_checks.mjs` need a Playwright
   install; they are optional maintainer tooling and the site itself still has no
   dependencies.
-- The astronomy hosts remain blocked by the sandbox network policy (HTTP 403 at
-  CONNECT), so no import can be re-run from this environment. This is why
-  `tools/derive_quiz_fields.py` recovers fields from the committed catalogue
-  instead of refetching them.
+- **Correction (2026-07-28): the astronomy hosts are not universally blocked.**
+  Earlier sessions recorded an HTTP 403 at CONNECT for every astronomy host and
+  treated it as a permanent constraint. That was a property of *that* sandbox,
+  not of the sources. On a normally networked machine SIMBAD, the NASA Exoplanet
+  Archive and the JPL SBDB all respond, and P5's common names were fetched live
+  from SIMBAD. SIMBAD needs `--ca-bundle` on Windows (see `tools/README.md`).
+  Check before assuming an import cannot be run; the recovery tools remain
+  useful because they are cheaper and auditable, not because the network is
+  unreachable.
+- `tools/search_checks.mjs` and `tools/quiz_checks.mjs` locate a global
+  Playwright install by running `npm root -g`. Recent Node refuses to launch
+  npm's `.cmd` shim without a shell, so on Windows this raised EINVAL and the
+  suites reported Playwright as missing even when it was installed. Fixed by
+  running that one lookup through a shell.
 
 ## Local start
 
@@ -156,6 +174,59 @@ Do not test by double-clicking `index.html`; browser `file://` security prevents
 8. Keep the static, dependency-free architecture unless an approved decision changes it.
 
 ## Last session
+
+- Date: 2026-07-28 (P5)
+- Branch: `claude/quiz-expansion-persistence-olq1ow`
+- Starting commit: `eef0794`
+- Task: **P5 — Catalogue information enrichment. Complete.**
+- Files changed: `celestial-bodies.json`, `app.js`, `quiz.js`, `index.html`,
+  `styles.css`, `tools/enrich_catalogue.py` (new),
+  `tools/fetch_common_names.py` (new), `tools/common-names.json` (new),
+  `tools/validate_catalogue.py`, `tools/search_checks.mjs`,
+  `tools/quiz_checks.mjs`, and the control documents.
+- Validation: 151 search checks, 113 quiz checks, 14 validator negative cases,
+  catalogue validator clean at 208 records with 0 warnings.
+- Next priority: **P6 — Planet category hierarchy.**
+
+### Unresolved probes, with exact steps
+
+**Constellation.** No source UniMap queries publishes one, so it must be derived
+from coordinates. The defensible method is the standard boundary lookup, and it
+is not a one-liner — the boundary table is defined in B1875 coordinates, so
+every J2000 position has to be precessed back before it can be tested:
+
+```bash
+# 1. Fetch the IAU constellation boundary table (Roman 1987, VizieR VI/42).
+python3 tools/import_catalogue.py --source constellation-boundaries --probe --refresh
+# 2. Confirm the real column names and units in the cached response before
+#    writing any lookup. Do not assume the RA unit — VI/42 uses hours, not degrees.
+```
+
+Then implement: precess J2000 → B1875, find the first boundary row whose
+declination floor is below the target and whose RA span contains it, and store
+`constellation` plus the epoch assumption. Validate against a handful of known
+positions (Betelgeuse → Orion, Vega → Lyra) before writing the catalogue. A
+moving solar-system body must not be given a fixed constellation without an
+explicit date, so restrict the first pass to the 192 records with catalogue
+coordinates and exclude the dwarf planets.
+
+**Exoplanet host stars.** None of the 60 hosts exists as a record, so related
+objects cannot be linked. They are faint Kepler/KOI stars; importing them would
+add ~60 records and needs its own curation decision under P7, not a quiet
+side-effect of a linking feature.
+
+**Notability.** No response carries it. The 11 records with no description at all
+(`cygnus-x-1`, `m87-star`, `sagittarius-a-star`, `milky-way`, `psr-b1919-21`,
+`psr-j0348-0432`, `earth`, `jupiter`, `kepler-452b`, `mars`, `sol`) are exactly
+the 11 with no provenance — the original hand-authored records. Each needs
+either an import that covers it or hand-written `summary` text with a cited
+source and review date.
+
+**Data issue seen in passing, not changed:** `kepler-452b` is typed `Planet`
+rather than `Exoplanet`, sitting alongside Earth, Mars and Jupiter. Correcting it
+touches category counts and the Planets hierarchy, so it belongs to P6.
+
+## Previous session
 
 - Date: 2026-07-28
 - Branch: `claude/quiz-expansion-persistence-olq1ow`

@@ -63,6 +63,9 @@ See `DEPLOYMENT.md` for the complete pre-deployment, verification, and rollback 
 │   ├── promote_staging.py    # validate, then update the catalogue
 │   ├── validate_catalogue.py # standalone catalogue validation
 │   ├── derive_quiz_fields.py # recover structured quiz fields; set wellKnown
+│   ├── fetch_common_names.py # SIMBAD common names -> common-names.json
+│   ├── common-names.json     # curated common-name mapping, with provenance
+│   ├── enrich_catalogue.py   # apply names; recover classification, mass, orbit
 │   ├── search_checks.mjs     # browser checks for search, autocomplete, layout
 │   ├── quiz_checks.mjs       # browser checks for quiz content and leaderboards
 │   ├── cache/                # raw API responses (git-ignored)
@@ -115,11 +118,20 @@ Each record in `celestial-bodies.json` has a stable lowercase `id` slug:
 Search runs entirely against the catalogue already loaded in the page. Nothing
 is requested while you type, and no search service is involved.
 
-**What is searched.** Each record's `name`, every entry in its `aliases`, and its
-`id` slug. Punctuation and spacing are normalized on both sides, so `alf tau`
-finds `* alf Tau`, `kepler200c` finds `Kepler-200 c`, and `crabnebula` finds
-`Crab Nebula`. Descriptions are not searched — they are long generated prose and
-matching inside them would return nearly everything.
+**What is searched.** Each record's `name`, its `commonName`, every entry in its
+`aliases` and `catalogueIdentifiers`, and its `id` slug. Punctuation and spacing
+are normalized on both sides, so `alf tau` finds `* alf Tau`, `kepler200c` finds
+`Kepler-200 c`, and `crabnebula` finds `Crab Nebula`. Descriptions are not
+searched — they are long generated prose and matching inside them would return
+nearly everything.
+
+**Names and designations.** Many records carry two names: the formal designation
+their source uses (`* 51 Peg`) and the recognisable name it publishes alongside
+it (`Helvetios`). The common name is what you see; the designation is shown
+beside it and both find the object. A common name is ranked as a **name**, not
+as an identifier — typing `Sirius` means the object, so it lands in tier 1
+rather than tier 3. Alternate names the source also lists are searchable but not
+displayed, which is why `Proxima` still finds Proxima Centauri.
 
 **Ranking.** Results are ordered by how well they matched, best first:
 
@@ -390,6 +402,28 @@ Optional: `distance`, `size`, `circumference`, `aliases`, `summary`,
 `sourceSummary`, `measurementLabel`, `measurementValue`, `sourceName`,
 `sourceUrl`, `lastReviewed`, `rightAscension`, `declination`, `image`,
 `imageAlt`, `imageCredit`.
+
+Structured quiz fields: `hostName`, `discoveryYear`, `discoveryMethod`,
+`spectralType`, and the editorial `wellKnown` flag.
+
+Enrichment fields, each recovered from a response a source actually returned
+(`DECISIONS.md` D17), with current coverage of 208 records:
+
+| Field | Type | Meaning | Records |
+|---|---|---|---:|
+| `classification` | string | SIMBAD's own object-type gloss, distinct from `type` | 132 |
+| `commonName` | string | The recognisable name; `name` stays the designation | 91 |
+| `massEarth` | string | Best mass estimate in Earth masses (exoplanets) | 59 |
+| `catalogueIdentifiers` | string[] | Alternate published names, searchable | 36 |
+| `orbitClass` | string | JPL *orbital* class — where a body orbits, not what it is | 5 |
+| `discoverer` | string | Who the source credits | 1 |
+| `discoveryDate` | string | `YYYY` or `YYYY-MM-DD`, at the source's precision | 1 |
+| `discoverySite` | string | Where the source says it was found | 1 |
+
+`classification` and `type` are deliberately separate: SIMBAD calls M 31 an
+"active galaxy nucleus" while UniMap files it under Galaxy, which is the
+category the filters use. `orbitClass` is never a claim about an object's type.
+`massEarth` is named for its unit so it can never be compared against a radius.
 
 ### Descriptions
 

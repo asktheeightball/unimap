@@ -598,6 +598,123 @@ Consequences:
 - Migration and corruption paths are covered by `tools/quiz_checks.mjs`, since
   they are exactly the code that is otherwise never exercised until it matters.
 
+## D16 — A common name is display and search only; the formal designation stays the record's name
+
+Status: **Accepted**
+
+Decision:
+
+`name` continues to hold the designation an import produced (`* 51 Peg`, `M 1`).
+A new optional `commonName` holds the recognisable name the same source
+publishes for that object (`Helvetios`, `Crab`). The interface prefers the
+common name in headings, result rows, suggestions and quiz prompts, and shows
+the designation beside it. Both are indexed for search, in the same ranking
+tiers. 91 of 208 records carry one.
+
+Values come from SIMBAD's `ident` table via `tools/fetch_common_names.py`, which
+writes the reviewable mapping `tools/common-names.json` carrying a source name,
+source URL and review date. Nothing is authored from recall.
+
+Where an object has several `NAME` entries the shortest wins and ties break
+alphabetically. Every other name is kept in `catalogueIdentifiers`, so search
+still matches what the source published even though only one name is displayed.
+
+A common name replaces a **designation**, never another common name. When
+SIMBAD's own `main_id` is already a `NAME`, the record is left alone: the
+shortest-name rule would otherwise have demoted `Proxima Centauri` to `Proxima`
+and the `Vela Pulsar` to `Vel A`. Those five records keep their names and gain
+the alternates as searchable identifiers instead.
+
+Rationale:
+
+- 102 records displayed a designation. A catalogue a reader cannot recognise is
+  a catalogue they cannot use, and Effortless quiz mode was limited to 34
+  records for exactly this reason.
+- Renaming `name` would break every stored reference, every alias the importer
+  wrote, and the guarantee that a record shows what its source called it.
+- Choosing among several published names is editorial, so it is done by a fixed
+  documented rule in a reviewable file rather than case by case.
+
+Consequences:
+
+- The validator rejects a `commonName` that duplicates or collides with any
+  record's `name`, and rejects two records sharing one.
+- A future import that adds objects does not need to re-derive names; rerunning
+  the fetch tool refreshes the mapping and the enrichment applies it.
+- Two records genuinely sharing a common name would be a hard error, not a
+  silent pick. None currently do.
+
+## D17 — Enrichment recovers values already fetched, in a fixed order of preference
+
+Status: **Accepted** (applies D7 and extends D12)
+
+Decision:
+
+Fields are added from what a source already returned, never from general
+knowledge, and `tools/enrich_catalogue.py` tries three routes in this order:
+
+1. **A cached source response.** `massEarth` comes from the exoplanet archive's
+   own `pl_bmasse` column, keyed by planet name.
+2. **A structured value the importer already stored.** `orbitClass` is lifted
+   out of the `"<x> (JPL orbit class)"` alias.
+3. **Reversal of our own generated sentence.** `sourceSummary` is emitted from a
+   fixed template in this repository, so reversing it is not prose parsing. Each
+   reversal is verified by re-rendering the whole sentence from the captured
+   values and requiring an exact match; a record that does not round-trip is
+   reported and left untouched.
+
+Recovered this way: `classification` (132), `massEarth` (59), `orbitClass` (5),
+and `discoverer`, `discoveryDate`, `discoverySite` (1 each, from JPL's discovery
+block, which the bulk query does not return).
+
+Rationale:
+
+- The values were real when fetched; serialising them into a sentence was a
+  storage mistake, not a provenance one, and the same evidence supports them.
+- A cached response is better evidence than a sentence, and a stored field is
+  better than either, so the order is by strength of evidence.
+- Requiring an exact re-render is what separates this from parsing prose: a
+  changed template fails loudly instead of silently capturing the wrong span.
+
+Consequences:
+
+- The tool is idempotent and exits non-zero if any record is refused.
+- `import_catalogue.py` should write new fields directly, so a future import
+  does not need this step.
+- Enrichment never touches `id`, `name`, `type`, coordinates, measurements,
+  provenance, `summary` or `sourceSummary`. This is asserted field by field
+  before the catalogue is written.
+
+## D18 — Classification is a field, not a measurement
+
+Status: **Accepted** (corrects a semantic in D10)
+
+Decision:
+
+SIMBAD's object-type gloss now lives in `classification`. It was previously
+written into `measurementLabel`/`measurementValue` as
+`"SIMBAD classification": "supernova remnant"`.
+
+Rationale:
+
+- A classification is not a measurement. Storing it in the measurement slot made
+  the pair mean two different things depending on the record, and there is only
+  one slot — so a star, whose slot holds a parallax, had nowhere to put its
+  classification at all.
+- That is why the quiz's classification family reached only 66 of the 132
+  records that actually have a gloss. Reading a field doubles it.
+- `type` remains UniMap's own category, which the filters use. The two are
+  deliberately separate: SIMBAD types M 31 an "active galaxy nucleus" while
+  UniMap files it under Galaxy.
+
+Consequences:
+
+- The measurement pair is left in place on the records that carry it, so nothing
+  is broken and no existing value changes; the quiz reads the field and falls
+  back to the measurement.
+- Measurement comparisons stay type-safe: a family may only compare values
+  sharing a `measurementLabel`, and a classification is no longer among them.
+
 ## Decision template
 
 ### D# — Title

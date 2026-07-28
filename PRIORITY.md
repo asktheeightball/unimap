@@ -4,35 +4,57 @@ This is the authoritative source for selecting the next unit of work.
 
 ## Current priority
 
+### P6 — Planet category hierarchy
+
+Status: **Not started** — this is now the active task. Full scope below.
+
+## Completed
+
 ### P5 — Catalogue information enrichment
 
-Status: **Partially complete** — see "Next priorities" below for the full scope.
+Status: **Complete** (2026-07-28)
 
-P4 raised its own reason to continue P5: four candidate quiz families were
-rejected for want of data, not for want of code (`DECISIONS.md` D14a). A
-discoverer field, a non-transit discovery method, a constellation, or object
-names that are independent of their host would each bring one back.
+326 values were added across nine fields, every one recovered from a source
+response that had already been fetched. No record was added, removed, renamed or
+reordered and no existing value changed.
+
+| Field | Records | Where it came from |
+|---|---:|---|
+| `classification` | 132 | SIMBAD object-type gloss |
+| `commonName` | 91 | SIMBAD `NAME` identifiers |
+| `massEarth` | 59 | Exoplanet archive `pl_bmasse`, from cache |
+| `catalogueIdentifiers` | 36 | Alternate SIMBAD names |
+| `orbitClass` | 5 | JPL orbit class |
+| `discoverer` / `discoveryDate` / `discoverySite` | 1 each | JPL discovery block |
+
+Delivered:
+
+- 91 records that displayed a bare designation now lead with a recognisable
+  name, keeping the designation visible and searchable (`DECISIONS.md` D16);
+- the detail view is grouped into Overview, Location, Discovery, Physical and
+  orbital, Names and identifiers, and Source, hiding empty rows and sections;
+- search indexes common names in the name tiers and alternates in the identifier
+  tiers, with the seven existing tiers unchanged;
+- the quiz classification family doubled its pool from 66 to 132, the Effortless
+  pool grew from 34 to 60, and one new family was enabled.
+
+**Not done, with evidence:**
+
+- **Notability.** No source response carries anything supporting "why this
+  object matters", and the 11 records with no description are exactly the 11
+  with no provenance. Writing editorial text for them is real work with real
+  sourcing requirements and is carried into P9 rather than guessed at now.
+- **Constellation.** No source field exists. The defensible route is deriving it
+  from coordinates against the IAU boundary table, which needs precession to
+  B1875 — see the probe steps in `HANDOFF.md`.
+- **Related objects.** All 60 exoplanet host stars were checked against the
+  catalogue and **none is present**, so no host link can be created without
+  first importing them. Creating one anyway would point at a record that does
+  not exist.
 
 ## Next priorities
 
-### P5 — Catalogue information enrichment (continued)
-
-Status: **Partially complete**
-
-Sourced descriptions currently answer what an object is, where it is, and in some cases how it was discovered. Continue by adding more verified fields where available:
-
-- why it is notable;
-- discovery date and discoverer;
-- discovery or observation method;
-- constellation, host, parent, or region;
-- spectral type or source classification;
-- mass, radius, orbital, or other type-appropriate measurements;
-- aliases and catalogue identifiers;
-- visible source attribution and review date.
-
-Hand-written `summary` remains separate from importer-generated `sourceSummary` and always takes precedence. Never invent missing facts.
-
-### P6 — Planet category hierarchy
+### P6 — Planet category hierarchy (active)
 
 Status: **Not started**
 

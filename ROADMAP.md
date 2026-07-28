@@ -132,26 +132,38 @@ A shared cross-device leaderboard remains a future backend decision requiring id
 
 ### R6 — Catalogue information enrichment
 
-Status: **Partially complete**
+Status: **Complete** (2026-07-28)
 
 Goal: make each detail page useful for learning and support richer quiz questions.
 
-Add verified fields where available:
+Delivered: 326 values across nine optional fields — `classification` (132),
+`commonName` (91), `massEarth` (59), `catalogueIdentifiers` (36), `orbitClass`
+(5), and `discoverer`, `discoveryDate`, `discoverySite` (1 each). Every value was
+recovered from a source response already fetched, by one of three routes ordered
+by strength of evidence (`DECISIONS.md` D17). No record was added, removed,
+renamed or reordered and no existing value changed.
 
-- why the object is notable;
-- discovery date and discoverer;
-- discovery or observation method;
-- constellation, host, parent, or region;
-- spectral type or source classification;
-- mass, radius, orbital, or type-appropriate measurements;
-- aliases and catalogue identifiers;
-- visible source attribution and review date.
+91 records that displayed only a designation now lead with a recognisable name
+while keeping the designation visible and searchable (D16). The detail view is
+grouped into six sections that hide when empty. Search indexes common names in
+the name tiers and alternates in the identifier tiers, with the seven existing
+tiers unchanged. The quiz classification pool doubled to 132, the Effortless pool
+grew from 34 to 60, and a designation family was enabled.
+
+Classification moved out of the measurement slot it had been sharing with
+parallax, which is what had capped the quiz family at half its real pool (D18).
+
+Three parts are carried forward with evidence rather than approximated:
+notability (no source response supports it), constellation (no source field; the
+defensible route needs the IAU boundary table and precession to B1875), and
+related objects (**none** of the 60 exoplanet host stars exists as a record, so
+no link can point anywhere).
 
 Hand-written `summary` remains separate from importer-generated `sourceSummary`, takes precedence, and must never be overwritten by imports. Missing facts must render gracefully rather than be invented.
 
 ### R7 — Planet category hierarchy
 
-Status: **Not started**
+Status: **Next** — the active priority as of 2026-07-28.
 
 Group planet-related categories into one navigable hierarchy:
 
