@@ -319,14 +319,13 @@ function valueQuestions(records, context, field, prompt, label) {
    nebula?") has nine correct answers in this catalogue, so it is not
    implemented. */
 function classificationQuestions(records, context) {
-  const distinct = [...new Set(context.classifications.map((body) => text(body.measurementValue)))];
+  const distinct = [...new Set(context.classifications.map((body) => text(body.classification)))];
   if (distinct.length < CHOICE_COUNT) {
     return [];
   }
   const questions = [];
   for (const body of records) {
-    if (text(body.measurementLabel) !== "SIMBAD classification") continue;
-    const value = text(body.measurementValue);
+    const value = text(body.classification);
     if (!value) continue;
     const question = makeQuestion({
       prompt: `How is ${body.name} classified in SIMBAD?`,
@@ -375,6 +374,76 @@ function discoveryYearQuestions(records, context) {
   }
   return questions;
 }
+
+/* "How massive is X?" — `massEarth`, recovered by tools/derive_enrichment.py
+   from the value the NASA Exoplanet Archive returned as `pl_bmasse`.
+
+   This is the one family P5 unlocked. It passes the fairness tests the others
+   fail: 59 eligible records, 56 distinct answers, and no leak in either
+   direction — an archive designation such as KOI-1599.02 says nothing about
+   the planet's mass, so the prompt cannot spell out its own answer. Distractors
+   are other catalogued planets' masses, so every choice is a mass a real planet
+   in this catalogue actually has. It is separate from the size family: radius
+   and mass are independent facts, and the catalogue holds both. */
+function massQuestions(records, context) {
+  const distinct = [...new Set(context.massive.map((body) => text(body.massEarth)))];
+  if (distinct.length < CHOICE_COUNT) {
+    return [];
+  }
+  const questions = [];
+  for (const body of records) {
+    const mass = text(body.massEarth);
+    if (!mass) continue;
+    const radius = text(body.radiusEarth);
+    const question = makeQuestion({
+      prompt: `What is the best mass estimate for ${body.name}, in Earth masses?`,
+      correct: mass,
+      distractors: shuffle(distinct.filter((candidate) => candidate !== mass)),
+      body,
+      family: "mass",
+      subject: body.name,
+      explanation: explain(body, [
+        `The archive's best mass estimate for ${body.name} is ${mass} times Earth's.`,
+        radius ? `Its radius is ${radius} times Earth's.` : "",
+      ]),
+    });
+    if (question) questions.push(question);
+  }
+  return questions;
+}
+
+/* REJECTED FAMILY — "In which constellation does X lie?"
+
+   P5 added `constellation` to 60 records, which removed the reason this family
+   was rejected in P4 (no record carried the field) and replaced it with a
+   harder one. The constellation is derived from the object's own Bayer,
+   Flamsteed or variable-star designation, and that designation is what the
+   catalogue displays as the name. So "In which constellation does bet Ori
+   lie?" is answered by "Orion", and "51 Peg" by "Pegasus". Measured over the
+   whole catalogue: 60 of 60 eligible records name their own answer. The field
+   is genuinely useful on the detail page and genuinely unusable here, and no
+   subset of the catalogue survives the test. Reconsider only if a source
+   supplies constellations for objects whose names do not encode them.
+
+   REJECTED FAMILY — "Who discovered X?"
+
+   Still rejected, for the same reason as in P4: one record carries a
+   `discoverer` (PSR B1919+21), which cannot make four distinct choices. No
+   source UniMap can currently reach publishes discoverers in bulk.
+
+   REJECTED FAMILY — "How was X discovered?"
+
+   Still rejected. `discoveryMethod` now sits on 61 records and every value is
+   still "Transit", because the archive query is ordered by distance and the
+   nearest confirmed planets with a measured radius are transit detections.
+   One distinct value cannot make four choices.
+
+   REJECTED FAMILY — "Which catalogue identifier also names X?"
+
+   Still rejected. P5 separated real designations from stored-fact aliases into
+   `catalogueIdentifiers`, which made the family measurable rather than viable:
+   68 of 69 identifiers are the object's own name with a SIMBAD kind marker in
+   front ("bet Ori" / "* bet Ori"). */
 
 /* REJECTED FAMILY — "Which star does X orbit?" and "Which exoplanet orbits X?"
 
@@ -551,7 +620,8 @@ const TIERS = {
   hard: [
     {
       pool: (bodies) => bodies,
-      families: [discoveryYearQuestions, spectralOfStarQuestions, classificationQuestions],
+      families: [discoveryYearQuestions, spectralOfStarQuestions, classificationQuestions,
+        massQuestions],
     },
     { pool: (bodies) => bodies, families: [DISTANCE_FAMILY, SIZE_FAMILY] },
     { pool: (bodies) => bodies, families: BASIC_FAMILIES },
@@ -571,7 +641,7 @@ const TIERS = {
     },
     {
       pool: (bodies) => bodies,
-      families: [discoveryYearQuestions, spectralOfStarQuestions],
+      families: [discoveryYearQuestions, spectralOfStarQuestions, massQuestions],
     },
     { pool: (bodies) => bodies, families: BASIC_FAMILIES },
   ],
@@ -591,11 +661,14 @@ function buildContext(bodies) {
     all: bodies,
     groups: byType(bodies),
     types: [...byType(bodies).keys()],
-    classifications: bodies.filter(
-      (body) =>
-        text(body.measurementLabel) === "SIMBAD classification" && text(body.measurementValue),
-    ),
+    // P5 gave SIMBAD's object-type gloss a field of its own. It used to be
+    // readable only from the generic measurement slot, which a star with a
+    // published parallax had already spent on the parallax — so half the
+    // SIMBAD records were invisible to this family. Reading the field instead
+    // takes the pool from 66 records to 132 without changing a single answer.
+    classifications: bodies.filter((body) => text(body.classification)),
     discovered: bodies.filter((body) => text(body.discoveryYear)),
+    massive: bodies.filter((body) => text(body.massEarth)),
     spectral,
     spectralCounts,
     located: bodies.filter(hasCoordinates),
