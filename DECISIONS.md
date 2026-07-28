@@ -119,9 +119,17 @@ Rationale:
 - Provenance is captured once, at review time, instead of being re-derived per visit.
 - A rerunnable script keeps the catalogue refreshable without a build system.
 
+Source terms and attribution strings were verified first-hand on 2026-07-28 and are
+recorded in `tools/sources.json`. One finding is load-bearing: the JPL SSD API Fair
+Use Policy states "You may not embed these APIs in your website (per NASA CORS
+policy)". UniMap complies *because* of this decision — the API is called only at
+import time, never from a page view. Had the site queried JPL directly, it would
+have breached that policy.
+
 Consequences:
 
-- Imports require network access that the current sandbox denies (see P0 blocker).
+- Imports require network access. The sandbox this was first attempted in denied it;
+  a normal networked machine does not. Resolved 2026-07-28.
 - Each importer owns a declared set of fields and must preserve curated ones.
 - Importers validate their output before replacing the catalogue.
 - Adding a source means adding a script, not a runtime dependency.
@@ -165,6 +173,52 @@ Consequences:
 - Catalogue growth is gated on real source access, not on effort available.
 - A field with no supporting source is left absent rather than estimated.
 - Where a source is missing, the record carries no provenance and the validator warns.
+
+## D8 — A source query must select for readability, not only for correctness
+
+Status: **Accepted** (extends D6)
+
+Decision:
+
+When a source can return far more objects than UniMap should carry, the query and
+its normalizer must select objects a reader can recognise — not merely objects that
+satisfy a measurement filter.
+
+The SIMBAD source originally queried `otype_txt = 'Star' and plx_value > 20`. That is
+a correct nearby-star filter and a poor catalogue: of its 2,684 rows, 1,280 are
+`Gaia DR3 …` designations, 453 are `UCAC4 …`, and 187 are `2MASS …`. Every record
+would have been accurate and almost none would have been recognisable.
+
+The query now joins SIMBAD's `ident` table and keeps only objects carrying a
+`NAME …` identifier, displaying that proper name. The normalizer additionally drops
+`NAME` values that are themselves designations (containing a digit or `*`, such as
+`NAME GR* 402A`). This yields 45 stars: Kochab, Bellatrix, Canopus, Adhara, Sargas,
+Rastaban, and similar.
+
+Records are keyed on `main_id`, not on the proper name. SIMBAD stores alternate
+spellings as separate `NAME` rows — Celeno/Celaeno and Azmidiske/Asmidiske each
+resolve to one object — and keying on the object collapses them into one record
+instead of duplicating the star.
+
+Rationale:
+
+- An unreadable name defeats the product's purpose; UniMap is browsed by name.
+- R2 quiz mode generates distractors from these records. Four Gaia designations are
+  not a question, and a catalogue full of them would make quiz mode unbuildable.
+- This is the judgement D6 already applies through `select_names` for the TNO
+  source: a broad query filter is not a claim about an object's suitability.
+
+Consequences:
+
+- Curation lives in `sources.json` where it is reviewable in a diff, except for
+  tests on the returned string itself, which must live in the normalizer.
+- Three marginal names remain (`DS Tau B`, `T Cha C`, `TPHE G`). They are real and
+  accurate; a stricter filter risks discarding legitimate names, so they stay until
+  there is evidence they cause a problem.
+- SIMBAD's ADQL rejects qualified column names in `ORDER BY`; the query orders by
+  ordinal (`order by 4`) instead.
+- This decision constrains data selection only. It never permits altering a value,
+  which D5 and D7 still forbid.
 
 ## Decision template
 

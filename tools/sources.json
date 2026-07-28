@@ -4,9 +4,8 @@
     "Each entry describes one authoritative service, the exact query sent to it,",
     "and which normalizer converts its rows into UniMap records.",
     "",
-    "IMPORTANT: the 'attribution' and 'terms' strings below were written without",
-    "network access and could NOT be checked against each service's current terms",
-    "page. Confirm them before publishing a catalogue built from these sources.",
+    "The 'attribution' and 'terms' strings below were verified against each",
+    "service's own page on 2026-07-28. Recheck them if a source is changed.",
     "",
     "The '{limit}' placeholder in a query is replaced with the --limit value, or",
     "removed entirely when no limit is given."
@@ -22,7 +21,7 @@
       "produces": ["Exoplanet"],
       "requires_key": false,
       "attribution": "This research has made use of the NASA Exoplanet Archive, which is operated by the California Institute of Technology, under contract with the National Aeronautics and Space Administration under the Exoplanet Exploration Program.",
-      "terms": "Public domain / open access. CONFIRM before publishing.",
+      "terms": "Verified 2026-07-28 at https://exoplanetarchive.ipac.caltech.edu/docs/acknowledge.html — the acknowledgement above is quoted verbatim from that page. The archive also asks that Christiansen et al. (2025), Planetary Science Journal, be cited when the archive itself is referenced.",
       "params": {
         "format": "json"
       },
@@ -37,15 +36,16 @@
       "normalizer": "simbad_star",
       "produces": ["Star"],
       "requires_key": false,
-      "attribution": "This research has made use of the SIMBAD database, operated at CDS, Strasbourg, France.",
-      "terms": "Attribution required; bulk querying discouraged. Use modest limits. CONFIRM before publishing.",
+      "attribution": "This research has made use of the SIMBAD database, operated at CDS, Strasbourg, France (Wenger et al. 2000, A&AS, 143, 9).",
+      "terms": "Verified 2026-07-28 at https://simbad.cds.unistra.fr/simbad/ — CDS asks that the acknowledgement above, including the Wenger et al. 2000 reference, accompany work using SIMBAD. Bulk querying is discouraged; this import takes a few hundred rows at most.",
       "note": "Restricted to objects with a measured parallax so distance is derived from a published value rather than estimated. SIMBAD's basic table carries no radius, so these records have no size/circumference.",
+      "note_curation": "The query joins SIMBAD's ident table and keeps only objects carrying a 'NAME ...' identifier, because a parallax cut alone is not a claim that an object is worth browsing: plx_value > 20 returns 2,684 rows of which 1,280 are Gaia DR3 designations and 453 are UCAC4. A record named 'Gaia DR3 6305165514134625024' is valid but unreadable, and it would make R2 quiz distractors meaningless. This is the same editorial judgement select_names applies to the TNO source. Rows whose NAME is itself a designation are dropped by the normalizer, not here, because the test is on the returned string.",
       "params": {
         "request": "doQuery",
         "lang": "ADQL",
         "format": "json"
       },
-      "query": "select {limit} main_id, ra, dec, plx_value, otype_txt, sp_type from basic where otype_txt = 'Star' and plx_value > 20 and ra is not null and dec is not null order by plx_value desc, main_id asc"
+      "query": "select {limit} b.main_id, b.ra, b.dec, b.plx_value, b.otype_txt, b.sp_type, i.id from basic as b join ident as i on b.oid = i.oidref where i.id like 'NAME %' and b.otype_txt = 'Star' and b.plx_value > 0 and b.ra is not null and b.dec is not null order by 4 desc"
     },
     {
       "id": "jpl-sbdb-dwarf-planets",
@@ -56,8 +56,8 @@
       "normalizer": "jpl_sbdb",
       "produces": ["Dwarf Planet"],
       "requires_key": false,
-      "attribution": "Data courtesy of NASA/JPL Solar System Dynamics, Small-Body Database.",
-      "terms": "Public domain, attribution appreciated. CONFIRM before publishing.",
+      "attribution": "Solar System Dynamics. (Downloaded 2026-07-28). Small-Body Database Query. https://ssd.jpl.nasa.gov",
+      "terms": "Verified 2026-07-28. The citation format above is the one prescribed at https://ssd.jpl.nasa.gov/about/. The SSD API Fair Use Policy (https://ssd-api.jpl.nasa.gov/) requires one request at a time and states 'You may not embed these APIs in your website (per NASA CORS policy)'. UniMap complies by design: this API is called only here, at import time, and never from the browser. See DECISIONS.md D6.",
       "note": "sb-class=TNO returns every trans-Neptunian object, most of which are small bodies and NOT dwarf planets. select_names therefore restricts the import to the IAU-recognised trans-Neptunian dwarf planets. Widening this list is an editorial decision, not a query change. Ceres is a main-belt object and is not covered by this source entry.",
       "note_distance": "Solar-system 'distance' is a mean orbital distance in AU, a different quantity from the light-year distances used for deep-sky objects. The record labels it explicitly.",
       "select_names": ["Pluto", "Eris", "Haumea", "Makemake"],

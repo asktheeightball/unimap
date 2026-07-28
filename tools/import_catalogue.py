@@ -161,9 +161,24 @@ def exoplanet_archive(row: dict, source: dict, reviewed: str) -> dict:
 
 
 def simbad_star(row: dict, source: dict, reviewed: str) -> dict:
-    name = str(row.get("main_id") or "").strip()
-    if not name:
+    catalogue_id = re.sub(r"\s+", " ", str(row.get("main_id") or "").strip())
+    if not catalogue_id:
         raise ValueError("row has no main_id")
+
+    # The query joins SIMBAD's ident table, so every row carries a "NAME x"
+    # identifier. Display that proper name -- a reader searches for "Kochab",
+    # not "* bet UMi" -- but key the record on main_id, which identifies the
+    # object itself. Two spellings of one name (Celeno/Celaeno, both * 16 Tau)
+    # then collapse into a single record instead of duplicating the star.
+    proper_name = re.sub(r"^NAME\s+", "", str(row.get("id") or "").strip()).strip()
+    if not proper_name:
+        raise ValueError(f"{catalogue_id} carries no NAME identifier")
+
+    # A NAME identifier is not always a proper name: SIMBAD also stores
+    # catalogue-style entries such as "NAME GR* 402A". Those add nothing a
+    # reader can recognise, so keep only names written as words.
+    if re.search(r"[0-9*]", proper_name):
+        raise ValueError(f"{proper_name!r} is a designation, not a proper name")
 
     # SIMBAD reports parallax in milliarcseconds; distance(pc) = 1000 / plx.
     parallax_mas = number(row.get("plx_value"), "plx_value")
@@ -173,17 +188,19 @@ def simbad_star(row: dict, source: dict, reviewed: str) -> dict:
 
     # SIMBAD's basic table carries no radius, so no size/circumference is set.
     record = {
-        "id": slugify(name),
-        "name": re.sub(r"\s+", " ", name),
+        "id": slugify(catalogue_id),
+        "name": proper_name,
         "type": "Star",
         "distance": f"~{light_years:,.1f} ly",
         "measurementLabel": "Parallax (mas)",
         "measurementValue": f"{parallax_mas:.2f}",
     }
 
+    aliases = [catalogue_id]
     spectral = str(row.get("sp_type") or "").strip()
     if spectral:
-        record["aliases"] = [f"Spectral type {spectral}"]
+        aliases.append(f"Spectral type {spectral}")
+    record["aliases"] = aliases
 
     try:
         record["rightAscension"] = f"{number(row.get('ra'), 'ra'):.5f}"
