@@ -83,9 +83,19 @@ Do not make the user-facing static application depend on these services being on
 
 ### R2 — Quiz mode
 
-Status: **Next** — the active priority as of 2026-07-28.
+Status: **Complete** (2026-07-28)
 
 Goal: turn the catalogue into a fast, replayable educational game.
+
+Outcome: `quiz.js` implements four timed modes over six question families drawn
+from validated catalogue fields, with per-mode `localStorage` leaderboards. All
+129 records can serve as a question subject. See `DECISIONS.md` D9 and D10.
+
+Question types delivered against the list below: object type, which-object-is-a-
+type, distance ordering, distance value, alternate designation, and named
+measurement. Description- and discovery-based questions are not built because the
+catalogue has no description or discovery fields yet — that is R3's work, and it
+would extend the quiz at no new source cost.
 
 #### Core game rules
 
@@ -153,15 +163,17 @@ A shared online/global leaderboard would require a hosted write service, anti-ch
 
 #### Exit criteria
 
-- All four modes work with the required timers
-- Every question shows four choices and exactly one valid answer
-- Scoring begins at 100 and reaches 0 at expiration
-- Mode-specific local leaderboards persist across browser sessions
-- Keyboard and touch input both work
-- Quiz questions are generated only from validated catalogue fields
-- A full quiz can be completed without console errors or blocked navigation
+- ✅ All four modes work with the required timers
+- ✅ Every question shows four choices and exactly one valid answer
+- ✅ Scoring begins at 100 and reaches 0 at expiration
+- ✅ Mode-specific local leaderboards persist across browser sessions
+- ✅ Keyboard and touch input both work
+- ✅ Quiz questions are generated only from validated catalogue fields
+- ✅ A full quiz can be completed without console errors or blocked navigation
 
 ### R3 — Educational object profiles
+
+Status: **Next** — the active priority as of 2026-07-28.
 
 Goal: make every celestial-object page useful for learning, not merely a list of measurements.
 
@@ -290,8 +302,8 @@ No application runtime dependencies should be introduced merely for validation.
 ## Recommended implementation order
 
 1. ~~**R1 — Major catalogue expansion**~~ — complete 2026-07-28
-2. **R2 — Quiz mode** ← next
-3. **R3 — Educational object profiles**
+2. ~~**R2 — Quiz mode**~~ — complete 2026-07-28
+3. **R3 — Educational object profiles** ← next
 4. **R4 — Images for objects**
 5. **R5 — Map**
 6. **R6 — Search and discovery refinements**

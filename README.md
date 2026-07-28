@@ -3,7 +3,8 @@
 UniMap is a small static web app for browsing a catalogue of 129 celestial bodies —
 stars, planets, exoplanets, dwarf planets, nebulae, black holes, neutron stars and
 galaxies. Search by name, filter by category, and open any result to see its type,
-distance, measurements and source.
+distance, measurements and source. A timed quiz mode turns the same catalogue into
+a game.
 
 ## Technology stack
 
@@ -52,7 +53,8 @@ See `DEPLOYMENT.md` for the complete pre-deployment, verification, and rollback 
 /
 ├── index.html             # semantic page structure
 ├── styles.css             # all presentation
-├── app.js                 # data loading, state, search, filtering, rendering
+├── app.js                 # catalogue: data loading, state, search, filtering
+├── quiz.js                # quiz: question generation, timing, scoring, leaderboards
 ├── celestial-bodies.json  # the dataset
 ├── tools/                 # maintainer scripts (never needed to run the site)
 │   ├── sources.json          # source endpoints, queries, attribution
@@ -100,6 +102,35 @@ Each record in `celestial-bodies.json` has a stable lowercase `id` slug:
 - Responsive centered layout for phones, tablets and desktops
 - Keyboard-accessible controls with visible focus states
 - A user-facing error message (and a console log) if the dataset cannot be loaded
+
+## Quiz mode
+
+Ten questions per round, in four timed modes: Easy (15s per question), Medium
+(10s), Hard (7s), Impossible (5s). Every question starts at 100 available points
+and decays continuously to zero as its timer runs down, so answering quickly is
+worth more:
+
+```text
+score = round(100 × remaining milliseconds ÷ total milliseconds)   clamped 0..100
+```
+
+A wrong answer or an expired timer scores nothing. After each question the correct
+answer and a one-line explanation are shown.
+
+Questions are generated from stored catalogue fields only — nothing is parsed out
+of prose or inferred. Six families are supported: object type, which object is a
+given type, distance ordering, distance value, catalogue designation, and named
+measurement. A family is offered for a record only when that record carries the
+fields it needs, and distractors must be numerically separated from the answer so
+no question has two defensible answers. See `DECISIONS.md` D10.
+
+Answer with a click, a tap, or the number keys `1`–`4`; `Enter` moves on. Each mode
+keeps its own leaderboard in `localStorage` under `unimap.leaderboards.v1`, storing
+player name, score, date and question count, capped at ten entries per mode. There
+is no server and no shared leaderboard: scores never leave the browser. Stored data
+that is missing, unparseable or the wrong shape is discarded rather than trusted,
+and a browser that blocks local storage still plays — it just says scores cannot be
+saved.
 
 ## Maintaining the catalogue
 

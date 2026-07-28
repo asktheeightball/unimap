@@ -4,11 +4,37 @@ This is the authoritative source for selecting the next unit of work.
 
 ## Current priority
 
-### P1 — Build quiz mode
+### P2 — Add educational object descriptions
 
 Status: **Not started** — this is now the active task. See the Queue below.
 
 ## Completed
+
+### P1 — Build quiz mode
+
+Status: **Complete** (2026-07-28)
+
+Four timed modes, ten questions each, generated from six question families over
+validated catalogue fields. Scoring is `round(100 × remaining ÷ total)`, clamped to
+0–100; wrong and expired answers score 0. Each mode keeps its own `localStorage`
+leaderboard storing player name, score, date and question count.
+
+Requirements met:
+
+- ✅ Easy 15s, Medium 10s, Hard 7s, Impossible 5s
+- ✅ Four answers, exactly one correct — verified across 7,000 generated questions
+- ✅ Points start at 100 and decay continuously to 0
+- ✅ Incorrect and expired answers score 0
+- ✅ Correct answer and a concise explanation shown after every question
+- ✅ Distractors are type-compatible, separated, and never ambiguous (D10)
+- ✅ Questions built only from stored fields — no prose parsing, no inference
+- ✅ Separate per-mode leaderboards, persisting across reload
+- ✅ Keyboard (number keys 1–4, Enter, native buttons) and touch (≥44px targets)
+- ✅ Responsive at 375px and 1280px
+- ✅ No backend, hosted leaderboard, auth, framework, package manager, or live API
+
+Not built, and deliberately so: a shared global leaderboard, which `PRODUCT.md`
+and R2 both defer until hosted writes, anti-cheat and privacy are decided.
 
 ### P0 — Expand the celestial-body catalogue substantially
 
@@ -76,9 +102,9 @@ Carried forward, not blocking:
 
 ## Queue
 
-### P1 — Build quiz mode
+### P1 — Build quiz mode — moved to Completed above
 
-Status: **Not started** — active priority as of 2026-07-28.
+Original scope, retained for reference:
 
 Build four quiz modes using validated local catalogue data:
 
@@ -105,7 +131,13 @@ A shared global leaderboard is not part of this priority because it requires hos
 
 ### P2 — Add educational object descriptions
 
-Status: **Not started**
+Status: **Not started** — active priority as of 2026-07-28.
+
+Quiz mode raised the value of this work: richer fields unlock better question
+families than the measurement-based ones the catalogue can support today. The
+exoplanet importer already *fetches* `disc_year` and `discoverymethod` from the
+NASA Exoplanet Archive and discards them; storing those two fields would enable
+discovery-based questions for 60 records at no new source cost.
 
 Add a concise sourced profile for each object explaining:
 

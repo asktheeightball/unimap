@@ -15,10 +15,15 @@
       <div class="wrap">
         <h1>UniMap</h1>
         <p class="tagline">A small map of very large things.</p>
+        <nav class="view-nav" id="view-nav" aria-label="Sections">
+          <button type="button" class="nav-button is-active" data-view="catalogue" aria-pressed="true">Catalogue</button>
+          <button type="button" class="nav-button" data-view="quiz" aria-pressed="false">Quiz</button>
+        </nav>
       </div>
     </header>
 
     <main class="wrap" id="main">
+      <div id="catalogue-view">
       <!-- Search + filters -->
       <section class="panel" id="browse-view" aria-labelledby="browse-heading">
         <h2 id="browse-heading" class="visually-hidden">Browse celestial bodies</h2>
@@ -97,6 +102,93 @@
       </section>
 
       <p class="error" id="error" role="alert" hidden></p>
+      </div>
+
+      <!-- Quiz -->
+      <section class="panel" id="quiz-view" aria-labelledby="quiz-heading" hidden>
+        <h2 id="quiz-heading" tabindex="-1">Quiz</h2>
+
+        <!-- Mode selection -->
+        <div id="quiz-setup">
+          <p class="quiz-intro">
+            Ten questions built from the catalogue. Each question starts at 100 points
+            and decays to zero as its timer runs down, so a fast answer is worth more.
+            A wrong or expired answer scores nothing.
+          </p>
+
+          <div class="quiz-name-field">
+            <label for="quiz-name">Player name (optional)</label>
+            <input type="text" id="quiz-name" maxlength="24" autocomplete="off" placeholder="Anonymous" />
+          </div>
+
+          <fieldset class="quiz-mode-picker">
+            <legend>Choose a difficulty to begin</legend>
+            <div class="quiz-modes" id="quiz-modes">
+              <button type="button" class="btn quiz-mode" data-mode="easy">
+                <span class="quiz-mode-name">Easy</span>
+                <span class="quiz-mode-time">15 seconds</span>
+              </button>
+              <button type="button" class="btn quiz-mode" data-mode="medium">
+                <span class="quiz-mode-name">Medium</span>
+                <span class="quiz-mode-time">10 seconds</span>
+              </button>
+              <button type="button" class="btn quiz-mode" data-mode="hard">
+                <span class="quiz-mode-name">Hard</span>
+                <span class="quiz-mode-time">7 seconds</span>
+              </button>
+              <button type="button" class="btn quiz-mode" data-mode="impossible">
+                <span class="quiz-mode-name">Impossible</span>
+                <span class="quiz-mode-time">5 seconds</span>
+              </button>
+            </div>
+          </fieldset>
+
+          <p class="error" id="quiz-setup-error" role="alert" hidden></p>
+          <p class="quiz-note" id="quiz-storage-note" hidden>
+            Scores cannot be saved because this browser is blocking local storage.
+            You can still play.
+          </p>
+
+          <h3 class="leaderboards-heading">Leaderboards</h3>
+          <div class="leaderboards" id="leaderboards"></div>
+        </div>
+
+        <!-- Active question -->
+        <div id="quiz-play" hidden>
+          <div class="quiz-hud">
+            <p class="quiz-progress" id="quiz-progress"></p>
+            <p class="quiz-mode-badge" id="quiz-mode-label"></p>
+            <p class="quiz-total" id="quiz-total"></p>
+          </div>
+
+          <p class="quiz-points">
+            <span id="quiz-points-value">100</span> points available
+          </p>
+          <progress class="quiz-meter" id="quiz-meter" max="100" value="100"></progress>
+
+          <h3 class="quiz-prompt" id="quiz-prompt"></h3>
+          <ul class="quiz-answers" id="quiz-answers"></ul>
+
+          <div class="quiz-feedback" id="quiz-feedback" role="status" hidden>
+            <p class="quiz-verdict" id="quiz-verdict"></p>
+            <p class="quiz-explanation" id="quiz-explanation"></p>
+            <button type="button" class="btn btn-primary" id="quiz-next">Next question</button>
+          </div>
+
+          <button type="button" class="btn quiz-quit" id="quiz-quit">End quiz and save score</button>
+        </div>
+
+        <!-- Final score -->
+        <div id="quiz-results" hidden>
+          <p class="quiz-results-score"><span id="quiz-results-score">0</span> points</p>
+          <p class="quiz-results-detail" id="quiz-results-detail"></p>
+          <p class="quiz-results-best" id="quiz-results-best" hidden></p>
+          <p class="quiz-note" id="quiz-results-storage" hidden>
+            This score could not be saved — the browser is blocking local storage.
+          </p>
+          <button type="button" class="btn btn-primary" id="quiz-again">Back to modes</button>
+        </div>
+      </section>
     </main>
 
     <footer class="site-footer">
@@ -106,5 +198,6 @@
     </footer>
 
     <script src="app.js"></script>
+    <script src="quiz.js"></script>
   </body>
 </html>

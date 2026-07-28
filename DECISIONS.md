@@ -220,6 +220,90 @@ Consequences:
 - This decision constrains data selection only. It never permits altering a value,
   which D5 and D7 still forbid.
 
+## D9 — Quiz behavior lives in `quiz.js`, separate from the catalogue
+
+Status: **Accepted**
+
+Decision:
+
+The quiz is a second plain script, `quiz.js`, loaded alongside `app.js`. It owns
+the quiz views, question generation, timing, scoring and leaderboards, and it
+switches between the catalogue and quiz views. `app.js` is unchanged.
+
+Rationale:
+
+- The quiz is roughly as large as the entire catalogue application. Merging the
+  two would have made `app.js` the place where every future change lands.
+- The catalogue's search, filter and detail behavior is already validated. Not
+  touching that file is the cheapest way to keep it that way.
+- Both files remain plain `<script>` tags. This adds no framework, module system,
+  bundler or dependency, so it stays inside D1.
+
+Consequences:
+
+- Both scripts read `celestial-bodies.json` independently. Two fetches of a local
+  file are cheaper than the coupling that sharing state between them would add;
+  revisit if a third feature needs the catalogue.
+- Switching views only toggles visibility, so a search and its results survive a
+  trip through the quiz.
+- Leaving the quiz mid-question abandons that round rather than leaving a timer
+  running behind a hidden view. "End quiz" is the deliberate path that records a
+  score.
+
+## D10 — Quiz questions are generated only from stored fields, with enforced answer separation
+
+Status: **Accepted** (applies D7 to generated content)
+
+Decision:
+
+Each question family declares which stored fields it needs and produces a question
+only when a record actually carries them. A family that cannot build a valid
+question for a record returns nothing; it never fills a gap with an estimate,
+and no question is derived by parsing prose.
+
+Six families are supported by the current catalogue:
+
+| Family | Requires | Eligible records |
+|---|---|---:|
+| `object-type` | `name`, `type` | 129 |
+| `which-is-type` | `name`, `type` | 129 |
+| `distance-order` | Earth-referenced `distance` | 123 |
+| `distance-value` | Earth-referenced `distance` | 123 |
+| `designation` | a catalogue-designation alias | 49 |
+| `measurement` | `measurementLabel` + `measurementValue` | 105 |
+
+Two rules keep answers unambiguous:
+
+1. **Distractors must be separated from the answer.** "How far away" options differ
+   by at least 2×, "which is closest" winners beat every distractor by at least
+   25%, and measurement options differ by at least 25%. Without this the four
+   dwarf planets, whose semi-major axes are close together, would have produced
+   coin-flip questions; the rule excludes them automatically rather than by a
+   hand-maintained list.
+2. **Quantities must be comparable.** A dwarf planet's `distance` is a mean orbital
+   distance from the Sun, not a distance from Earth, so the distance families
+   accept only Earth-referenced values. Measurement distractors are drawn only from
+   records sharing the same `measurementLabel`, so units always match.
+
+Every question is checked before use: exactly four options, exactly one correct,
+and no two option labels equal.
+
+Rationale:
+
+- A quiz multiplies data errors — a wrong value becomes a wrong answer marked
+  correct, which teaches the error.
+- Ambiguity is as damaging as inaccuracy: a question with two defensible answers
+  punishes the better-informed player.
+
+Consequences:
+
+- Question supply is bounded by data quality, not by the number of templates.
+  Richer fields (a discovery method or year, a description) would unlock better
+  families; see the note in `HANDOFF.md`.
+- Adding a family means declaring its field requirements and separation rule.
+- The generator is honest about failure: if the catalogue could not support a quiz
+  at all, the interface says so rather than asking a degenerate question.
+
 ## Decision template
 
 ### D# — Title
