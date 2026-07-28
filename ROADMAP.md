@@ -54,41 +54,34 @@ Status: **Partially complete**
 
 Sourced descriptions exist on 197 of 208 records and answer what an object is, where it is, and in some cases how it was discovered. Remaining work is folded into R6 below.
 
-## Active roadmap
-
 ### R4 — Search intelligence and autocomplete
 
-Status: **Not started**
+Status: **Complete** (2026-07-28)
 
 Goal: make catalogue discovery forgiving and fast without a runtime service.
 
-#### Fuzzy matching and correction
+Delivered:
 
-- Search names, aliases, and catalogue identifiers.
-- Tolerate common spelling errors, missing letters, transpositions, and partial names.
-- Offer visible corrections such as `Did you mean Betelgeuse?`.
-- Never silently replace the user query.
-- Use a small native similarity implementation rather than a framework or service.
+- names, aliases and the `id` slug are indexed once after load, normalized to a
+  comparable form and a space-free variant, without mutating any record;
+- matches are ranked in seven tiers — exact name, name prefix, exact
+  alias/identifier, alias/identifier prefix, name substring, alias/identifier
+  substring, fuzzy — so a fuzzy match can never outrank a literal one;
+- fuzzy matching is bounded Damerau-Levenshtein with a budget that scales with
+  query length and is zero below four characters;
+- an explicit `Did you mean …?` correction appears whenever the best match was
+  only reached by edit distance, and the query is never rewritten without a
+  click;
+- an ARIA 1.2 combobox offers up to eight suggestions with mouse, touch,
+  Arrow Up/Down, Enter and Escape support and a polite count announcement;
+- the footer was removed.
 
-#### Autocomplete and suggestions
+Measured at 1.7 ms per query on the 208-record catalogue and 2.6 ms on a
+1,000-record fixture, worst case. No request of any kind is made while typing.
 
-- Show 6–8 ranked suggestions after one or two characters.
-- Rank exact prefix, common-name, alias, identifier, then fuzzy matches.
-- Support mouse, touch, Arrow Up, Arrow Down, Enter, Escape, and screen readers.
-- Allow selection to open or filter directly to an object.
-- Remain effectively instant at larger catalogue sizes.
+Exit criteria met, verified by 121 browser checks (`node tools/search_checks.mjs`).
 
-#### Interface cleanup
-
-- Remove the footer and any empty spacing it leaves.
-
-#### Exit criteria
-
-- Misspelled queries produce useful corrections.
-- Alias and identifier search works.
-- Autocomplete works on desktop and mobile.
-- Touch, keyboard, and screen-reader behavior pass.
-- No network request occurs while typing.
+## Active roadmap
 
 ### R5 — Quiz expansion and persistent local scores
 
@@ -225,14 +218,15 @@ Add focused validation for IDs, fields, aliases, sources, coordinates, images, r
 
 ## Recommended implementation order
 
-1. **R4 — Search intelligence and autocomplete**
-2. **R5 — Quiz expansion and persistent local scores**
-3. **R6 — Catalogue information enrichment**
-4. **R7 — Planet category hierarchy**
-5. **R8 — Catalogue expansion and new object classes**
-6. **R9 — Object location map**
-7. **R10 — Images for objects**
-8. **R11 — Lightweight quality automation**
+1. **R5 — Quiz expansion and persistent local scores**
+2. **R6 — Catalogue information enrichment**
+3. **R7 — Planet category hierarchy**
+4. **R8 — Catalogue expansion and new object classes**
+5. **R9 — Object location map**
+6. **R10 — Images for objects**
+7. **R11 — Lightweight quality automation**
+
+R4 — Search intelligence and autocomplete is complete.
 
 ## Later ideas requiring explicit approval
 

@@ -356,6 +356,102 @@ Consequences:
 - A source that begins returning a new field can extend its description by adding
   one fragment, because `describe()` drops fragments whose value is absent.
 
+## D13 — Search ranks in tiers over a local index; fuzzy matching is a last resort
+
+Status: **Accepted**
+
+Decision:
+
+Search is a tiered ranking over an in-memory index built once from the loaded
+catalogue. No search service, index format, or dependency is introduced, and no
+request is made while typing.
+
+**Indexed fields.** Per record: `name`, every entry in `aliases`, and the `id`
+slug. This catalogue has no `sourceRecordId` field — `id` and `aliases` are the
+identifier fields the schema actually defines, so those are what search covers.
+Descriptions (`summary`, `sourceSummary`) are deliberately *not* indexed: they
+are long generated prose, and matching inside them would make almost every
+query return almost every record.
+
+**Normalization.** Each indexed string is stored twice — a spaced form and a
+space-free form — after Unicode decomposition, dropping combining marks,
+flattening Unicode dashes and quotes to ASCII, lowercasing, and reducing every
+remaining non-alphanumeric run to a single space. This is what makes `* alf Tau`
+reachable as `alf tau`, `Kepler-200 c` reachable as `kepler200c`, and
+`136199 Eris (2003 UB313)` reachable as typed. Records are never mutated; the
+index holds references, and every displayed value still comes from the record.
+
+**Ranking tiers**, best first:
+
+| Tier | Match |
+|---:|---|
+| 0 | exact primary name |
+| 1 | primary-name prefix |
+| 2 | exact alias or identifier |
+| 3 | alias or identifier prefix |
+| 4 | primary-name substring |
+| 5 | alias or identifier substring |
+| 6 | fuzzy |
+
+Ties break on edit distance, then shorter name, then catalogue position, so
+ordering is deterministic. With no query the catalogue keeps its original order.
+
+**Fuzzy algorithm.** Bounded Damerau-Levenshtein (optimal string alignment) with
+three rolling rows and an early exit as soon as a whole row exceeds the budget.
+Transpositions cost one edit, so `Betelguese` is one step from `Betelgeuse`.
+A query is compared against the whole name, each word of the name over two
+characters, and each identifier.
+
+**Thresholds.** Budget by normalized query length: under 4 characters none at
+all, 4–5 one edit, 6–9 two, 10 or more three. A candidate must also satisfy
+`distance / max(length) <= 0.34`. The fuzzy pass runs only when the literal
+passes fall short of what the caller needs — one match for the results list,
+eight for the suggestion list — and contributes at most 12 records.
+
+Rationale:
+
+- The zero budget under four characters exists because at three characters most
+  of the catalogue is within one edit; tolerance there produces noise, not
+  corrections.
+- The ratio test exists because a three-edit budget alone lets a long query
+  reach unrelated short names.
+- Gating the fuzzy pass on the literal result count is what keeps typing fast:
+  an ordinary prefix query computes no edit distance at all. Measured worst case
+  is 1.7 ms per query at 208 records and 2.6 ms at 1,000, so no debounce is
+  used — suggestions appear on the keystroke.
+
+**Correction, not rewriting.** When the best match was only reached by edit
+distance, `Did you mean X?` appears above the results. When nothing matched at
+all, a fuller panel repeats the searched text, offers a correction computed
+*without* the category filter (a filter is often the reason a spelling matched
+nothing), lists at most three other close names, and offers Clear search. The
+query is never rewritten without a click.
+
+**Autocomplete.** An ARIA 1.2 combobox: the input carries `role="combobox"`,
+`aria-expanded`, `aria-controls` and `aria-activedescendant`; the list is a
+`listbox` of `option` elements — not buttons, which a listbox may not contain.
+Suggestions open at two normalized characters, cap at eight, respect the active
+category, and show the object's name with its type and the matched alias as
+secondary text. **Selecting a suggestion opens that object's detail view**, and
+also sets the search box to the object's name and re-runs the search, so Back
+returns to a result list containing it. Enter with no highlighted suggestion
+submits the search as it always did. The suggestion count is announced only when
+it changes, to keep a screen reader from reciting a number on every keystroke.
+
+Consequences:
+
+- Adding a searchable field means adding a term in `buildIndexEntry`, not a new
+  system.
+- The tier table is the contract: a change to it changes result ordering and
+  should be reflected in `tools/search_checks.mjs`.
+- Aliases are indexed as the source wrote them, including classification-style
+  entries such as `Spectral type K5+III`. Those are searchable, which is useful,
+  but they are not names and must not be presented as such.
+- Escape inside the search field falls through to the browser's native
+  "clear the search input" behaviour whenever the suggestion list is already
+  closed. That is deliberate; the app only intercepts Escape to dismiss its own
+  list.
+
 ## Decision template
 
 ### D# — Title

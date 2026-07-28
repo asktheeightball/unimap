@@ -62,6 +62,7 @@ See `DEPLOYMENT.md` for the complete pre-deployment, verification, and rollback 
 │   ├── import_catalogue.py   # fetch -> cache -> normalize -> stage
 │   ├── promote_staging.py    # validate, then update the catalogue
 │   ├── validate_catalogue.py # standalone catalogue validation
+│   ├── search_checks.mjs     # browser checks for search, autocomplete, layout
 │   ├── cache/                # raw API responses (git-ignored)
 │   └── staging/              # generated staging JSON (git-ignored)
 ├── README.md              # project overview and local setup
@@ -89,7 +90,9 @@ Each record in `celestial-bodies.json` has a stable lowercase `id` slug:
 
 ## Features
 
-- Case-insensitive, partial-match search by name
+- Search across object names, aliases and catalogue ids, tolerant of
+  punctuation, spacing and spelling — see **Searching** below
+- Autocomplete suggestions as you type, usable by mouse, touch and keyboard
 - Search button and the Enter key behave identically
 - An empty search shows the full catalogue rather than nothing
 - Category filters: All, Stars, Planets, Exoplanets, Dwarf Planets, Moons,
@@ -104,6 +107,51 @@ Each record in `celestial-bodies.json` has a stable lowercase `id` slug:
 - Keyboard-accessible controls with visible focus states
 - A sourced description on each object's detail view, where one is available
 - A user-facing error message (and a console log) if the dataset cannot be loaded
+
+## Searching
+
+Search runs entirely against the catalogue already loaded in the page. Nothing
+is requested while you type, and no search service is involved.
+
+**What is searched.** Each record's `name`, every entry in its `aliases`, and its
+`id` slug. Punctuation and spacing are normalized on both sides, so `alf tau`
+finds `* alf Tau`, `kepler200c` finds `Kepler-200 c`, and `crabnebula` finds
+`Crab Nebula`. Descriptions are not searched — they are long generated prose and
+matching inside them would return nearly everything.
+
+**Ranking.** Results are ordered by how well they matched, best first:
+
+1. exact primary name
+2. primary-name prefix
+3. exact alias or catalogue id
+4. alias or catalogue id prefix
+5. primary-name substring
+6. alias or catalogue id substring
+7. fuzzy (spelling-tolerant)
+
+A fuzzy match can never outrank a literal one. With no query the catalogue keeps
+its original order. Search always respects the active category filter.
+
+**Spelling tolerance.** Misspellings are matched by edit distance, counting a
+swapped pair of letters as a single mistake — so `Betelguese` finds
+`Betelgeuse`, `Andromida` finds `Andromeda`, and `Proxima Centari` finds
+`Proxima Centauri`. The allowance grows with the length of what you typed and is
+switched off entirely below four characters, where almost any short string is a
+near-miss for something. When a result was only reached this way, UniMap says
+`Did you mean …?` above the results; it never rewrites what you typed on its
+own. `DECISIONS.md` D13 records the exact thresholds.
+
+**Suggestions.** After two characters, up to eight suggestions appear under the
+input, showing each object's name with its type and, where relevant, the alias
+that matched. Arrow Up and Arrow Down move through the list, Enter opens the
+highlighted object, Escape closes the list, and Enter with nothing highlighted
+runs the search as usual. Clicking or tapping a suggestion opens that object;
+the search box keeps its name, so Back returns to a result list containing it.
+
+**When nothing matches**, the page shows what was searched for, a correction if
+there is a sensible one — computed without the category filter, since a filter
+is often the reason a spelling matched nothing — a few close names, and a Clear
+search button.
 
 ## Quiz mode
 
@@ -174,6 +222,24 @@ python3 tools/validate_catalogue.py
 Checks JSON syntax, unique lowercase ids, required fields, category values the
 interface can actually reach, duplicate names, alias collisions and local image
 references, then prints totals by category. Exits non-zero on any error.
+
+### Browser checks
+
+```bash
+node tools/search_checks.mjs
+```
+
+121 checks driving real Chromium against the real `index.html` over HTTP:
+matching and ranking, alias and identifier lookup, spelling correction,
+suggestion behaviour, keyboard, mouse and touchscreen interaction, the combobox
+ARIA attributes, three phone widths, horizontal overflow, the browse, detail and
+quiz regressions, and search performance on both the shipped catalogue and a
+synthetic 1,000-record fixture. Exits non-zero on any failure.
+
+This is optional maintainer tooling. It needs Node and a Playwright install
+(`npm install -g playwright`), found wherever it happens to live — the
+repository has no `package.json` and no lockfile, and **the site itself still
+has no dependencies at all**. Python is used the same way for the importers.
 
 ### Import
 

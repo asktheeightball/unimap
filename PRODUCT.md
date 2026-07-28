@@ -34,7 +34,8 @@ A visitor should be able to:
 
 - Static catalogue loaded from `celestial-bodies.json`
 - 208 celestial-body records
-- Partial-name search
+- Ranked search over names, aliases, and catalogue ids, with punctuation
+  tolerance, spelling correction, and accessible autocomplete
 - Flat category filters
 - Accessible result list and object detail view
 - Four quiz difficulties with local leaderboards
@@ -43,18 +44,17 @@ A visitor should be able to:
 
 ## Prioritized product expansion
 
-The approved order is:
+Item 1 is complete. The remaining approved order is:
 
-1. Fuzzy search, spelling correction, autocomplete, alias and identifier search
-2. Effortless quiz mode, more question families, stronger Hard/Impossible content, and reliable local leaderboard persistence
-3. More verified information on object profiles
-4. A grouped planet hierarchy covering solar-system planets, exoplanets, dwarf planets, and candidate dwarf planets
-5. More celestial bodies, including candidate dwarf planets, brown dwarfs, and galaxy clusters
-6. Per-object and catalogue-wide celestial maps
-7. Properly attributed local images
-8. Lightweight validation automation
+1. Effortless quiz mode, more question families, stronger Hard/Impossible content, and reliable local leaderboard persistence
+2. More verified information on object profiles
+3. A grouped planet hierarchy covering solar-system planets, exoplanets, dwarf planets, and candidate dwarf planets
+4. More celestial bodies, including candidate dwarf planets, brown dwarfs, and galaxy clusters
+5. Per-object and catalogue-wide celestial maps
+6. Properly attributed local images
+7. Lightweight validation automation
 
-The footer should be removed as part of the next search/interface slice.
+The footer was removed with the search slice.
 
 ## Category direction
 

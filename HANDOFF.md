@@ -18,7 +18,8 @@ There is no framework, package manager, build command, backend, database, or aut
 ## Repository
 
 - GitHub: `asktheeightball/unimap`
-- Current working branch: `claude/catalogue-expansion-200-250-ygs28r`
+- Current working branch: `claude/search-intelligence-autocomplete-tzkv43`
+- Previous working branch: `claude/catalogue-expansion-200-250-ygs28r` (this branch continues it)
 - Repository default branch remains `claude/unimap-static-app-uj0ql5`
 - Do not change branch strategy or deployment automation without first reconciling the default branch with the active branch
 
@@ -26,7 +27,7 @@ There is no framework, package manager, build command, backend, database, or aut
 
 - `index.html` contains the semantic page structure and Browse/Quiz navigation.
 - `styles.css` contains responsive presentation.
-- `app.js` loads the catalogue, manages browse state, filters results, renders details, and switches modes.
+- `app.js` loads the catalogue, builds the search index, ranks and filters results, renders details, drives the autocomplete combobox, and switches modes.
 - `quiz.js` implements question generation, timing, scoring, and local leaderboards.
 - `celestial-bodies.json` contains **208 records**.
 - The detail view prefers hand-written `summary` over importer-generated `sourceSummary`.
@@ -37,7 +38,9 @@ There is no framework, package manager, build command, backend, database, or aut
 
 The application currently provides:
 
-- case-insensitive partial-name search;
+- tiered search over names, aliases and catalogue ids, with punctuation-insensitive matching and spelling tolerance;
+- an accessible autocomplete listbox with mouse, touch and keyboard selection;
+- explicit `Did you mean …?` corrections that never rewrite the query;
 - flat category filters;
 - result counts and a no-results state;
 - Clear Search;
@@ -57,17 +60,12 @@ The application currently provides:
 
 The user approved and requested these features be written into GitHub.
 
-### Current: P3 — Search intelligence and autocomplete
+### Complete: P3 — Search intelligence and autocomplete
 
-Implement next:
+Delivered 2026-07-28. See `DECISIONS.md` D13 and the "Searching" section of
+`README.md`.
 
-- fuzzy matching and explicit spelling corrections;
-- search across names, aliases, and catalogue identifiers;
-- Google-style autocomplete suggestions;
-- touch, mouse, keyboard, and screen-reader operation;
-- remove the footer as part of this interface slice.
-
-### Next: P4 — Quiz expansion and persistence
+### Current: P4 — Quiz expansion and persistence
 
 - Add Effortless mode at 20 seconds.
 - Add more question families.
@@ -99,15 +97,22 @@ See `PRIORITY.md` for acceptance criteria and `ROADMAP.md` for full outcomes.
 
 ## Known limitations
 
-- Search currently checks names only; aliases and identifiers are not searchable.
-- There is no fuzzy correction or autocomplete yet.
 - The quiz has four modes; Effortless is not implemented.
 - Existing leaderboards persist only in `localStorage` on the same browser/device.
 - Discovery data is not available for every object.
 - Why an object is notable is not available from current imported source responses for most records.
 - Black-hole expansion remains blocked on a defensible authoritative classification source.
 - The previously configured moon endpoint returned HTTP 404 and must not be reused without correction.
-- The footer still exists and is queued for removal in P3.
+- Fuzzy matching compares whole strings and whole words, so a typo *inside* a
+  multi-word name is corrected but a query that is a misspelled fragment of a
+  long name may not be. This was judged the right trade against false positives.
+- Aliases are indexed as their sources wrote them, so classification-style
+  entries such as `Spectral type K5+III` are searchable. That is useful but they
+  are not names.
+- Suggestions are capped at eight and the fuzzy pass contributes at most twelve
+  records to any result list.
+- `tools/search_checks.mjs` needs a Playwright install; it is optional maintainer
+  tooling and the site itself still has no dependencies.
 
 ## Local start
 
@@ -136,13 +141,44 @@ Do not test by double-clicking `index.html`; browser `file://` security prevents
 7. Start the highest-ranked item in `PRIORITY.md`.
 8. Keep the static, dependency-free architecture unless an approved decision changes it.
 
-## Latest documentation session
+## Last session
 
-- Date: 2026-07-27
-- Branch: `claude/catalogue-expansion-200-250-ygs28r`
-- Task: record and prioritize the newly requested search, quiz, catalogue, hierarchy, map, image, and cleanup features
-- Code changed: none
-- Catalogue changed: none; remains 208 records
-- New current priority: P3 — Search intelligence and autocomplete
-- Documentation updated: `PRIORITY.md`, `ROADMAP.md`, `PRODUCT.md`, `HANDOFF.md`
-- Next implementation slice: fuzzy search, correction suggestions, autocomplete, alias/identifier search, and footer removal
+- Date: 2026-07-28
+- Branch: `claude/search-intelligence-autocomplete-tzkv43`
+- Starting commit: `8e8556a` (the branch was 12 commits behind and was
+  fast-forwarded onto it; nothing was reset or discarded)
+- Task selected: **P3 — Search intelligence and autocomplete**
+- Status: **Complete**
+- Files changed: `app.js`, `index.html`, `styles.css`, `tools/search_checks.mjs`
+  (new), `PRIORITY.md`, `ROADMAP.md`, `DECISIONS.md`, `README.md`, `HANDOFF.md`
+- Catalogue changed: none; remains 208 records and validates with 0 warnings
+
+What changed in the application:
+
+- a normalized search index is built once after load over `name`, `aliases` and
+  the `id` slug — no record is mutated;
+- matches rank in seven tiers, exact name through fuzzy;
+- fuzzy matching is bounded Damerau-Levenshtein, budget scaled by query length,
+  off below four characters, gated behind the literal passes;
+- an ARIA 1.2 combobox shows up to eight suggestions;
+- `Did you mean …?` appears when only a fuzzy match was found, and a fuller
+  panel when nothing matched at all;
+- the footer and its CSS were removed.
+
+Validation performed:
+
+- `python3 tools/validate_catalogue.py` — 208 records, 0 warnings
+- `node tools/search_checks.mjs` — **121/121 checks passed**, covering matching
+  and ranking, alias and identifier lookup, one-character and transposed typos,
+  the short-query threshold, unrelated queries, category filtering under fuzzy
+  search, suggestion count and de-duplication, mouse click, real touchscreen
+  tap, Arrow Up/Down, Enter, Escape, the combobox ARIA attributes, list closure
+  on clear, both correction states, desktop and 320/375/390-wide mobile layout,
+  horizontal overflow, browse/detail/Back, quiz navigation and question
+  generation, console errors, and footer removal
+- Search performance: 1.66 ms per query worst case on the 208-record catalogue,
+  2.60 ms on a synthetic 1,000-record fixture. No debounce was needed.
+
+- Deployment performed: none
+- Next priority: **P4 — Quiz expansion and persistence**
+- Uncommitted work: none

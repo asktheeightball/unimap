@@ -4,44 +4,6 @@ This is the authoritative source for selecting the next unit of work.
 
 ## Current priority
 
-### P3 — Search intelligence and autocomplete
-
-Status: **Not started**
-
-Goal: make search forgiving, fast, and useful on desktop and mobile without adding a runtime dependency or external service.
-
-#### P3.1 Fuzzy matching and spelling correction
-
-- Search names, aliases, and catalogue identifiers.
-- Tolerate common misspellings, missing letters, transposed letters, and partial names.
-- Show an explicit correction such as `Did you mean Betelgeuse?` rather than silently changing the query.
-- Prefer a small native edit-distance or similarity implementation.
-- Keep all search local to the loaded catalogue.
-
-#### P3.2 Autocomplete and suggestions
-
-- Show 6–8 suggestions after one or two characters.
-- Rank exact prefix matches first, then common-name, alias, identifier, and fuzzy matches.
-- Support touch, mouse, Arrow Up, Arrow Down, Enter, Escape, and screen-reader announcements.
-- Selecting a suggestion should open or filter directly to that object.
-- Keep suggestions effectively instant with a larger catalogue.
-
-#### P3.3 Small interface cleanup
-
-- Remove the footer and any empty spacing it leaves behind.
-- Preserve mobile layout, keyboard access, and no-horizontal-overflow behavior.
-
-#### P3 exit criteria
-
-- Misspelled searches produce useful corrections.
-- Alias and identifier search works.
-- Autocomplete works on desktop and mobile.
-- Keyboard and touch behavior pass.
-- No-results guidance remains clear.
-- No runtime API or new framework is introduced.
-
-## Next priorities
-
 ### P4 — Quiz expansion and persistence
 
 Status: **Not started**
@@ -95,6 +57,8 @@ Current `localStorage` persistence is device- and browser-specific. Improve loca
 - add export/import backup as JSON.
 
 A shared cross-device leaderboard remains a later backend decision because it requires server-side storage, identity, privacy, and anti-cheat controls.
+
+## Next priorities
 
 ### P5 — Catalogue information enrichment
 
@@ -196,6 +160,14 @@ Four difficulties, 10 questions per game, four choices, time-based scoring from 
 Status: **Partially complete / carried into P5**
 
 Sourced descriptions ship on 197 of 208 records. The remaining notability and discovery gaps are now governed by P5 rather than blocking the higher-value search and quiz refinements.
+
+### P3 — Search intelligence and autocomplete
+
+Status: **Complete** (2026-07-28)
+
+Search now indexes names, aliases and the `id` slug, ranks matches in seven tiers, tolerates misspellings through bounded Damerau-Levenshtein, offers explicit `Did you mean …?` corrections, and provides an accessible autocomplete listbox. The footer was removed as the P3.3 interface slice. See `DECISIONS.md` D13 for the matching rules and thresholds, and `README.md` for the behaviour a visitor sees.
+
+Validation: 121 browser checks against the real `index.html` over HTTP, all passing (`node tools/search_checks.mjs`).
 
 ## Selection rules
 
