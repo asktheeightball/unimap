@@ -30,6 +30,10 @@ const state = {
   suggestions: [],
   activeSuggestion: -1,
   announcedCount: -1,
+  // id -> record, built once at load. Related-object links resolve through
+  // this rather than scanning the catalogue on every detail render, which
+  // would make the cost of opening a page grow with the catalogue.
+  byId: new Map(),
 };
 
 const el = {
@@ -46,19 +50,10 @@ const el = {
   modeNav: document.getElementById("mode-nav"),
   backButton: document.getElementById("back-button"),
   detailName: document.getElementById("detail-name"),
+  detailDesignation: document.getElementById("detail-designation"),
   detailSummary: document.getElementById("detail-summary"),
-  detailTypeValue: document.getElementById("detail-type-value"),
-  detailDistance: document.getElementById("detail-distance"),
-  detailSize: document.getElementById("detail-size"),
-  detailCircumference: document.getElementById("detail-circumference"),
-  detailMeasurementLabel: document.getElementById("detail-measurement-label"),
-  detailMeasurementValue: document.getElementById("detail-measurement-value"),
-  detailSource: document.getElementById("detail-source"),
-  rowDistance: document.getElementById("detail-row-distance"),
-  rowSize: document.getElementById("detail-row-size"),
-  rowCircumference: document.getElementById("detail-row-circumference"),
-  rowMeasurement: document.getElementById("detail-row-measurement"),
-  rowSource: document.getElementById("detail-row-source"),
+  detailNotability: document.getElementById("detail-notability"),
+  detailSections: document.getElementById("detail-sections"),
   searchField: document.getElementById("search-combobox"),
   suggestions: document.getElementById("search-suggestions"),
   suggestionStatus: document.getElementById("search-suggestion-status"),
@@ -534,15 +529,6 @@ function createResultItem(body) {
   return item;
 }
 
-/* Fill a detail row, hiding it when the record has no value for that field.
-   Not every object has a published diameter, and a blank row reads as missing
-   data rather than as data that was never measured. */
-function setDetailRow(row, valueElement, value) {
-  const text = typeof value === "string" ? value.trim() : "";
-  valueElement.textContent = text;
-  row.hidden = text === "";
-}
-
 /* A hand-written `summary` always wins over the importer-generated
    `sourceSummary`, and the two are never merged: one is editorial prose a person
    wrote, the other is assembled from the values a source returned. A record with
@@ -555,23 +541,237 @@ function describeBody(body) {
   return typeof body.sourceSummary === "string" ? body.sourceSummary.trim() : "";
 }
 
+/* --- Detail view ---------------------------------------------------------
+
+   The detail page is grouped rather than listed: a reader looking for where an
+   object is should not have to scan past its parallax to find its coordinates.
+
+   Each section declares the fields it may show, in display order, as a
+   [label, value] pair. A field with no value produces no row, and a section
+   with no rows is never created — so an enriched record and a sparse one both
+   read as finished pages rather than one looking broken. Nothing here prints a
+   raw field name, a null, or an empty string. */
+
+function text(value) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+/* The generic measurement slot means something different on every record, and
+   each meaning now has a field that names itself. Show the generic pair only
+   when its label is not one of those, so a record written before the named
+   fields existed — or by a future importer — still displays its measurement
+   instead of silently losing it. */
+const NAMED_MEASUREMENT_LABELS = new Set([
+  "Radius (Earth radii)",
+  "Parallax (mas)",
+  "Semi-major axis (AU)",
+  "SIMBAD classification",
+]);
+
+function legacyMeasurement(body) {
+  const label = text(body.measurementLabel);
+  const value = text(body.measurementValue);
+  if (!label || !value || NAMED_MEASUREMENT_LABELS.has(label)) {
+    return [];
+  }
+  return [[label, value]];
+}
+
+function detailSections(body) {
+  const identifiers = Array.isArray(body.catalogueIdentifiers)
+    ? body.catalogueIdentifiers.filter((entry) => text(entry))
+    : [];
+
+  return [
+    ["Overview", [
+      ["Type", body.type],
+      ["Classification", body.classification],
+      ["Host star", body.hostName],
+      ["Orbits", body.parentBody],
+    ]],
+    ["Location", [
+      ["Constellation", body.constellation],
+      ["Distance", body.distance],
+      ["Right ascension", body.rightAscension ? `${body.rightAscension}°` : ""],
+      ["Declination", body.declination ? `${body.declination}°` : ""],
+    ]],
+    ["Discovery", [
+      ["Discovered by", body.discoverer],
+      ["Discovery date", body.discoveryDate],
+      ["Discovered", body.discoveryDate ? "" : body.discoveryYear],
+      ["Method", body.discoveryMethod],
+    ]],
+    ["Physical details", [
+      ["Size", body.size],
+      ["Circumference", body.circumference],
+      ["Radius", body.radiusEarth ? `${body.radiusEarth} × Earth` : ""],
+      ["Mass", body.massEarth ? `${body.massEarth} × Earth` : ""],
+      ["Spectral type", body.spectralType],
+      ["Parallax", body.parallaxMas ? `${body.parallaxMas} mas` : ""],
+      ["Semi-major axis", body.semiMajorAxisAu ? `${body.semiMajorAxisAu} AU` : ""],
+      ...legacyMeasurement(body),
+    ]],
+    ["Names and identifiers", [
+      ["Also known as", identifiers.join(", ")],
+    ]],
+  ];
+}
+
+function createDetailSection(title) {
+  const section = document.createElement("section");
+  section.className = "detail-section";
+
+  const heading = document.createElement("h3");
+  heading.textContent = title;
+  section.append(heading);
+  return section;
+}
+
+function createDetailRow(label, value) {
+  const row = document.createElement("div");
+  row.className = "detail-row";
+
+  const term = document.createElement("dt");
+  term.textContent = label;
+
+  const definition = document.createElement("dd");
+  definition.textContent = value;
+
+  row.append(term, definition);
+  return row;
+}
+
+/* Related objects are rendered as buttons into the same detail view, so a
+   reader can walk from a planet to its star, or a black hole to its galaxy,
+   without going back through search. An id that names no record is skipped
+   rather than rendered as a link that goes nowhere; the validator already
+   rejects that case, so this is defence against a hand-edited catalogue. */
+function createRelatedSection(body) {
+  const ids = Array.isArray(body.relatedObjectIds) ? body.relatedObjectIds : [];
+  const related = ids
+    .map((id) => state.byId.get(id))
+    .filter((entry) => entry && entry.id !== body.id);
+
+  if (related.length === 0) {
+    return null;
+  }
+
+  const section = createDetailSection("Related objects");
+  const list = document.createElement("ul");
+  list.className = "detail-related";
+
+  for (const entry of related) {
+    const item = document.createElement("li");
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "link-button";
+    button.dataset.id = entry.id;
+    button.textContent = entry.name;
+    button.addEventListener("click", () => renderDetails(entry));
+    item.append(button);
+    list.append(item);
+  }
+
+  section.append(list);
+  return section;
+}
+
+/* Attribution is a section of its own so a reader can always tell where a
+   record came from. An importer-owned record links to the service that
+   published it; an editorial record names the person's work instead and does
+   NOT invent a URL for prose no source supplied. */
+function createSourceSection(body) {
+  const rows = [];
+  const sourceName = text(body.sourceName);
+  const sourceUrl = text(body.sourceUrl);
+  const editorial = text(body.summarySource);
+
+  const section = createDetailSection("Source");
+  const list = document.createElement("dl");
+  list.className = "detail-list";
+
+  if (sourceName) {
+    const row = document.createElement("div");
+    row.className = "detail-row";
+    const term = document.createElement("dt");
+    term.textContent = "Data from";
+    const definition = document.createElement("dd");
+    if (sourceUrl) {
+      const link = document.createElement("a");
+      link.href = sourceUrl;
+      link.textContent = sourceName;
+      link.rel = "noopener noreferrer";
+      definition.append(link);
+    } else {
+      definition.textContent = sourceName;
+    }
+    row.append(term, definition);
+    list.append(row);
+    rows.push(row);
+  }
+
+  for (const [label, value] of [
+    ["Reviewed", body.lastReviewed],
+    ["Description", editorial],
+    ["Description reviewed", body.summaryReviewed],
+  ]) {
+    if (!text(value)) {
+      continue;
+    }
+    const row = createDetailRow(label, text(value));
+    list.append(row);
+    rows.push(row);
+  }
+
+  if (rows.length === 0) {
+    return null;
+  }
+  section.append(list);
+  return section;
+}
+
 function renderDetails(body) {
   el.detailName.textContent = body.name;
-  el.detailTypeValue.textContent = body.type;
+
+  // A record displayed under a common name keeps its formal designation
+  // visible; one displayed under its designation already shows it as the
+  // heading, so repeating it would be noise.
+  const commonName = text(body.commonName);
+  const designation = commonName && commonName !== body.name ? body.name : "";
+  el.detailName.textContent = commonName || body.name;
+  el.detailDesignation.textContent = designation;
+  el.detailDesignation.hidden = designation === "";
 
   const description = describeBody(body);
   el.detailSummary.textContent = description;
   el.detailSummary.hidden = description === "";
 
-  setDetailRow(el.rowDistance, el.detailDistance, body.distance);
-  setDetailRow(el.rowSize, el.detailSize, body.size);
-  setDetailRow(el.rowCircumference, el.detailCircumference, body.circumference);
-  setDetailRow(el.rowSource, el.detailSource, body.sourceName);
+  const notability = text(body.notability);
+  el.detailNotability.textContent = notability;
+  el.detailNotability.hidden = notability === "";
 
-  const hasMeasurement = Boolean(body.measurementLabel && body.measurementValue);
-  el.detailMeasurementLabel.textContent = hasMeasurement ? body.measurementLabel : "";
-  setDetailRow(el.rowMeasurement, el.detailMeasurementValue,
-    hasMeasurement ? body.measurementValue : "");
+  el.detailSections.replaceChildren();
+
+  for (const [title, fields] of detailSections(body)) {
+    const rows = fields.filter(([, value]) => text(value));
+    if (rows.length === 0) {
+      continue;
+    }
+    const section = createDetailSection(title);
+    const list = document.createElement("dl");
+    list.className = "detail-list";
+    for (const [label, value] of rows) {
+      list.append(createDetailRow(label, text(value)));
+    }
+    section.append(list);
+    el.detailSections.append(section);
+  }
+
+  for (const section of [createRelatedSection(body), createSourceSection(body)]) {
+    if (section) {
+      el.detailSections.append(section);
+    }
+  }
 
   el.browseView.hidden = true;
   el.detailView.hidden = false;
@@ -877,6 +1077,7 @@ async function init() {
   // Build the search index once, immediately after load: every keystroke then
   // compares pre-normalized strings instead of re-folding the catalogue.
   state.index = buildSearchIndex(state.bodies);
+  state.byId = new Map(state.bodies.map((body) => [body.id, body]));
   hideEmptyCategories();
   closeSuggestions();
   renderResults();

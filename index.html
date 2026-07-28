@@ -93,33 +93,16 @@
         <button type="button" class="btn" id="back-button">&larr; Back to results</button>
         <article class="detail">
           <h2 id="detail-name"></h2>
+          <!-- The formal designation, shown under the name when the record is
+               displayed by a different one. -->
+          <p class="detail-designation" id="detail-designation" hidden></p>
           <p class="detail-summary" id="detail-summary" hidden></p>
-          <dl class="detail-list">
-            <div class="detail-row">
-              <dt>Type</dt>
-              <dd id="detail-type-value"></dd>
-            </div>
-            <div class="detail-row" id="detail-row-distance">
-              <dt>Distance</dt>
-              <dd id="detail-distance"></dd>
-            </div>
-            <div class="detail-row" id="detail-row-size">
-              <dt>Size</dt>
-              <dd id="detail-size"></dd>
-            </div>
-            <div class="detail-row" id="detail-row-circumference">
-              <dt>Circumference</dt>
-              <dd id="detail-circumference"></dd>
-            </div>
-            <div class="detail-row" id="detail-row-measurement">
-              <dt id="detail-measurement-label"></dt>
-              <dd id="detail-measurement-value"></dd>
-            </div>
-            <div class="detail-row" id="detail-row-source">
-              <dt>Source</dt>
-              <dd id="detail-source"></dd>
-            </div>
-          </dl>
+          <p class="detail-notability" id="detail-notability" hidden></p>
+          <!-- Overview, Location, Discovery, Physical details, Names and
+               identifiers, Related objects and Source are built here by
+               app.js. A section with no values is never created, so the page
+               never shows an empty heading or a blank row. -->
+          <div id="detail-sections"></div>
         </article>
       </section>
 

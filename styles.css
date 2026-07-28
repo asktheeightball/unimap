@@ -367,16 +367,69 @@ input[type="search"]::placeholder {
 }
 
 .detail h2 {
-  margin: 0 0 1.25rem;
+  margin: 0 0 0.35rem;
   font-size: clamp(1.5rem, 4vw, 2rem);
 }
 
+/* The formal designation of a record shown under a common name. */
+.detail-designation {
+  margin: 0 0 1rem;
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+}
+
 .detail-summary {
-  margin: 0 0 1.5rem;
+  margin: 0.9rem 0 1rem;
   max-width: 46rem;
   color: var(--text-muted);
   font-size: 1.0625rem;
   line-height: 1.6;
+}
+
+/* Why the object matters, set apart from the description of what it is. */
+.detail-notability {
+  margin: 0 0 1.5rem;
+  max-width: 46rem;
+  padding-left: 0.9rem;
+  border-left: 3px solid var(--accent);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.detail-section {
+  margin-bottom: 1.75rem;
+}
+
+.detail-section:last-child {
+  margin-bottom: 0;
+}
+
+.detail-section h3 {
+  margin: 0 0 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* The default link blue does not carry enough contrast on the panel
+   background; match the accent the rest of the interface already uses. */
+.detail-row a {
+  color: var(--accent);
+}
+
+.detail-row a:hover {
+  color: var(--text);
+}
+
+.detail-related {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.25rem;
 }
 
 .detail-list {
