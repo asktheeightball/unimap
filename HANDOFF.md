@@ -30,6 +30,8 @@ There is no framework, package manager, build command, backend, database, or aut
 - `app.js` loads the catalogue, builds the search index, ranks and filters results, renders details, drives the autocomplete combobox, and switches modes.
 - `quiz.js` implements question generation, difficulty tiers, timing, scoring, and versioned local leaderboards.
 - `celestial-bodies.json` contains **208 records**.
+- Categories are a declared model with stable ids in `app.js`; Planets is a disclosure group holding All Planets (69), Solar System Planets (3), Exoplanets (61), Dwarf Planets (5) and Candidate Dwarf Planets (0). Moons and Brown Dwarfs are top-level and outside it.
+- Moons, Brown Dwarfs and Candidate Dwarf Planets are declared, validated and tested but hidden — none has a record yet.
 - The detail view prefers hand-written `summary` over importer-generated `sourceSummary`, and groups fields into six sections that hide when empty.
 - 197 records carry source metadata and generated descriptions; 192 carry coordinates.
 - Structured quiz fields: `hostName`, `discoveryYear` and `discoveryMethod` on the 60 exoplanets, `spectralType` on 63 stars, and the editorial `wellKnown` flag on 85 records.
@@ -44,7 +46,7 @@ The application currently provides:
 - tiered search over names, aliases and catalogue ids, with punctuation-insensitive matching and spelling tolerance;
 - an accessible autocomplete listbox with mouse, touch and keyboard selection;
 - explicit `Did you mean …?` corrections that never rewrite the query;
-- flat category filters;
+- a Planets category group with sub-filters, and flat filters for everything else;
 - result counts and a no-results state;
 - Clear Search;
 - keyboard-accessible results;
@@ -86,14 +88,18 @@ convention). Each returns automatically when the data supports it.
 Delivered 2026-07-28. See `DECISIONS.md` D16, D17 and D18, and the "Record
 schema" and "Searching" sections of `README.md`.
 
-### Current: P6 — Group all planet types under one Planets hierarchy
+### Complete: P6 — Planet category hierarchy
+
+Delivered 2026-07-28. See `DECISIONS.md` D19–D22 and the "Categories" section of
+`README.md`.
+
+### Current: P7 — Add candidate dwarf planets, brown dwarfs, galaxy clusters, and more sourced objects
 
 ### Then
 
-1. P7 — Add candidate dwarf planets, brown dwarfs, galaxy clusters, and more sourced objects
-3. P8 — Add per-object and catalogue-wide celestial maps
-4. P9 — Add properly attributed local images
-5. P10 — Expand lightweight validation automation
+1. P8 — Add per-object and catalogue-wide celestial maps
+2. P9 — Add properly attributed local images
+3. P10 — Expand lightweight validation automation
 
 See `PRIORITY.md` for acceptance criteria and `ROADMAP.md` for full outcomes.
 
@@ -175,6 +181,27 @@ Do not test by double-clicking `index.html`; browser `file://` security prevents
 
 ## Last session
 
+- Date: 2026-07-28 (P6)
+- Branch: `claude/quiz-expansion-persistence-olq1ow`
+- Starting commit: `eef2348`
+- Task: **P6 — Planet category hierarchy. Complete.**
+- Files changed: `app.js`, `index.html`, `styles.css`, `celestial-bodies.json`,
+  `tools/validate_catalogue.py`, `tools/search_checks.mjs`,
+  `tools/quiz_checks.mjs`, and the control documents.
+- Validation: 225 search checks, 121 quiz checks, catalogue validator clean at
+  208 records.
+- Catalogue change: exactly one field — `kepler-452b.type`, Planet to Exoplanet.
+- Next priority: **P7 — Catalogue expansion and new object classes.**
+
+Note for P7: `Candidate Dwarf Planet` and `Brown Dwarf` already have category,
+validator and check support. Importing a record of either type lights its filter
+up with no interface work, so P7 is a sourcing problem rather than a code one.
+A candidate dwarf planet source must not simply treat every large TNO as a
+candidate — that is the same error `select_names` exists to prevent for the
+recognised dwarf planets.
+
+## Previous session
+
 - Date: 2026-07-28 (P5)
 - Branch: `claude/quiz-expansion-persistence-olq1ow`
 - Starting commit: `eef0794`
@@ -222,9 +249,9 @@ the 11 with no provenance — the original hand-authored records. Each needs
 either an import that covers it or hand-written `summary` text with a cited
 source and review date.
 
-**Data issue seen in passing, not changed:** `kepler-452b` is typed `Planet`
-rather than `Exoplanet`, sitting alongside Earth, Mars and Jupiter. Correcting it
-touches category counts and the Planets hierarchy, so it belongs to P6.
+**Resolved in P6:** `kepler-452b` was typed `Planet` and is now `Exoplanet`, on
+the NASA Exoplanet Archive's own listing of it as a confirmed planet in the
+cached response here. See `DECISIONS.md` D22.
 
 ## Previous session
 

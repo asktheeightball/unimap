@@ -4,11 +4,38 @@ This is the authoritative source for selecting the next unit of work.
 
 ## Current priority
 
-### P6 — Planet category hierarchy
+### P7 — Catalogue expansion and new object classes
 
 Status: **Not started** — this is now the active task. Full scope below.
 
 ## Completed
+
+### P6 — Planet category hierarchy
+
+Status: **Complete** (2026-07-28)
+
+Categories are now a declared model with stable ids (`DECISIONS.md` D19), and the
+planet filters are a disclosure group (D20):
+
+| Category | id | Types | Records |
+|---|---|---|---:|
+| All Planets | `all-planets` | Planet, Exoplanet, Dwarf Planet, Candidate Dwarf Planet | 69 |
+| Solar System Planets | `solar-system-planets` | Planet | 3 |
+| Exoplanets | `exoplanets` | Exoplanet | 61 |
+| Dwarf Planets | `dwarf-planets` | Dwarf Planet | 5 |
+| Candidate Dwarf Planets | `candidate-dwarf-planets` | Candidate Dwarf Planet | 0 |
+
+Moons and Brown Dwarfs are top-level categories and are deliberately not members
+of All Planets. Both, and Candidate Dwarf Planets, are declared, validated and
+tested but hidden until a record exists (D21) — which makes P7 a data-only
+change for all three.
+
+`kepler-452b` was corrected from `Planet` to `Exoplanet` on the NASA Exoplanet
+Archive's own listing of it as a confirmed planet, cached in this repository
+(D22). Only the type changed; counts moved to Planet 3 / Exoplanet 61.
+
+Validation: 225 search checks, 121 quiz checks, catalogue validator clean at 208
+records.
 
 ### P5 — Catalogue information enrichment
 
@@ -54,24 +81,19 @@ Delivered:
 
 ## Next priorities
 
-### P6 — Planet category hierarchy (active)
+### P7 — Catalogue expansion and new object classes (active)
 
 Status: **Not started**
 
-Group planet-related filters into one hierarchy:
+The interface work is already done. `Candidate Dwarf Planet` and `Brown Dwarf`
+are declared in the category model, accepted by the validator and covered by the
+checks; both filters appear automatically as soon as a record exists, so this
+priority is a data-only change for them. What it needs is sources, not code:
 
-- Planets
-  - All Planets
-  - Solar System Planets
-  - Exoplanets
-  - Dwarf Planets
-  - Candidate Dwarf Planets
-
-`All Planets` should include Planet, Exoplanet, Dwarf Planet, and Candidate Dwarf Planet. Moons and brown dwarfs must remain separate categories. The hierarchy must work on desktop, mobile, keyboard, and screen readers.
-
-### P7 — Catalogue expansion and new object classes
-
-Status: **Not started**
+- an authoritative list for candidate dwarf planets that does **not** simply
+  treat every large TNO as a candidate;
+- a source that types brown dwarfs as such;
+- a galaxy-cluster source distinct from star clusters.
 
 Add more curated, sourced objects, prioritizing:
 

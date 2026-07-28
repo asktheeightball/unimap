@@ -163,7 +163,22 @@ Hand-written `summary` remains separate from importer-generated `sourceSummary`,
 
 ### R7 — Planet category hierarchy
 
-Status: **Next** — the active priority as of 2026-07-28.
+Status: **Complete** (2026-07-28)
+
+Categories are a declared model with stable ids rather than a label-to-type map
+(`DECISIONS.md` D19). Planets is a disclosure group holding All Planets (69),
+Solar System Planets (3), Exoplanets (61), Dwarf Planets (5) and Candidate Dwarf
+Planets (0). Moons and Brown Dwarfs are top-level and deliberately outside it
+(D20). Every empty category is hidden by one rule, so declaring a category ahead
+of its data leaves no dead control and makes R8 a data-only change (D21).
+
+`kepler-452b` was corrected to `Exoplanet` on the NASA Exoplanet Archive's own
+listing of it as a confirmed planet (D22).
+
+Verified by 225 search checks and 121 quiz checks, including real touch at 320,
+375 and 390, keyboard activation, and 2,000 quiz questions confirming that
+grouping Planet with Exoplanet did not make them acceptable distractors for each
+other.
 
 Group planet-related categories into one navigable hierarchy:
 
@@ -178,7 +193,11 @@ Group planet-related categories into one navigable hierarchy:
 
 ### R8 — Catalogue expansion and new object classes
 
-Status: **Not started**
+Status: **Next** — the active priority as of 2026-07-28.
+
+Candidate Dwarf Planet and Brown Dwarf already have category, validator and test
+support from R7, so adding them is a data-only change. What is missing is
+sources, not code.
 
 Add more curated, sourced records and introduce:
 
@@ -232,9 +251,9 @@ Add focused validation for IDs, fields, aliases, sources, coordinates, images, r
 
 ## Recommended implementation order
 
-1. **R6 — Catalogue information enrichment**
-2. **R7 — Planet category hierarchy**
-3. **R8 — Catalogue expansion and new object classes**
+1. ~~**R6 — Catalogue information enrichment**~~ — complete 2026-07-28
+2. ~~**R7 — Planet category hierarchy**~~ — complete 2026-07-28
+3. **R8 — Catalogue expansion and new object classes** ← next
 4. **R9 — Object location map**
 5. **R10 — Images for objects**
 6. **R11 — Lightweight quality automation**

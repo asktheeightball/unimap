@@ -100,10 +100,10 @@ Each record in `celestial-bodies.json` has a stable lowercase `id` slug:
 - Autocomplete suggestions as you type, usable by mouse, touch and keyboard
 - Search button and the Enter key behave identically
 - An empty search shows the full catalogue rather than nothing
-- Category filters: All, Stars, Planets, Exoplanets, Dwarf Planets, Moons,
-  Nebulae, Black Holes, Neutron Stars, Galaxies, Star Clusters — matching
-  tolerates singular and plural type values, pulsars are reached through Neutron
-  Stars, and a filter no record can match is hidden rather than left dead
+- Category filters: All, Stars, Planets, Moons, Brown Dwarfs, Nebulae, Black
+  Holes, Neutron Stars, Galaxies, Star Clusters — see **Categories** below.
+  Pulsars are reached through Neutron Stars, and a filter no record can match is
+  hidden rather than left dead
 - Result count and a clear no-results message, announced via an ARIA live region
 - Clear Search button that resets both the query and the category
 - Detail view with name, type, distance, size and circumference, plus a Back button
@@ -112,6 +112,42 @@ Each record in `celestial-bodies.json` has a stable lowercase `id` slug:
 - Keyboard-accessible controls with visible focus states
 - A sourced description on each object's detail view, where one is available
 - A user-facing error message (and a console log) if the dataset cannot be loaded
+
+## Categories
+
+Filters come from one declaration in `app.js`. Each category has a stable `id`,
+a visible label, and the exact `type` values it accepts. State stores the id, so
+labels can be reworded without breaking anything.
+
+**Planets** is a group rather than a filter. Selecting it opens a second row of
+sub-filters and selects **All Planets**, so it always shows results:
+
+| Filter | id | Types it accepts | Records |
+|---|---|---|---:|
+| All Planets | `all-planets` | Planet, Exoplanet, Dwarf Planet, Candidate Dwarf Planet | 69 |
+| Solar System Planets | `solar-system-planets` | Planet | 3 |
+| Exoplanets | `exoplanets` | Exoplanet | 61 |
+| Dwarf Planets | `dwarf-planets` | Dwarf Planet | 5 |
+| Candidate Dwarf Planets | `candidate-dwarf-planets` | Candidate Dwarf Planet | 0 |
+
+Closing the group returns to All; choosing another top-level filter collapses it.
+Re-opening always returns to All Planets rather than restoring your last
+sub-filter, so the control has one predictable outcome. Each sub-filter shows
+its record count.
+
+**Moons and Brown Dwarfs are not planets** and sit outside the group. A moon
+orbits a planet rather than being one, and a brown dwarf is neither a planet nor
+a star. A *candidate* dwarf planet is likewise not a recognised dwarf planet, so
+it is a separate type and a separate filter.
+
+**Empty categories are hidden.** Moons, Brown Dwarfs and Candidate Dwarf Planets
+are all declared, validated and tested, and none has a record yet, so none is
+visible. Each appears on its own the moment one is imported — which is why
+adding them is a data change rather than an interface change.
+
+The controls are native buttons, so Enter and Space work. The group carries
+`aria-expanded` and `aria-controls`, and while collapsed the sub-filters are
+hidden, which keeps them out of the tab order.
 
 ## Searching
 

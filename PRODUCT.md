@@ -69,6 +69,8 @@ Planet-related categories should share one hierarchy while preserving scientific
 
 Brown dwarfs are not planets and must have a separate category. Galaxy clusters must remain distinct from star clusters.
 
+Delivered 2026-07-28. `All Planets` is the composite of Planet, Exoplanet, Dwarf Planet and Candidate Dwarf Planet. Moons and Brown Dwarfs are top-level categories outside the group, and a candidate dwarf planet is a distinct type from a recognised one — a category grouping must never assert a classification a source does not make. A category with no records is hidden rather than shown as a dead control, so a type can be declared ahead of its data. See `DECISIONS.md` D19–D21.
+
 ## Leaderboard boundary
 
 Local leaderboard persistence is part of the static product and should be reliable, versioned, recoverable, and exportable. Cross-device or global leaderboards are not part of the current static architecture because they require hosted writes, identity, privacy decisions, server-side validation, and anti-cheat controls.

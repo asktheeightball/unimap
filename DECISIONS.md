@@ -715,6 +715,143 @@ Consequences:
 - Measurement comparisons stay type-safe: a family may only compare values
   sharing a `measurementLabel`, and a classification is no longer among them.
 
+## D19 — Categories are a declared model with stable ids, not a label-to-type map
+
+Status: **Accepted**
+
+Decision:
+
+`CATEGORY_GROUPS` in `app.js` declares every filter once: a stable `id`, a
+visible `label`, and either the exact `type` values it accepts or a list of
+`children`. State stores the id. The markup's `data-category` attributes carry
+ids, and `countCategories` derives every count from the same declaration.
+
+Matching is an exact comparison against the declared list. It previously
+depended on that list carrying two spellings — `["galaxy", "galaxies"]` — so a
+pluralised label would still match a singular type. That coupled the label
+wording to the matching rule, and a label reworded to "Galaxy" would silently
+have matched nothing.
+
+Rationale:
+
+- One declaration means a new category is one entry plus one button, not an edit
+  in four places that can drift apart.
+- Ids survive rewording. Labels are user-facing text and will change.
+- Exact matching fails loudly when a type is misspelled, instead of quietly
+  returning an empty list.
+
+Consequences:
+
+- `data-category` values changed from labels to ids, which is a breaking change
+  for anything selecting on them. The two check suites were updated.
+- An unknown id falls back to matching everything, so a stale stored value shows
+  the catalogue rather than an empty page.
+- Adding Candidate Dwarf Planet or Brown Dwarf records in P7 needs no interface
+  work at all: both are already declared and both appear automatically.
+
+## D20 — Planets is a disclosure group; Moons and Brown Dwarfs stay outside it
+
+Status: **Accepted**
+
+Decision:
+
+Planets is a group containing All Planets, Solar System Planets, Exoplanets,
+Dwarf Planets and Candidate Dwarf Planets. All Planets is the composite of all
+four planet types. Moons and Brown Dwarfs are top-level categories and are
+deliberately **not** members of All Planets.
+
+The group control is a disclosure, not a filter. Opening it selects All Planets,
+so activating it always produces results rather than only revealing more
+controls; closing it returns to All. Selecting any other top-level category
+collapses it. Children render in a second row rather than nested in the parent
+row. Re-opening always returns to All Planets rather than restoring the last
+child, so the control has one predictable outcome.
+
+Rationale:
+
+- A moon orbits a planet rather than being one, and a brown dwarf is neither a
+  planet nor a star. Filing either under Planets would assert a classification
+  no source makes.
+- A second row keeps the parent row from reflowing as it opens, and wraps
+  predictably on a phone. Below 30rem each child takes a full line, because
+  "Candidate Dwarf Planets (0)" is wider than a 320px screen allows beside
+  anything else.
+- The group carries `aria-expanded` and `aria-controls` but deliberately no
+  `aria-pressed`: the selected filter is one of its children, and two controls
+  must not both be announced as chosen.
+
+Consequences:
+
+- While collapsed the child row is `hidden`, so its buttons leave the tab order
+  and cannot be reached by a keyboard user who cannot see them.
+- All controls are native buttons, so Enter and Space work with no key handling.
+- Counts appear in the child labels only. The parent row stays uncluttered, and
+  the counts are where the hierarchy actually needs disambiguating.
+
+## D21 — An empty category is hidden, and that is the rule for every category
+
+Status: **Accepted** (generalises existing behaviour)
+
+Decision:
+
+A category whose count is zero is hidden, with no exception for a category that
+is expected to fill later. Moons, Brown Dwarfs and Candidate Dwarf Planets are
+all declared in the model and all currently hidden. A group hides only when
+every one of its children is empty.
+
+Rationale:
+
+- The alternative — a disabled control showing `(0)` — is a dead control, and
+  the interface would carry three of them today.
+- Declaring a category before its data is what makes P7 a data-only change: the
+  filter, the validator type and the checks are already in place, and importing
+  one record lights the control up with no interface work.
+- One rule for every category means no special case to keep in step.
+
+Consequences:
+
+- Candidate Dwarf Planets is invisible until P7 imports a candidate. It is not
+  "missing"; it is declared, tested and waiting.
+- A maintainer cannot see a planned category in the running application. The
+  model in `app.js` and this decision are where that is documented.
+
+## D22 — kepler-452b is an exoplanet, on the archive's own evidence
+
+Status: **Accepted**
+
+Decision:
+
+`kepler-452b` was typed `Planet` and is now typed `Exoplanet`. Only the type
+changed.
+
+Evidence:
+
+- Kepler-452 b appears in the NASA Exoplanet Archive's `pscomppars` table — the
+  archive's table of *confirmed exoplanets* — in the response cached in this
+  repository. The classification is the source's, not ours.
+- That row gives `sy_dist` 551.727 pc, which is 1,799.6 light years, matching
+  the record's own `~1,800 ly`. The two describe the same object.
+- The record is one of the 20 original hand-authored entries from `c55b9bb`. It
+  has never carried provenance and its type was hand-assigned.
+- In this catalogue `Planet` means a solar-system planet: the others are Earth,
+  Mars and Jupiter, and Solar System Planets is defined as exactly that set.
+
+Rationale:
+
+- The name looking like an exoplanet is not evidence. The archive listing it as
+  a confirmed planet is.
+- Left uncorrected, the Solar System Planets filter would return an object
+  1,800 light years away, which is the filter promising something false.
+
+Consequences:
+
+- Counts move from Planet 4 / Exoplanet 60 to Planet 3 / Exoplanet 61. The
+  record count is unchanged at 208 and no other field moved.
+- No identity collision: no other record carries that id or that name.
+- Provenance was **not** added. The record's values were hand-authored, and
+  attaching a source name to them would claim they came from that source.
+  Importing it properly belongs to P7.
+
 ## Decision template
 
 ### D# — Title

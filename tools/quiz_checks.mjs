@@ -396,31 +396,71 @@ async function run() {
     const typeSafety = await page.evaluate(() => {
       const api = window.unimapQuiz;
       const bodies = quiz.bodies;
-      const context = api.buildContext(bodies);
       const byName = Object.fromEntries(bodies.map((b) => [b.name, b.type]));
-      // Grouping Planet and Exoplanet under one filter must not make them
-      // acceptable distractors for each other: an exoplanet IS a planet, so a
-      // "what kind of object" question offering both has two defensible answers.
-      let planetClash = 0;
-      let dwarfClash = 0;
+
+      /* Grouping Planet and Exoplanet under one filter must not make them
+         acceptable answers to the same question. The rule applies only where the
+         *type is the discriminator*:
+
+         - `type` asks "what kind of object is X?", so no two type options may
+           overlap;
+         - `membership` asks "which of these is a Star?", so no distractor may be
+           of (or overlap) the type being asked for.
+
+         It deliberately does NOT apply elsewhere. "Which designation belongs to
+         Spica?" should offer other stars' designations — same-type distractors
+         are what make that question fair rather than trivial. An earlier version
+         of this check asserted the rule everywhere and flagged those, which
+         would have argued for weakening a guard that was working correctly. */
+      const CONFLICTS = {
+        "Neutron Star": ["Pulsar"],
+        Pulsar: ["Neutron Star"],
+        Planet: ["Exoplanet"],
+        Exoplanet: ["Planet"],
+        // Not conflicting in the application: a recognised dwarf planet is not a
+        // candidate, so a question offering both still has one answer. Listed
+        // here so the check is ready if P7 shows otherwise.
+        "Dwarf Planet": ["Candidate Dwarf Planet"],
+        "Candidate Dwarf Planet": ["Dwarf Planet"],
+      };
+      const overlaps = (a, b) => a === b || (CONFLICTS[a] || []).includes(b);
+
       let questions = 0;
+      let membershipChecked = 0;
+      let membershipBad = 0;
+      let typeChecked = 0;
+      let typeBad = 0;
+
       for (let i = 0; i < 60; i += 1) {
         for (const difficulty of api.DIFFICULTIES) {
           for (const question of api.buildQuestions(bodies, difficulty.id)) {
             questions += 1;
-            const types = question.options.map((o) => byName[o]).filter(Boolean);
-            if (types.length !== 4) continue;
-            const set = new Set(types);
-            if (set.has("Planet") && set.has("Exoplanet")) planetClash += 1;
-            if (set.has("Dwarf Planet") && set.has("Candidate Dwarf Planet")) dwarfClash += 1;
+            const answer = question.options[question.answerIndex];
+            const others = question.options.filter((_, at) => at !== question.answerIndex);
+
+            if (question.family === "membership") {
+              const answerType = byName[answer];
+              const otherTypes = others.map((o) => byName[o]);
+              if (!answerType || otherTypes.some((t) => !t)) continue;
+              membershipChecked += 1;
+              if (otherTypes.some((t) => overlaps(answerType, t))) membershipBad += 1;
+            }
+
+            if (question.family === "type") {
+              typeChecked += 1;
+              if (others.some((t) => overlaps(answer, t))) typeBad += 1;
+            }
           }
         }
       }
+
       const kepler = bodies.find((b) => b.id === "kepler-452b");
       return {
         questions,
-        planetClash,
-        dwarfClash,
+        membershipChecked,
+        membershipBad,
+        typeChecked,
+        typeBad,
         keplerType: kepler ? kepler.type : null,
         keplerCopies: bodies.filter((b) => b.id === "kepler-452b").length,
         planetCount: bodies.filter((b) => b.type === "Planet").length,
@@ -431,10 +471,15 @@ async function run() {
 
     check("20. a large sample of questions was generated",
       typeSafety.questions > 2000, String(typeSafety.questions));
-    check("20. Planet and Exoplanet never share an option set",
-      typeSafety.planetClash === 0, String(typeSafety.planetClash));
-    check("20. Dwarf Planet and Candidate Dwarf Planet never share an option set",
-      typeSafety.dwarfClash === 0, String(typeSafety.dwarfClash));
+    check("20. type questions were actually sampled",
+      typeSafety.typeChecked > 100, String(typeSafety.typeChecked));
+    check("20. membership questions were actually sampled",
+      typeSafety.membershipChecked > 20, String(typeSafety.membershipChecked));
+    check("20. no two type options overlap",
+      typeSafety.typeBad === 0, `${typeSafety.typeBad} of ${typeSafety.typeChecked}`);
+    check("20. no membership distractor is of the type being asked for",
+      typeSafety.membershipBad === 0,
+      `${typeSafety.membershipBad} of ${typeSafety.membershipChecked}`);
     equal("20. kepler-452b is an Exoplanet to the quiz too",
       typeSafety.keplerType, "Exoplanet");
     equal("20. it is still a single record", typeSafety.keplerCopies, 1);
